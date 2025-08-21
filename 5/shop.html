@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShopNow • Cửa hàng trực tuyến</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#home" class="logo">Shop<span>Now</span></a>
+      <nav class="nav">
+        <a href="#products">Sản phẩm</a>
+        <a href="#collections">Bộ sưu tập</a>
+        <a href="#deals">Ưu đãi</a>
+        <a href="#contact">Liên hệ</a>
+        <a href="#cart" class="cart-link">🛒 Giỏ hàng</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="home" class="hero container">
+    <div class="hero-content">
+      <h1>Ưu đãi mùa hè 🔥</h1>
+      <p>Giảm đến <strong>50%</strong> cho hàng trăm sản phẩm. Giao nhanh toàn quốc.</p>
+      <a class="btn" href="#products">Mua ngay</a>
+    </div>
+  </section>
+
+  <section id="products" class="container">
+    <h2 class="section-title">Sản phẩm nổi bật</h2>
+
+    <form class="filters">
+      <input type="radio" name="cat" id="cat-all" checked>
+      <label for="cat-all">Tất cả</label>
+      <input type="radio" name="cat" id="cat-shoes">
+      <label for="cat-shoes">Giày</label>
+      <input type="radio" name="cat" id="cat-bag">
+      <label for="cat-bag">Túi</label>
+      <input type="radio" name="cat" id="cat-watch">
+      <label for="cat-watch">Đồng hồ</label>
+    </form>
+
+    <div class="catalog">
+      
+      <article class="card shoes">
+        <div class="badge">-30%</div>
+        <img src="giay1.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Giày Runner X</h3>
+        <p class="price"><span class="price-old">1.290.000₫</span> 903.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+      
+      <article class="card bag">
+        <div class="badge">Mới</div>
+        <img src="tuicanvas.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Túi Vải Canvas</h3>
+        <p class="price">249.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card watch">
+        <div class="badge">-15%</div>
+        <img src="dongho1.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Đồng hồ Minimal</h3>
+        <p class="price"><span class="price-old">2.000.000₫</span> 1.700.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card shoes">
+        <img src="giay2.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Giày City Walk</h3>
+        <p class="price">790.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card bag">
+        <div class="badge">Hot</div>
+        <img src="tuideocheo.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Túi Đeo Chéo</h3>
+        <p class="price">399.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card watch">
+        <img src="dongho2.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Đồng hồ Classic</h3>
+        <p class="price">1.350.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card shoes">
+        <img src="giay3.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Giày Thể Thao</h3>
+        <p class="price">1.100.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card bag">
+        <img src="tuitote.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Túi Tote</h3>
+        <p class="price">499.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card watch">
+        <img src="dongho3.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Đồng hồ Thể Thao</h3>
+        <p class="price">1.200.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card shoes">
+        <img src="giay4.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Giày Casual</h3>
+        <p class="price">850.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card bag">
+        <img src="tuidulich.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Túi Du Lịch</h3>
+        <p class="price">1.200.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card watch">
+        <img src="dongho4.png" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Đồng hồ Thời Trang</h3>
+        <p class="price">950.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card shoes">
+        <img src="giay5.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Giày Thể Thao Nam</h3>
+        <p class="price">1.150.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card bag">
+        <img src="tuixachnu.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Túi Xách Nữ</h3>
+        <p class="price">699.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card watch">
+        <img src="dongho5.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Đồng hồ Thể Thao Nam</h3>
+        <p class="price">1.400.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+
+      <article class="card shoes">
+        <img src="giay6.jpg" alt="" style="height: 170px; border-radius: 15px;">
+        <h3>Giày Thể Thao Nữ</h3>
+        <p class="price">1.250.000₫</p>
+        <a class="btn btn-outline" href="#cart">Thêm vào giỏ</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="collections" class="container collections">
+    <div class="collection-card">
+      <h3>Urban Street</h3>
+      <p>Phong cách năng động cho mọi ngày.</p>
+      <a class="btn btn-light" href="#products">Khám phá</a>
+    </div>
+    <div class="collection-card">
+      <h3>Office Chic</h3>
+      <p>Thanh lịch, tối giản, tinh tế.</p>
+      <a class="btn btn-light" href="#products">Khám phá</a>
+    </div>
+    <div class="collection-card">
+      <h3>Outdoor Active</h3>
+      <p>Bền bỉ cho mọi hành trình.</p>
+      <a class="btn btn-light" href="#products">Khám phá</a>
+    </div>
+  </section>
+
+  <section id="deals" class="deals">
+    <div class="container deals-inner">
+      <h2>Flash Sale hôm nay</h2>
+      <p>Nhập mã <strong>HOT20</strong> giảm thêm 20% cho đơn từ 500k.</p>
+      <a class="btn" href="#products">Săn hàng ngay</a>
+    </div>
+  </section>
+  
+
+  <aside id="cart" class="cart">
+    <a class="cart-close" href="#">✕</a>
+    <h3>Giỏ hàng</h3>
+    <ul class="cart-list">
+      <li>Giày Runner X — 1 x 903.000₫</li>
+      <li>Túi Canvas — 1 x 249.000₫</li>
+    </ul>
+    <div class="cart-total">Tạm tính: <strong>1.152.000₫</strong></div>
+    <a class="btn btn-full" href="#contact">Tiến hành đặt hàng</a>
+  </aside>
+
+  <section id="contact" class="container contact">
+  <h2 class="section-title">Đặt hàng nhanh</h2>
+  <form class="form" action="#" method="post">
+    <div class="grid">
+      <input type="text" name="name" placeholder="Họ và tên" required>
+      <input type="tel" name="phone" placeholder="Số điện thoại" required>
+    </div><br>
+    <input type="email" name="email" placeholder="Email (tuỳ chọn)"><br><br>
+    <textarea name="address" rows="3" placeholder="Địa chỉ giao hàng" required></textarea>
+
+    <h3>Phương thức thanh toán</h3>
+    <div class="payment-methods">
+      <label>
+        <input type="radio" name="payment" value="cod" required>
+        Thanh toán khi nhận hàng (COD)
+      </label>
+      <label>
+        <input type="radio" name="payment" value="bank">
+        Chuyển khoản ngân hàng
+      </label>
+      <label>
+        <input type="radio" name="payment" value="card">
+        Thẻ tín dụng / Ghi nợ
+      </label>
+      <label>
+        <input type="radio" name="payment" value="wallet">
+        Ví điện tử (Momo, ZaloPay…)
+      </label>
+    </div>
+
+    <center>
+      <button class="btn" type="submit">Gửi đơn</button>
+    </center>
+  </form>
+</section>
+
+
+  
+
+  <footer class="footer">
+    <div class="container">
+      <center>
+        <p>Lương Hoàng Duy Linh</p>
+      </center>
+    </div>
+  </footer>
+</body>
+</html>
