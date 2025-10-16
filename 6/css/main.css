@@ -1,0 +1,89 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+
+@theme {
+  /* font */
+  --font-lobster: "Lobster", serif;
+  --font-inter: "Inter", sans-serif;
+
+  --tracking-1: 0.1em;
+}
+
+
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  padding-block: 2rem;
+  width: 100%;
+  overflow-x: clip;
+  max-width: 1536px;
+
+  @media (min-width: theme("screens.md")) {
+    padding-inline: 4.5rem;
+    padding-block: 3rem;
+  }
+}
+
+@utility tp {
+  @apply px-40
+}
+@utility tp2 {
+  @apply px-60
+}
+@utility dd {
+  @apply px-10
+}
+@utility lp {
+  @apply pl-20
+}
+
+
+.banner {
+  background:url("../img/banner.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.gr4{
+  background-image: url("../img/gr4-1.png");
+  background-size: 1800px;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 150px;
+}
+.gr7{
+  background-image: url("../img/gr7-2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 150px;
+}
+.gr9{
+  background-image: url("../img/gr9-1.png");
+  background-size: 1820px;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 150px;
+}
+.gr10{
+  background-image: url("../img/gr10-1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 0px;
+}
+.foot{
+  background-image: url("../img/backfoot.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 0px;
+  padding-inline: 5px;
+}
+/* CSS cho trạng thái active của tab */
+.tab-link.tab-active {
+    font-weight: bold; /* In đậm chữ */
+    color: #1a202c; /* Màu chữ sẫm hơn, ví dụ: gray-900 */
+}

@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phương Đông</title>
+  <link rel="Icon" type="image/png" href="./img/logo.png">
+  <link href="./dist/output.css" rel="stylesheet">
+  <script defer type="module" src="./js/main.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <nav id="navbar" class=" fixed z-50 top-0 left-0 right-0 w-full transition-colors duration-300 bg-transparent">
+        <div class="max-w-full px-4">
+            <div class="flex items-center justify-between h-25">
+                
+                <!-- Logo -->
+                <div class="flex lg:flex-1 lg:ml-20">
+                <a href="#" class="-m-1.5 p-1.5">
+                    <span class="sr-only">Your Company</span>
+                    <img src="../img/logo.png" alt="logo" class="h-12 w-auto" />
+                </a>
+                </div>
+
+                <!-- Desktop menu -->
+                <ul class="hidden 2xl:flex space-x-6 items-center">
+                    <li><a href="#gr1" class="px-5 py-3 relative inline-block text-xl font-medium text-gray-700 hover:text-gray-900 after:content-[''] after:absolute after:left-0 after:bottom-1 
+                            after:w-0 after:h-[3px] after:bg-gray-400 after:transition-all after:duration-300 
+                            hover:after:w-full">
+                            Giới thiệu
+                        </a>
+                    </li>
+                    <li><a href="#gr2" class="px-5 py-3 relative inline-block text-xl font-medium text-gray-700 hover:text-gray-900 after:content-[''] after:absolute after:left-0 after:bottom-0 
+                            after:w-0 after:h-[3px] after:bg-gray-400 after:transition-all after:duration-300 
+                            hover:after:w-full">
+                            Đối tượng khách hàng
+                        </a>
+                    </li>
+                    <li><a href="#gr8" class="px-5 py-3 relative inline-block text-xl font-medium text-gray-700 hover:text-gray-900 after:content-[''] after:absolute after:left-0 after:bottom-0 
+                            after:w-0 after:h-[3px] after:bg-gray-400 after:transition-all after:duration-300 
+                            hover:after:w-full">
+                            Quy trình
+                        </a>
+                    </li>
+                    <li><a href="#gr11" class="px-5 py-3 relative inline-block text-xl font-medium text-gray-700 hover:text-gray-900 after:content-[''] after:absolute after:left-0 after:bottom-0 
+                            after:w-0 after:h-[3px] after:bg-gray-400 after:transition-all after:duration-300 
+                            hover:after:w-full">
+                            Bảng giá
+                        </a>
+                    </li>
+                    <li><a href="#group10" class="px-5 py-3 relative inline-block text-xl font-medium text-gray-700 hover:text-gray-900 after:content-[''] after:absolute after:left-0 after:bottom-0 
+                            after:w-0 after:h-[3px] after:bg-gray-400 after:transition-all after:duration-300 
+                            hover:after:w-full">
+                            Cảm nhận khách hàng
+                        </a>
+                    </li>
+                    <li><a href="#gr9" class="px-5 py-3 relative inline-block text-xl font-medium text-gray-700 hover:text-gray-900 after:content-[''] after:absolute after:left-0 after:bottom-0 
+                            after:w-0 after:h-[3px] after:bg-gray-400 after:transition-all after:duration-300 
+                            hover:after:w-full">
+                            Đội ngũ bác sĩ
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="tel:19001806" 
+                            class="group relative flex items-center gap-2 px-6 py-3 text-xl font-medium text-white rounded-full 
+                                    bg-gradient-to-br from-green-400 to-green-600 shadow-md overflow-hidden">
+                            
+                            <!-- Overlay hover -->
+                            <span 
+                            class="absolute inset-0 rounded-full 
+                                    bg-gradient-to-tl from-green-500 to-green-700 
+                                    opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                            
+                            <!-- Nội dung nút -->
+                            <span class="relative flex items-center gap-2">
+                            <!-- Icon phone -->
+                            <img src="./img/icon-phone.png" alt="">
+                            Gọi 1900 1806
+                            </span>
+                        </a>
+                    </li>
+
+                    <li class="w-20"></li>
+                    
+                </ul>
+
+                <!-- Mobile button -->
+                <button id="menuBtn" class="2xl:hidden p-2 rounded-md focus:outline-none bg-white" aria-label="Toggle menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="2xl:hidden hidden border-t bg-white">
+            <ul class="px-2 pt-2 pb-4 space-y-1">
+                <li><a href="#gr1" class="block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Giới thiệu</a></li>
+                <li><a href="#gr2" class="block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Đối tượng khách hàng</a></li>
+                <li><a href="#gr8" class="block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Quy trình</a></li>
+                <li><a href="#gr11" class="block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Bảng giá</a></li>
+                <li><a href="#group10" class="block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Cảm nhận khách hàng</a></li>
+                <li><a href="#gr9" class="block px-3 py-2 rounded text-gray-700 hover:bg-gray-100">Đội ngũ bác sĩ</a></li>
+                <li>
+                <a href="tel:19001806" class="block px-4 py-2 rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white text-center hover:bg-green-700">
+                    Gọi 1900 1806
+                </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+    <!-- banner -->
+    <section class=" h-screen max-h-[1100px] overflow-y-clip banner pt-[70px] sm:pt-0">
+        <!-- <div class=" overflow-hidden z-0">
+            <img src="./img/banner.png" alt="" class="h-full hidden lg:block ">
+            <img src="./img/banner-right.png" alt="" class="h-full w-auto lg:hidden lg:absolute lg:top-25">
+        </div> -->
+
+        <div>
+            <div class="px-4 hidden 2xl:block lg:mt-0 lg:pt-40">
+                <div class="relative">
+                    <p class="tp text-white text-lg tracking-widest">TẦM SOÁT UNG THƯ TUYẾN GIÁP</p>
+                    <span class="absolute top-1/2 left-125 w-50 h-[1px] bg-white"></span>
+                </div>
+                <p class="tp text-white text-5xl font-semibold font-inter tracking-widest leading-normal p-5">Phát hiện sớm ung thư <br> giúp điều trị dễ dàng</p>
+                <p class="tp text-white">Tầm soát ung thư tuyến giáp là phương pháp y học hiện đại giúp phát <br> hiện sớm các tổn thương tiền ung thư. Đây được đánh giá là chìa <br> khóa để đưa ra phương pháp điều trị sớm và hiệu quả nhất.</p>
+                <p class="tp text-white pt-10">Quý khách vui lòng để lại số điện thoại, chúng tôi sẽ liên hệ lại ngay!</p>
+
+                <div class="tp pt-5 relative flex items-center gap-2">
+                    <!-- Input -->
+                    <input type="text" placeholder="Nhập số điện thoại..." maxlength="11" 
+                        class="rounded-full px-4 py-2 w-150 h-14 outline-none bg-white" />
+
+                    <!-- Button -->
+                    <a href="tel:19001806" 
+                        class="group relative flex items-center gap-2 px-6 py-3 h-10 text-lg font-medium text-white rounded-full 
+                                bg-gradient-to-br from-green-400 to-green-600 shadow-md overflow-hidden -ml-58 shadow-[#8bff9a]">
+
+                        <!-- Overlay hover -->
+                        <span class="absolute inset-0 rounded-full 
+                                    bg-gradient-to-tl from-green-500 to-green-700 
+                                    opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></span>
+
+                        <!-- Nội dung nút -->
+                        <span class="relative z-10 flex items-center gap-2">
+                            <img src="./img/banner-1.png" alt="">
+                            GỬI THÔNG TIN
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- responsive -->
+            <div class="z-10 px-2 items-center justify-center text-center 2xl:hidden sm:w-full sm:pt-10">
+                <div class="bg-[#7a7ada]/70 h-auto w-full max-w-4xl mx-auto p-5 rounded-lg mt-10 border-2 border-gray-300">
+                    
+                    <p class="text-white text-sm sm:text-lg tracking-widest">
+                    TẦM SOÁT UNG THƯ TUYẾN GIÁP
+                    </p>
+
+                    <p class="text-white text-2xl sm:text-4xl md:text-5xl font-semibold leading-snug sm:leading-normal font-inter tracking-widest p-3">
+                    Phát hiện sớm ung thư <br class="hidden sm:block"> giúp điều trị dễ dàng
+                    </p>
+
+                    <p class="text-white text-sm sm:text-base md:text-lg leading-relaxed">
+                    Tầm soát ung thư tuyến giáp là phương pháp y học hiện đại giúp phát hiện sớm 
+                    các tổn thương tiền ung thư. Đây được đánh giá là chìa khóa để đưa ra phương 
+                    pháp điều trị sớm và hiệu quả nhất.
+                    </p>
+
+                    <p class="text-white text-sm sm:text-base pt-6">
+                    Quý khách vui lòng để lại số điện thoại, chúng tôi sẽ liên hệ lại ngay!
+                    </p>
+
+                    <div class="mt-4 flex flex-col sm:flex-row sm:bg-white sm:rounded-full sm:shadow-md w-full max-w-xl mx-auto sm:p-1 gap-2">
+                        <input type="text" placeholder="Nhập số điện thoại..."
+                                class="flex-1 px-4 py-2 rounded-full outline-none text-sm sm:text-base bg-white border border-gray-300 sm:border-0" />
+
+                        <a href="tel:19001806" 
+                            class="group relative flex items-center justify-center gap-2 px-4 sm:px-6 py-2 text-white text-sm sm:text-base font-medium rounded-full 
+                                    bg-gradient-to-br from-green-400 to-green-600 shadow-md overflow-hidden">
+                            <span class="absolute inset-0 rounded-full bg-gradient-to-tl from-green-500 to-green-700 
+                                        opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                            <span class="relative flex items-center gap-2">
+                                <img src="./img/banner-1.png" alt="" class="w-4 h-4 sm:w-5 sm:h-5">
+                                GỬI THÔNG TIN
+                            </span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+    
+
+    <!-- group1 -->
+    <section id="gr1" class="2xl:tp flex flex-row gap-50 w-auto 2xl:pb-50 sm:pl-10">
+        <div class="pt-20 z-10">
+            <p class="text-4xl font-semibold">Gói Tầm soát ung thư tuyến giáp là gì?</p><br>
+            <p>Tầm soát ung thư tuyến giáp là phương pháp y học hiện đại giúp phát hiện sớm các tổn thương <br>
+                tiền ung thư. Đây được đánh giá là chìa khóa để đưa ra phương pháp điều trị sớm nhất, nâng cao <br>
+                hiệu quả phục hồi, hạn chế các diễn biến xấu dẫn tới tử vong.
+            </p><br>
+            <p>Hiện nay xét nghiệm tầm soát ung thư tuyến giáp được nhiều người quan tâm. Thống kê cho thấy <br>
+                căn bệnh chỉ chiếm từ 1 - 2% trong toàn bộ các loại ung thư, tuy nhiên nó lại chiếm tới 90% ung <br>
+                thư các tuyến nội tiết. Đặc biệt, bệnh đứng hàng thứ 9 trong số các ung thư xảy ra ở nữ giới.
+            </p><br>
+            <p>Điều đáng lo ngại hiện nay là bệnh ung thư tuyến giáp vẫn thường bị bỏ sót. Thậm chí có từ 20 - <br>
+                60% tổng số bệnh nhân không biết mình mắc bệnh cho tới khi diễn biến xấu ở giai đoạn cuối. Điều <br>
+                này là cực kỳ đáng lo ngại bởi nghiên cứu đã chỉ ra rằng bệnh ung thư tuyến giáp có tỷ lệ chữa <br>
+                khỏi đạt tới 90% nếu như được khám và phát hiện sớm.
+            </p>
+
+            <div class="mt-4 sm:flex-row sm:bg-white sm:rounded-full  w-full max-w-fit  sm:p-1">
+                <a href="tel:19001806" 
+                    class="group relative flex items-center justify-center gap-2 px-4 sm:px-6 py-2 text-white text-sm sm:text-base font-medium rounded-full 
+                            bg-gradient-to-br from-green-400 to-green-600 shadow-md overflow-hidden">
+                    <span class="absolute inset-0 rounded-full bg-gradient-to-tl from-green-500 to-green-700 
+                                opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                    <span class="relative flex items-center gap-2">
+                        <img src="./img/icon-phone.png" alt="" class="w-4 h-4 sm:w-5 sm:h-5">
+                        Gọi cho chúng tôi
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="hidden 2xl:block md:block">
+            <img src="./img/im1-1.png" alt="" class=" flex absolute w-4xl right-0 z-0">
+            <img src="./img/im1.png" alt="" class="hidden xl:block lp top-0 relative right-0 z-10 w-lg">
+        </div>
+        
+    </section>
+    <div class="xl:hidden md:block ">
+        <center>
+            <img src="./img/im1.png" alt="" class="p-5">
+        </center>
+    </div>
+
+
+    <!-- group2 -->
+    <section id="gr2" class="sm:dd flex flex-row 2xl:gap-30 2xl:pt-0 md:pt-20 w-auto pt-0">
+        <div class="hidden md:block">
+            <img src="./img/im1-1.png" alt="" class=" flex absolute left-0 z-0 transform -scale-x-100">
+            <img src="./img/im2.png" alt="" class="hidden xl:block md:left-0 2xl:left-50 relative left-50 -top-10 z-10 w-lg">
+        </div>
+
+        <div class="top-0 z-10 2xl:pl-80 md:pl-5 ">
+            <p class="text-4xl font-semibold">Ai nên khám tầm soat ung thư tuyến giáp?</p>
+            <p>Phát hiện sớm bệnh lý ung thư tuyến giáp không chỉ nang cao hiệu quả trong điều trị ma còn hạn chế các biến <br>
+                chứng, tổn thương, gia tăng cơ hồi hồi phục hoàn toàn cho người bệnh. Theo khuyến cáo của bác sĩ Bệnh Viện Đa <br>
+                khoa Phương Đông, những trường hợp sau đây nên khảm sàng lọc định kỳ căn bệnh.
+            </p>
+            <span class="flex items-center gap-2 pt-5">
+                <img src="../img/tickgr2.png" alt="">
+                <p>Nữ giới ở độ tuổi từ 15 - 35 và nam giới trong độ tuổi từ 40 trở lên, những người có <br>
+                    nhu cầu thăm khám bệnh ung thư tuyến giáp.
+                </p>
+            </span>
+            <span class="flex items-center gap-2 pt-5">
+                <img src="../img/tickgr2.png" alt="">
+                <p>Đối tượng có tiền sử gia đình có người bị ung thư tuyến giáp, người mắc hội chứng <br>
+                    Cowden, MEN II hoặc FAP.
+                </p>
+            </span>
+            <span class="flex items-center gap-2 pt-5">
+                <img src="../img/tickgr2.png" alt="">
+                <p>Những người có chế độ ăn thiếu i - ốt.</p>
+            </span>
+            <span class="flex items-center gap-2 pt-5">
+                <img src="../img/tickgr2.png" alt="">
+                <p>Đối tượng bị phơi nhiễm phóng xạ ở mức cao.
+                </p>
+            </span>
+            <span class="flex items-center gap-2 pt-5">
+                <img src="../img/tickgr2.png" alt="">
+                <p>Người đang mắc các bệnh liên quan tới tuyến giáp và có thể trạng mệt mỏi, <br>
+                    sút cần nhanh.
+                </p>
+            </span>
+            <span class="flex items-center gap-2 pt-5">
+                <img src="../img/tickgr2.png" alt="">
+                <p>Đối tượng xuất hiện triệu chứng bất thường nghi ngờ ung thư tuyến giáp như: <br>
+                    Có khối u ở vùng tuyến giáp, giọng nói khàn, hạch bạch huyết sưng to, ....
+                </p>
+            </span>
+
+            <div class="pt-5">
+                <a href="tel:19001806" class="group relative flex  items-center w-fit gap-2 px-6 py-3 text-xl font-medium text-white rounded-full 
+                        bg-gradient-to-br from-green-400 to-green-600 shadow-md cursor-pointer overflow-hidden">
+                
+                <!-- Overlay hover -->
+                <span 
+                class="absolute inset-0 rounded-full 
+                        bg-gradient-to-tl from-green-500 to-green-700 
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                
+                <!-- Nội dung nút -->
+                <span class="relative flex items-center gap-2">
+                <!-- Icon phone -->
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                    class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.95.684l1.22 3.657a1 1 0 01-.217.958l-1.516 1.516a16.001 16.001 0 006.586 6.586l1.516-1.516a1 1 0 01.958-.217l3.657 1.22a1 1 0 01.684.95V19a2 2 0 01-2 2h-1C9.163 21 3 14.837 3 7V5z" />
+                </svg>
+                ĐĂNG KÝ TƯ VẤN
+                </span>
+            </a>
+            </div>
+        </div>
+        
+    </section>
+    <div class="xl:hidden">
+        <center>
+            <img src="./img/im2.png" alt="" class="p-5">
+        </center>
+    </div>
+
+
+
+    <!-- group3 -->
+    <section id="gr3" class="2xl:tp md:pl-0 pt-20 text-center justify-center items-center">
+        <div>
+            <p class="text-4xl font-semibold">Dấu hiệu nhận biết Ung thư tuyến giáp</p>
+        </div>
+        <center>
+            <div class="pt-10 hidden md:block">
+                <div class="grid grid-cols-3 grid-rows-2 gap-20 pt-5">
+                    <div class="">
+                        <img src="../img/gr3-1.png" alt="">
+                        <p class="text-xl font-bold">Ho kéo dài mãi</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="">
+                        <img src="../img/gr3-2.png" alt="">
+                        <p class="text-xl font-bold">Cơ thể mệt mỏi</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="">
+                        <img src="../img/gr3-3.png" alt="">
+                        <p class="text-xl font-bold">Thay đổi giọng nói</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="">
+                        <img src="../img/gr3-4.png" alt="">
+                        <p class="text-xl font-bold">Các tuyến ở cổ bị sưng</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="">
+                        <img src="../img/gr3-5.png" alt="">
+                        <p class="text-xl font-bold">Khó thở khó nuốt</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="">
+                        <img src="../img/gr3-6.png" alt="">
+                        <p class="text-xl font-bold">Cổ đau phía trước</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- responsive -->
+            <div class="pt-10 md:hidden">
+                <div class="">
+                    <div class="pt-10">
+                        <img src="../img/gr3-1.png" alt="">
+                        <p class="text-xl font-bold">Ho kéo dài mãi</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="pt-10">
+                        <img src="../img/gr3-2.png" alt="">
+                        <p class="text-xl font-bold">Cơ thể mệt mỏi</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="pt-10">
+                        <img src="../img/gr3-3.png" alt="">
+                        <p class="text-xl font-bold">Thay đổi giọng nói</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="pt-10">
+                        <img src="../img/gr3-4.png" alt="">
+                        <p class="text-xl font-bold">Các tuyến ở cổ bị sưng</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="pt-10">
+                        <img src="../img/gr3-5.png" alt="">
+                        <p class="text-xl font-bold">Khó thở khó nuốt</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                    <div  class="pt-10">
+                        <img src="../img/gr3-6.png" alt="">
+                        <p class="text-xl font-bold">Cổ đau phía trước</p>
+                        <p>Một số dấu hiệu ung thư tuyến giáp <br> giai đoạn đầu cần hết sức lưu ý</p>
+                    </div>
+                </div>
+            </div>
+        </center>
+    </section>
+
+
+    <!-- group4 -->
+    <section id="gr4" class="gr4 pt-50 pl-100 hidden 2xl:block">
+        <div class="">
+            <div class="flex relative gap-10 -top-60">
+                <div class="w-[300px] h-[400px] flex-shrink-0">
+                    <img id="tabImage" class="w-full h-full object-cover rounded-lg shadow-lg" src="./img/gr4-2.png" alt="Ảnh minh họa">
+                </div>
+                <div>
+                    <p class="text-4xl font-semibold">Gói tầm soát ung thư tuyến giáp tại <br> BVĐK Phương Đông bao gồm những gì?</p>
+
+                    <div class="flex relative gap-10 top-10">
+                        <div>
+                            <a id="tabLink1" href="#" class="text-gray-500 text-xl hover:text-gray-950 cursor-pointer tab-link" data-tab="tab1" data-img-src="./img/gr4-2.png">
+                                Khám bệnh tổng quát
+                            </a>
+                        </div>
+                        <div>
+                            <a id="tabLink2" href="#" class="text-gray-500 text-xl hover:text-gray-950 cursor-pointer tab-link" data-tab="tab2" data-img-src="./img/gr9-2.png">
+                                <p>Khám chuyên khoa Ngoại</p>
+                            </a>
+                        </div>
+                        <div>
+                            <a id="tabLink3" href="#" class="text-gray-500 text-xl hover:text-gray-950 cursor-pointer tab-link" data-tab="tab3" data-img-src="./img/gr9-3.png">
+                                <p>Chẩn đoán hình ảnh</p>
+                            </a>
+                        </div>
+                        <div>
+                            <a id="tabLink4" href="#" class="text-gray-500 text-xl hover:text-gray-950 cursor-pointer tab-link" data-tab="tab4" data-img-src="./img/gr9-4.png">
+                                <p>Xét nghiệm</p>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="hidden 2xl:block">
+                        <button id="prev" class="absolute -left-65 top-90">
+                            <img src="./img/iconleft.png" alt="" class="size-20 cursor-pointer">
+                        </button>
+                        <button id="next" class="absolute right-35 top-90">
+                            <img src="./img/iconright.png" alt="" class="size-20 cursor-pointer">
+                        </button>
+                    </div>
+                    
+                    <div class="pt-40 w-200 text-xl text-white">
+                        <!-- Tab 1 -->
+                        <div id="tab1" class="tab-content">
+                            <h2 class="text-2xl font-bold mb-4">Khám bệnh tổng quát</h2>
+                            <p>Khách hàng sẽ được đón tiếp và thăm khám bởi các chuyên gia, y bác sĩ hàng đầu, giỏi về chuyên môn,
+                                giàu kinh nghiệm. Bác sĩ sẽ khai thác bệnh sử, khám lâm sàng để phát hiện các nguy cơ ban đầu. Từ đó có
+                                căn cứ để chỉ định thực hiện xét nghiệm và chẩn đoán bằng hình ảnh.
+                            </p>
+                            <p>
+                                Bác sĩ phụ trách khám tổng quát cũng chính là người sẽ tiếp nhận kết quả chẩn đoán và đưa ra kết luận
+                                cuối cùng.
+                            </p>
+                            <p>
+                                Tầm soát, sàng lọc ung thư tuyến giáp là một trong những kỹ thuật khó, không phải bệnh viện nào cũng có
+                                thể thực hiện. Phương pháp đòi hỏi cơ sở y tế phải có hệ thống máy móc và thiết bị y tế chuyên biệt cùng
+                                đội ngũ y bác sĩ giàu kinh nghiệm.
+                            </p>
+                        </div>
+                        <!-- Tab 2 -->
+                        <div id="tab2" class="tab-content hidden">
+                            <h2 class="text-2xl font-bold mb-4">Khám chuyên khoa Ngoại</h2>
+                            
+                            <p>
+                                Tầm soát, sàng lọc ung thư tuyến giáp là một trong những kỹ thuật khó, không phải bệnh viện nào cũng có
+                                thể thực hiện. Phương pháp đòi hỏi cơ sở y tế phải có hệ thống máy móc và thiết bị y tế chuyên biệt cùng
+                                đội ngũ y bác sĩ giàu kinh nghiệm.
+                            </p>
+                            <p>
+                                Bác sĩ phụ trách khám tổng quát cũng chính là người sẽ tiếp nhận kết quả chẩn đoán và đưa ra kết luận
+                                cuối cùng.
+                            </p>
+                            <p>Khách hàng sẽ được đón tiếp và thăm khám bởi các chuyên gia, y bác sĩ hàng đầu, giỏi về chuyên môn,
+                                giàu kinh nghiệm. Bác sĩ sẽ khai thác bệnh sử, khám lâm sàng để phát hiện các nguy cơ ban đầu. Từ đó có
+                                căn cứ để chỉ định thực hiện xét nghiệm và chẩn đoán bằng hình ảnh.
+                            </p>
+                        </div>
+                        <!-- Tab 3 -->
+                        <div id="tab3" class="tab-content hidden">
+                            <h2 class="text-2xl font-bold mb-4">Chẩn đoán hình ảnh</h2>
+                            <p>
+                                Tầm soát, sàng lọc ung thư tuyến giáp là một trong những kỹ thuật khó, không phải bệnh viện nào cũng có
+                                thể thực hiện. Phương pháp đòi hỏi cơ sở y tế phải có hệ thống máy móc và thiết bị y tế chuyên biệt cùng
+                                đội ngũ y bác sĩ giàu kinh nghiệm.
+                            </p>
+                            <p>Khách hàng sẽ được đón tiếp và thăm khám bởi các chuyên gia, y bác sĩ hàng đầu, giỏi về chuyên môn,
+                                giàu kinh nghiệm. Bác sĩ sẽ khai thác bệnh sử, khám lâm sàng để phát hiện các nguy cơ ban đầu. Từ đó có
+                                căn cứ để chỉ định thực hiện xét nghiệm và chẩn đoán bằng hình ảnh.
+                            </p>
+                            
+                            
+                            <p>
+                                Bác sĩ phụ trách khám tổng quát cũng chính là người sẽ tiếp nhận kết quả chẩn đoán và đưa ra kết luận
+                                cuối cùng.
+                            </p>
+                        </div>
+                        <!-- Tab 4 -->
+                        <div id="tab4" class="tab-content hidden">
+                            <h2 class="text-2xl font-bold mb-4">Xét nghiệm</h2>
+                            <p>
+                                Tầm soát, sàng lọc ung thư tuyến giáp là một trong những kỹ thuật khó, không phải bệnh viện nào cũng có
+                                thể thực hiện. Phương pháp đòi hỏi cơ sở y tế phải có hệ thống máy móc và thiết bị y tế chuyên biệt cùng
+                                đội ngũ y bác sĩ giàu kinh nghiệm.
+                            </p>
+                            <p>
+                                Bác sĩ phụ trách khám tổng quát cũng chính là người sẽ tiếp nhận kết quả chẩn đoán và đưa ra kết luận
+                                cuối cùng.
+                            </p>
+                            <p>Khách hàng sẽ được đón tiếp và thăm khám bởi các chuyên gia, y bác sĩ hàng đầu, giỏi về chuyên môn,
+                                giàu kinh nghiệm. Bác sĩ sẽ khai thác bệnh sử, khám lâm sàng để phát hiện các nguy cơ ban đầu. Từ đó có
+                                căn cứ để chỉ định thực hiện xét nghiệm và chẩn đoán bằng hình ảnh.
+                            </p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- responsive -->
+     <section class="gr4 2xl:hidden h-fit p-2">
+        <div class="">
+            <div>
+                <p class="text-2xl font-semibold text-center">Gói tầm soát ung thư tuyến giáp tại BVĐK Phương Đông bao gồm những gì?</p>
+
+                
+            </div>
+        </div>
+     </section>
+     <div class="py-5 2xl:hidden">
+        <div class="bg-fuchsia-100 p-5 rounded-3xl h-fit text-center mb-6">
+            <p class="text-xl font-semibold">Khám chuyên khoa Ngoại</p>
+            <p>
+                Tầm soát, sàng lọc ung thư tuyến giáp là một trong những kỹ thuật khó, không phải bệnh viện nào cũng có
+                thể thực hiện. Phương pháp đòi hỏi cơ sở y tế phải có hệ thống máy móc và thiết bị y tế chuyên biệt cùng
+                đội ngũ y bác sĩ giàu kinh nghiệm.
+            </p>
+            <p>
+                Bác sĩ phụ trách khám tổng quát cũng chính là người sẽ tiếp nhận kết quả chẩn đoán và đưa ra kết luận
+                cuối cùng.
+            </p>
+            <p>Khách hàng sẽ được đón tiếp và thăm khám bởi các chuyên gia, y bác sĩ hàng đầu, giỏi về chuyên môn,
+                giàu kinh nghiệm. Bác sĩ sẽ khai thác bệnh sử, khám lâm sàng để phát hiện các nguy cơ ban đầu. Từ đó có
+                căn cứ để chỉ định thực hiện xét nghiệm và chẩn đoán bằng hình ảnh.
+                </p>
+        </div>
+        <div class="bg-fuchsia-100 p-5 rounded-3xl h-fit text-center mb-6">
+            <p class="text-xl font-semibold">Chẩn đoán hình ảnh</p>
+            <p>
+                Tầm soát, sàng lọc ung thư tuyến giáp là một trong những kỹ thuật khó, không phải bệnh viện nào cũng có
+                thể thực hiện. Phương pháp đòi hỏi cơ sở y tế phải có hệ thống máy móc và thiết bị y tế chuyên biệt cùng
+                đội ngũ y bác sĩ giàu kinh nghiệm.
+            </p>
+            <p>
+                Bác sĩ phụ trách khám tổng quát cũng chính là người sẽ tiếp nhận kết quả chẩn đoán và đưa ra kết luận
+                cuối cùng.
+            </p>
+            <p>Khách hàng sẽ được đón tiếp và thăm khám bởi các chuyên gia, y bác sĩ hàng đầu, giỏi về chuyên môn,
+                giàu kinh nghiệm. Bác sĩ sẽ khai thác bệnh sử, khám lâm sàng để phát hiện các nguy cơ ban đầu. Từ đó có
+                căn cứ để chỉ định thực hiện xét nghiệm và chẩn đoán bằng hình ảnh.
+                </p>
+        </div>
+        <div class="bg-fuchsia-100 p-5 rounded-3xl h-fit text-center mb-6">
+            <p class="text-xl font-semibold">Xét nghiệm</p>
+            <p>
+                Tầm soát, sàng lọc ung thư tuyến giáp là một trong những kỹ thuật khó, không phải bệnh viện nào cũng có
+                thể thực hiện. Phương pháp đòi hỏi cơ sở y tế phải có hệ thống máy móc và thiết bị y tế chuyên biệt cùng
+                đội ngũ y bác sĩ giàu kinh nghiệm.
+            </p>
+            <p>
+                Bác sĩ phụ trách khám tổng quát cũng chính là người sẽ tiếp nhận kết quả chẩn đoán và đưa ra kết luận
+                cuối cùng.
+            </p>
+            <p>Khách hàng sẽ được đón tiếp và thăm khám bởi các chuyên gia, y bác sĩ hàng đầu, giỏi về chuyên môn,
+                giàu kinh nghiệm. Bác sĩ sẽ khai thác bệnh sử, khám lâm sàng để phát hiện các nguy cơ ban đầu. Từ đó có
+                căn cứ để chỉ định thực hiện xét nghiệm và chẩn đoán bằng hình ảnh.
+                </p>
+        </div>
+        <div class="bg-fuchsia-100 p-5 rounded-3xl h-fit text-center mb-6">
+            <p class="text-xl font-semibold">Khám bệnh tổng quát</p>
+            <p>
+                Tầm soát, sàng lọc ung thư tuyến giáp là một trong những kỹ thuật khó, không phải bệnh viện nào cũng có
+                thể thực hiện. Phương pháp đòi hỏi cơ sở y tế phải có hệ thống máy móc và thiết bị y tế chuyên biệt cùng
+                đội ngũ y bác sĩ giàu kinh nghiệm.
+            </p>
+            <p>
+                Bác sĩ phụ trách khám tổng quát cũng chính là người sẽ tiếp nhận kết quả chẩn đoán và đưa ra kết luận
+                cuối cùng.
+            </p>
+            <p>Khách hàng sẽ được đón tiếp và thăm khám bởi các chuyên gia, y bác sĩ hàng đầu, giỏi về chuyên môn,
+                giàu kinh nghiệm. Bác sĩ sẽ khai thác bệnh sử, khám lâm sàng để phát hiện các nguy cơ ban đầu. Từ đó có
+                căn cứ để chỉ định thực hiện xét nghiệm và chẩn đoán bằng hình ảnh.
+                </p>
+        </div>
+    </div>
+
+    
+
+    <!-- group5 -->
+    <section id="gr5" class="2xl:tp flex flex-row gap-30 w-auto 2xl:pb-10 pt-20">
+        <div class="pt-0 z-10 w-2xl">
+            <p class="text-4xl font-semibold">Lưu ý khi sử dụng dịch vụ</p><br>
+                <div class="bg-fuchsia-100 p-5 rounded-3xl h-fit">
+                    <img src="../img/gr5-1.png" alt="" class="flex absolute">
+                    <p class="flex pl-10">Với những trường hợp nghi ngờ ung thư tuyến giáp, bác sĩ có thể chỉ định người bệnh thực hiện thêm các xét nghiệm như chọc hút tế bào tuyến giáp. </p>
+                </div><br>
+                <div class="bg-fuchsia-100 p-5 rounded-3xl h-fit">
+                    <img src="../img/gr5-1.png" alt="" class="flex absolute">
+                    <p class="flex pl-10">Với những trường hợp nghi ngờ ung thư tuyến giáp, bác sĩ có thể chỉ định người bệnh thực hiện thêm các xét nghiệm như chọc hút tế bào tuyến giáp. </p>
+                </div><br>
+                <div class="bg-fuchsia-100 p-5 rounded-3xl h-fit">
+                    <img src="../img/gr5-1.png" alt="" class="flex absolute">
+                    <p class="flex pl-10">Với những trường hợp nghi ngờ ung thư tuyến giáp, bác sĩ có thể chỉ định người bệnh thực hiện thêm các xét nghiệm như chọc hút tế bào tuyến giáp. </p>
+                </div><br>
+                <div class="bg-fuchsia-100 p-5 rounded-3xl h-fit">
+                    <img src="../img/gr5-1.png" alt="" class="flex absolute">
+                    <p class="flex pl-10">Với những trường hợp nghi ngờ ung thư tuyến giáp, bác sĩ có thể chỉ định người bệnh thực hiện thêm các xét nghiệm như chọc hút tế bào tuyến giáp. </p>
+                </div><br>
+                <div>
+                    <a href="tel:19001806" class="group relative flex items-center w-fit gap-2 px-6 py-3 text-xl font-medium text-white rounded-full 
+                            bg-gradient-to-br from-green-400 to-green-600 shadow-md cursor-pointer overflow-hidden">
+                    
+                        <!-- Overlay hover -->
+                        <span 
+                        class="absolute inset-0 rounded-full 
+                                bg-gradient-to-tl from-green-500 to-green-700 
+                                opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                        
+                        <!-- Nội dung nút -->
+                        <span class="relative flex items-center gap-2">
+                        <!-- Icon phone -->
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                            class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.95.684l1.22 3.657a1 1 0 01-.217.958l-1.516 1.516a16.001 16.001 0 006.586 6.586l1.516-1.516a1 1 0 01.958-.217l3.657 1.22a1 1 0 01.684.95V19a2 2 0 01-2 2h-1C9.163 21 3 14.837 3 7V5z" />
+                        </svg>
+                        ĐĂNG KÝ TƯ VẤN
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="hidden 2xl:block md:block">
+            <img src="./img/im1-1.png" alt="" class=" flex absolute w-4xl right-0 z-0">
+            <img src="./img/gr5-2.png" alt="" class="hidden xl:block lp -top-10  relative right-0 z-10 w-xl">
+        </div>
+        
+    </section>
+    <div class="xl:hidden md:block ">
+        <center>
+            <img src="./img/gr5-2.png" alt="" class="p-5">
+        </center>
+    </div>
+
+    
+
+    <!-- group6 -->
+    <section id="group6" class="py-10 relative overflow-hidden">
+  <div class="text-center mb-8">
+    <p class="text-4xl font-bold">Các gói dịch vụ liên quan</p>
+  </div>
+
+  <div class="relative">
+    <!-- Slider wrapper -->
+    <div id="serviceCarousel" class="flex transition-transform duration-500 ease-in-out">
+      <!-- Item 1 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-1.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám sàng lọc ung thư tiền liệt tuyến</p>
+            <p>Ung thư tiền liệt tuyến rất nguy hiểm, cần tầm soát định kỳ.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Item 2 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-2.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám tầm soát ung thư đường tiêu hoá</p>
+            <p>Tầm soát định kỳ giúp phát hiện sớm bệnh lý tiêu hoá nguy hiểm.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Item 3 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-1.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám sàng lọc ung thư phổi</p>
+            <p>Khám định kỳ giúp phát hiện sớm ung thư phổi, điều trị hiệu quả.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Item 1 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-1.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám sàng lọc ung thư tiền liệt tuyến</p>
+            <p>Ung thư tiền liệt tuyến rất nguy hiểm, cần tầm soát định kỳ.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Item 2 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-2.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám tầm soát ung thư đường tiêu hoá</p>
+            <p>Tầm soát định kỳ giúp phát hiện sớm bệnh lý tiêu hoá nguy hiểm.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Item 3 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-1.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám sàng lọc ung thư phổi</p>
+            <p>Khám định kỳ giúp phát hiện sớm ung thư phổi, điều trị hiệu quả.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Item 1 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-1.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám sàng lọc ung thư tiền liệt tuyến</p>
+            <p>Ung thư tiền liệt tuyến rất nguy hiểm, cần tầm soát định kỳ.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Item 2 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-2.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám tầm soát ung thư đường tiêu hoá</p>
+            <p>Tầm soát định kỳ giúp phát hiện sớm bệnh lý tiêu hoá nguy hiểm.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Item 3 -->
+      <div class="min-w-full md:min-w-1/3 px-2">
+        <div class="border-2 border-gray-200 rounded-2xl bg-white hover:shadow-2xl">
+          <img src="../img/gr6-1.png" class="w-full rounded-t-2xl">
+          <div class="p-5 text-left">
+            <p class="text-xl font-bold">Gói Khám sàng lọc ung thư phổi</p>
+            <p>Khám định kỳ giúp phát hiện sớm ung thư phổi, điều trị hiệu quả.</p>
+            <a href="tel:19001806" class="text-xl text-green-500 font-bold hover:text-green-600">
+              Đăng ký tư vấn ngay >>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nút điều hướng -->
+    <button id="servicePrevBtn"
+      class="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100">
+      &#10094;
+    </button>
+    <button id="serviceNextBtn"
+      class="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100">
+      &#10095;
+    </button>
+  </div>
+</section>
+
+
+
+
+
+
+    <!-- group7 -->
+    <section id="gr7" class="gr7">
+        <div>
+            <div class="text-center">
+                <p class="text-4xl font-bold text-white py-10">Lợi ích khi sử dụng dịch vụ Tầm soát <br> ung thư tuyến giáp</p>
+            </div>
+
+            <div class="2xl:flex grid place-items-center gap-10 items-baseline justify-center pb-20">
+                <div>
+                    <div class="bg-none md:bg-[url('../img/gr7-3.png')] md:bg-no-repeat md:bg-[length:680px] flex h-fit p-5 pb-10">
+                        <img src="../img/gr7-1.png" alt="" class="size-10">
+                        <p class="pl-5">Bệnh viện có khuôn viên khang trang, hiện đại và trong lành với hệ thống cây xanh <br> rộng khắp, rất lý tưởng trong việc điều trị và hồi phục của người bệnh. </p>
+                    </div>
+                    <div class="bg-none md:bg-[url('../img/gr7-3.png')] md:bg-no-repeat md:bg-[length:680px] flex h-fit p-5 pb-10">
+                        <img src="../img/gr7-1.png" alt="" class="size-10">
+                        <p class="pl-5">Bệnh viện có khuôn viên khang trang, hiện đại và trong lành với hệ thống cây xanh <br> rộng khắp, rất lý tưởng trong việc điều trị và hồi phục của người bệnh. </p>
+                    </div>
+                    <div class="bg-none md:bg-[url('../img/gr7-3.png')] md:bg-no-repeat md:bg-[length:680px] flex h-fit p-5 pb-10">
+                        <img src="../img/gr7-1.png" alt="" class="size-10">
+                        <p class="pl-5">Bệnh viện có khuôn viên khang trang, hiện đại và trong lành với hệ thống cây xanh <br> rộng khắp, rất lý tưởng trong việc điều trị và hồi phục của người bệnh. </p>
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-none md:bg-[url('../img/gr7-4.png')] md:bg-no-repeat md:bg-[length:680px] flex h-fit p-5 pb-10">
+                        <img src="../img/gr7-1.png" alt="" class="size-10">
+                        <p class="pl-5">Bệnh viện có khuôn viên khang trang, hiện đại và trong lành với hệ thống cây xanh <br> rộng khắp, rất lý tưởng trong việc điều trị và hồi phục của người bệnh. </p>
+                    </div>
+                    <div class="bg-none md:bg-[url('../img/gr7-4.png')] md:bg-no-repeat md:bg-[length:680px] flex h-fit p-5 pb-10">
+                        <img src="../img/gr7-1.png" alt="" class="size-10">
+                        <p class="pl-5">Bệnh viện có khuôn viên khang trang, hiện đại và trong lành với hệ thống cây xanh <br> rộng khắp, rất lý tưởng trong việc điều trị và hồi phục của người bệnh. </p>
+                    </div>
+                    <div class="bg-none md:bg-[url('../img/gr7-4.png')] md:bg-no-repeat md:bg-[length:680px] flex h-fit p-5 pb-10">
+                        <img src="../img/gr7-1.png" alt="" class="size-10">
+                        <p class="pl-5">Bệnh viện có khuôn viên khang trang, hiện đại và trong lành với hệ thống cây xanh <br> rộng khắp, rất lý tưởng trong việc điều trị và hồi phục của người bệnh. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- group8 -->
+    <section id="gr8" class="pt-20">
+        <div class="text-center">
+            <p class="text-3xl font-bold">Quy trình thăm khám ung thư tuyến giáp <br> tại BVĐK Phương Đông</p>
+        </div>
+        <div class="flex flex-col md:flex-row gap-6 pt-10">
+            <!-- Box 1 -->
+            <div class="flex-1 rounded-2xl p-6 flex flex-col items-center justify-center text-center text-black min-h-[420px] bg-center bg-cover h-150"
+                style="background-image: url('/img/gr8-1.png')">
+                <h3 class="font-bold text-3xl mb-4 pt-20">Bước 1:</h3>
+                <p>Khách hàng liên hệ thông qua <br> tổng đài 19001806 hoặc đến <br> bệnh viện trực tiếp để được tư <br> vấn và đặt lịch khám.</p>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="flex-1 rounded-2xl p-6 flex flex-col items-center justify-center text-center text-black min-h-[420px] bg-center bg-cover"
+                style="background-image: url('/img/gr8-2.png')">
+                <h3 class="font-bold text-3xl mb-4 pt-20">Bước 2:</h3>
+                <p>Thanh toán chi phí của gói khám.</p>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="flex-1 rounded-2xl p-6 flex flex-col items-center justify-center text-center text-black min-h-[420px] bg-center bg-cover"
+                style="background-image: url('/img/gr8-3.png')">
+                <h3 class="font-bold text-3xl mb-4 pt-20">Bước 3:</h3>
+                <p>Thực hiện các bước thăm <br> khám, xét nghiệm và chẩn <br> đoán bằng hình ảnh tại viện.</p>
+            </div>
+
+            <!-- Box 4 -->
+            <div class="flex-1 rounded-2xl p-6 flex flex-col items-center justify-center text-center text-black min-h-[420px] bg-center bg-cover"
+                style="background-image: url('/img/gr8-4.png')">
+                <h3 class="font-bold text-3xl mb-4 pt-20">Bước 4:</h3>
+                <p>Bác sĩ trả kết quả, kết luận <br> và tư vấn quá trình điều trị <br> tiếp theo (nếu có).</p>
+            </div>
+        </div>
+        <center>
+            <div>
+                <a href="tel:19001806" class="group relative flex items-center w-fit gap-2 px-6 py-3 text-xl font-medium text-white rounded-full 
+                        bg-gradient-to-br from-green-400 to-green-600 shadow-md cursor-pointer overflow-hidden">
+                
+                    <!-- Overlay hover -->
+                    <span 
+                    class="absolute inset-0 rounded-full 
+                            bg-gradient-to-tl from-green-500 to-green-700 
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                    
+                    <!-- Nội dung nút -->
+                    <span class="relative flex items-center gap-2">
+                    <!-- Icon phone -->
+                    
+                    ĐĂNG KÝ TƯ VẤN
+                    </span>
+                </a>
+            </div>
+        </center>
+
+
+    </section>
+
+
+    <!-- group9 -->
+    <section id="gr9" class="gr9 relative w-full py-20 text-white">
+        <!-- Nút trái -->
+        <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white text-black p-3 rounded-full shadow-md z-10">
+            &#10094;
+        </button>
+
+        <!-- Slider container -->
+        <div id="sliderWrapper" class="overflow-hidden w-full relative -top-40">
+            <center>
+                <p class="text-4xl font-bold text-black pb-10">Đội ngũ bác sĩ của chúng tôi</p>
+            </center>
+            <div id="slider" class="flex transition-transform duration-500 ease-in-out">
+                <!-- Slide item -->
+                <div class="doctor min-w-full md:min-w-1/4 flex flex-col items-center text-center px-6">
+                    <img src="../img/gr9-2.png" class="h-64r w-80" alt="">
+                    <hr class="w-40 border-white my-2">
+                    <p class="text-xl font-bold">NGUYỄN TRUNG CHÍNH</p>
+                    <p>PGS.TS. Bác sĩ Ung bướu</p>
+                    <img src="../img/gr9-6.png" alt="">
+                    <p>4.8/5 (38 bình chọn)</p>
+                </div>
+                <div class="doctor min-w-full md:min-w-1/4 flex flex-col items-center text-center px-6">
+                    <img src="../img/gr9-3.png" class="h-64r w-80" alt="">
+                    <hr class="w-40 border-gray-300 my-2">
+                    <p class="text-xl font-bold">NGUYỄN TRUNG CHÍNH</p>
+                    <p>PGS.TS. Bác sĩ Ung bướu</p>
+                    <img src="../img/gr9-6.png" alt="">
+                    <p>4.8/5 (38 bình chọn)</p>
+                </div>
+                <div class="doctor min-w-full md:min-w-1/4 flex flex-col items-center text-center px-6">
+                    <img src="../img/gr9-4.png" class="h-64r w-80" alt="">
+                    <hr class="w-40 border-gray-300 my-2">
+                    <p class="text-xl font-bold">NGUYỄN TRUNG CHÍNH</p>
+                    <p>PGS.TS. Bác sĩ Ung bướu</p>
+                    <img src="../img/gr9-6.png" alt="">
+                    <p>4.8/5 (38 bình chọn)</p>
+                </div>
+                <div class="doctor min-w-full md:min-w-1/4 flex flex-col items-center text-center px-6">
+                    <img src="../img/gr9-5.png" class="h-64r w-80" alt="">
+                    <hr class="w-40 border-gray-300 my-2">
+                    <p class="text-xl font-bold">NGUYỄN TRUNG CHÍNH</p>
+                    <p>PGS.TS. Bác sĩ Ung bướu</p>
+                    <img src="../img/gr9-6.png" alt="">
+                    <p>4.8/5 (38 bình chọn)</p>
+                </div>
+                <div class="doctor min-w-full md:min-w-1/4 flex flex-col items-center text-center px-6">
+                    <img src="../img/gr9-2.png" class="h-64r w-80" alt="">
+                    <hr class="w-40 border-gray-300 my-2">
+                    <p class="text-xl font-bold">NGUYỄN TRUNG CHÍNH</p>
+                    <p>PGS.TS. Bác sĩ Ung bướu</p>
+                    <img src="../img/gr9-6.png" alt="">
+                    <p>4.8/5 (38 bình chọn)</p>
+                </div>
+                <div class="doctor min-w-full md:min-w-1/4 flex flex-col items-center text-center px-6">
+                    <img src="../img/gr9-3.png" class="h-64r w-80" alt="">
+                    <hr class="w-40 border-gray-300 my-2">
+                    <p class="text-xl font-bold">NGUYỄN TRUNG CHÍNH</p>
+                    <p>PGS.TS. Bác sĩ Ung bướu</p>
+                    <img src="../img/gr9-6.png" alt="">
+                    <p>4.8/5 (38 bình chọn)</p>
+                </div>
+                <div class="doctor min-w-full md:min-w-1/4 flex flex-col items-center text-center px-6">
+                    <img src="../img/gr9-4.png" class="h-64r w-80" alt="">
+                    <hr class="w-40 border-gray-300 my-2">
+                    <p class="text-xl font-bold">NGUYỄN TRUNG CHÍNH</p>
+                    <p>PGS.TS. Bác sĩ Ung bướu</p>
+                    <img src="../img/gr9-6.png" alt="">
+                    <p>4.8/5 (38 bình chọn)</p>
+                </div>
+                <div class="doctor min-w-full md:min-w-1/4 flex flex-col items-center text-center px-6">
+                    <img src="../img/gr9-5.png" class="h-64r w-80" alt="">
+                    <hr class="w-40 border-gray-300 my-2">
+                    <p class="text-xl font-bold">NGUYỄN TRUNG CHÍNH</p>
+                    <p>PGS.TS. Bác sĩ Ung bướu</p>
+                    <img src="../img/gr9-6.png" alt="">
+                    <p>4.8/5 (38 bình chọn)</p>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Nút phải -->
+        <button id="nextBtn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white text-black p-3 rounded-full shadow-md z-10">
+            &#10095;
+        </button>
+    </section>
+
+
+
+    <!-- group10 -->
+    <section id="group10" class=" gr10 py-10 relative overflow-hidden">
+        <div class="text-center mb-8">
+            <p class="text-4xl font-bold">Cảm nhận của khách hành sau khi sử dụng dịch vụ <br> Tầm soát ung thư tuyến giáp</p>
+        </div>
+
+        <div class="relative">
+            <!-- Slider wrapper -->
+            <center>
+                <div id="testimonialCarousel" class="flex transition-transform duration-500 ease-in-out">
+            
+                <!-- Item 1 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-3.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-4.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-5.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+                    <!-- Item 1 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-3.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-4.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-5.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+                    <!-- Item 1 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-3.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-4.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="w-full md:w-1/3 flex-shrink-0 px-2">
+                    <div class="border-2 border-gray-200 p-10 rounded-2xl hover:shadow-2xl bg-white/90">
+                    <img src="../img/gr10-2.png" alt="" class="pb-10 pt-10 mx-auto">
+                    <p class="text-xl font-bold">
+                        Bệnh viện Phương Đông mang đến cho tôi cảm giác vô cùng bình yên và an tâm khi thăm khám tại đây!
+                    </p><br>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit nulla etiam sed consequat...</p><br>
+                    <img src="../img/gr10-5.png" alt="" class="mx-auto"><br>
+                    <span class="block font-semibold">Nguyễn Minh Ánh</span>
+                    <img src="../img/gr9-6.png" alt="" class="mx-auto">
+                    </div>
+                </div>
+            </div>
+            </center>
+
+            <!-- Nút điều hướng -->
+            <button id="testimonialPrevBtn"
+            class="absolute left-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100">&#10094;</button>
+            <button id="testimonialNextBtn"
+            class="absolute right-2 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-100">&#10095;</button>
+        </div>
+        </section>
+
+
+        <!-- group11 -->
+        <section id="gr11" class="2xl:flex relative justify-center pt-20 pb-20 gap-30">
+        <div>
+            <center>
+                <div>
+                <img src="../img/gr11-1.png" alt="" class="w-200">
+            </div>
+            </center>
+        </div>
+
+        <div class="pt-50">
+            <form action="" class="2xl:w-150 border-2 border-gray-200 rounded-2xl text-center pb-10">
+                <nav class="bg-gradient-to-r from-pink-300 to-purple-400 p-10  text-white text-center rounded-t-2xl">
+                    <p class="text-2xl">ĐĂNG KÝ TƯ VẤN MIỄN PHÍ</p>
+                    <p>Đặt hẹn ngay để nhận tư vấn và chúng tôi sẽ xếp lịch khám kịp thời!</p>
+                </nav><br><br>
+                <div class="px-5">
+                    <input type="text" placeholder="Họ và tên" class="border-2 border-gray-200 rounded-2xl p-3 w-full bg-gray-100"><br><br>
+                    <input type="text" placeholder="Số điện thoại" class="border-2 border-gray-200 rounded-2xl p-3  w-full bg-gray-100"><br><br>
+                    <input type="text" placeholder="Email" class="border-2 border-gray-200 rounded-2xl p-3  w-full bg-gray-100"><br><br>
+                    <input type="text" placeholder="Nội dung..." class="border-2 border-gray-200 rounded-2xl p-3  w-full bg-gray-100 pb-20"><br><br>
+                </div>
+
+                <center>
+                    <div class="pt-10">
+                        <a href="tel:19001806" class="group relative flex items-center w-fit gap-2 px-6 py-3 text-xl font-medium text-white rounded-full 
+                        bg-gradient-to-br from-green-400 to-green-600 shadow-md cursor-pointer overflow-hidden">
+                
+                    <!-- Overlay hover -->
+                    <span 
+                    class="absolute inset-0 rounded-full 
+                            bg-gradient-to-tl from-green-500 to-green-700 
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                    
+                    <!-- Nội dung nút -->
+                    <span class="relative flex items-center gap-2">
+                    <!-- Icon phone -->
+                    
+                    ĐĂNG KÝ TƯ VẤN
+                    </span>
+                </a>
+                    </div>
+                </center>
+            </form>
+        </div>
+    </section>
+
+
+    <!-- footer -->
+    <footer class="foot justify-center text-white pb-10 relative">
+        <div class="">
+            <div class=" p-5 2xl:pl-40 ">
+                <img src="../img/logo-foot.png" alt="">
+            </div>
+            
+            <div class="2xl:flex relative gap-20 2xl:pl-40">
+                <div>
+                <p class="text-2xl">BỆNH VIỆN ĐA KHOA PHƯƠNG ĐÔNG</p><br>
+                <p>Địa chỉ: Số 9, Phố Viên, P. Cổ Nhuế 2, Q. Bắc Từ Liêm, HN</p>
+                <p>Email: bvphuongdong@phuongdonghospital.vn</p>
+                <p>Hotline: 1900 1806</p>
+                </div><br>
+                <div>
+                    <p class="text-2xl">Thời gian mở cửa</p>
+                    <p>Thứ 2 - Chủ nhật :      07:30 -19:00</p>
+                    <p>Cấp cứu 24/7:            0833 015 115</p>
+                </div><br>
+
+                <div>
+                    <p class="text-2xl">Liên hệ</p>
+                    <p>Hotline Tiêm chủng:  0911 615 115</p>
+                    <p>Hotline Khoa sản :     0911 615 115</p>
+                </div><br>
+                <div>
+                    <p class="text-2xl">Mạng xã hội</p>
+                    <div class="flex gap-5 pt-5">
+                        <a href=""><img src="../img/fb.png" alt=""></a>
+                        <a href=""><img src="../img/tt.png" alt=""></a>
+                        <a href=""><img src="../img/yt.png" alt=""></a>
+                        <a href=""><img src="../img/ig.png" alt=""></a>
+                    </div>
+                </div><br>
+            </div><br><br>
+            <center>
+                <hr class="2xl:w-450"><br>
+                <span>© Copyright 2022 Bệnh Viện Đa khoa Phương Đông. All Rights Reserved. Designed and developed by Tech5S</span>
+            </center>
+        </div>
+    </footer>
+
+
+
+
+    <script>
+        const testimonialCarousel = document.getElementById("testimonialCarousel");
+        const testimonialPrevBtn = document.getElementById("testimonialPrevBtn");
+        const testimonialNextBtn = document.getElementById("testimonialNextBtn");
+
+        let testimonialIndex = 0;
+
+        function getTestimonialVisible() {
+            return window.innerWidth >= 1024 ? 3 : 1; // PC: 3 thẻ, Mobile: 1 thẻ
+        }
+
+        function updateTestimonialCarousel() {
+            const visible = getTestimonialVisible();
+            const totalItems = testimonialCarousel.children.length;
+            const maxIndex = totalItems - visible;
+
+            if (testimonialIndex < 0) testimonialIndex = maxIndex;
+            if (testimonialIndex > maxIndex) testimonialIndex = 0;
+
+            const percent = -(100 / visible) * testimonialIndex;
+            testimonialCarousel.style.transform = `translateX(${percent}%)`;
+        }
+
+        testimonialNextBtn.addEventListener("click", () => {
+            testimonialIndex++;
+            updateTestimonialCarousel();
+        });
+
+        testimonialPrevBtn.addEventListener("click", () => {
+            testimonialIndex--;
+            updateTestimonialCarousel();
+        });
+
+        window.addEventListener("resize", updateTestimonialCarousel);
+        updateTestimonialCarousel();
+    </script>
+
+
+    <script>
+        const serviceCarousel = document.getElementById("serviceCarousel");
+        const servicePrevBtn = document.getElementById("servicePrevBtn");
+        const serviceNextBtn = document.getElementById("serviceNextBtn");
+
+        let serviceIndex = 0;
+
+        function getServiceVisible() {
+            return window.innerWidth >= 1024 ? 3 : 1; // PC: 3 thẻ, Mobile: 1 thẻ
+        }
+
+        function updateServiceCarousel() {
+            const visible = getServiceVisible();
+            const totalItems = serviceCarousel.children.length;
+            const maxIndex = totalItems - visible;
+
+            if (serviceIndex < 0) serviceIndex = maxIndex;
+            if (serviceIndex > maxIndex) serviceIndex = 0;
+
+            const percent = -(100 / visible) * serviceIndex;
+            serviceCarousel.style.transform = `translateX(${percent}%)`;
+        }
+
+        serviceNextBtn.addEventListener("click", () => {
+            serviceIndex++;
+            updateServiceCarousel();
+        });
+
+        servicePrevBtn.addEventListener("click", () => {
+            serviceIndex--;
+            updateServiceCarousel();
+        });
+
+        window.addEventListener("resize", updateServiceCarousel);
+        updateServiceCarousel();
+    </script>
+
+    <script>
+        // ================== SLIDER BÁC SĨ ==================
+        const slider = document.getElementById('slider');
+        const doctorPrevBtn = document.getElementById('prevBtn'); // đổi tên
+        const doctorNextBtn = document.getElementById('nextBtn'); // đổi tên
+        const items = document.querySelectorAll('.doctor');
+
+        let currentIndex = 0;
+
+        function getVisibleCount() {
+            return window.innerWidth >= 768 ? 4 : 1; // PC = 4, Mobile = 1
+        }
+
+        function updateSlide() {
+            const visible = getVisibleCount();
+            const offset = currentIndex * (100 / visible);
+            slider.style.transform = `translateX(-${offset}%)`;
+        }
+
+        doctorNextBtn.addEventListener('click', () => {
+            const visible = getVisibleCount();
+            if (visible === 4) {
+                // PC
+                if (currentIndex >= items.length - visible) {
+                    currentIndex = 0; // quay lại đầu
+                } else {
+                    currentIndex++;
+                }
+            } else {
+                // Mobile
+                currentIndex = (currentIndex + 1) % items.length;
+            }
+            updateSlide();
+        });
+
+        doctorPrevBtn.addEventListener('click', () => {
+            const visible = getVisibleCount();
+            if (visible === 4) {
+                // PC
+                if (currentIndex <= 0) {
+                    currentIndex = items.length - visible; // quay lại cuối cụm
+                } else {
+                    currentIndex--;
+                }
+            } else {
+                // Mobile
+                currentIndex = (currentIndex - 1 + items.length) % items.length;
+            }
+            updateSlide();
+        });
+
+        window.addEventListener('resize', updateSlide);
+        updateSlide();
+
+
+        // ================== NAVBAR + MENU ==================
+        window.addEventListener("scroll", () => {
+            const navbar = document.getElementById("navbar");
+            if (window.scrollY > 0) {
+                navbar.classList.add("bg-white", "shadow-md");
+                navbar.classList.remove("bg-transparent");
+            } else {
+                navbar.classList.remove("bg-white", "shadow-md");
+                navbar.classList.add("bg-transparent");
+            }
+        });
+
+        const menuBtn = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        menuBtn.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+        });
+
+
+        // ================== TABS ==================
+        const tabLinks = document.querySelectorAll(".tab-link");
+        const tabContents = document.querySelectorAll(".tab-content");
+        const tabImage = document.getElementById("tabImage");
+        const tabPrevBtn = document.getElementById("prev"); // đổi tên riêng
+        const tabNextBtn = document.getElementById("next"); // đổi tên riêng
+
+        let currentTabIndex = 0;
+
+        const tabsData = [
+            { id: 'tab1', img: './img/gr4-2.png' },
+            { id: 'tab2', img: './img/gr9-2.png' },
+            { id: 'tab3', img: './img/gr9-3.png' },
+            { id: 'tab4', img: './img/gr9-4.png' }
+        ];
+
+        function showTab(index) {
+            if (index < 0 || index >= tabsData.length) return;
+
+            tabContents.forEach(content => content.classList.add("hidden"));
+            tabLinks.forEach(link => link.classList.remove("tab-active"));
+
+            const activeTabId = tabsData[index].id;
+            const activeImgSrc = tabsData[index].img;
+
+            document.getElementById(activeTabId).classList.remove("hidden");
+            tabImage.src = activeImgSrc;
+            tabLinks[index].classList.add("tab-active");
+
+            currentTabIndex = index;
+        }
+
+        tabLinks.forEach((link, index) => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                showTab(index);
+            });
+        });
+
+        tabPrevBtn.addEventListener("click", () => {
+            const newIndex = (currentTabIndex - 1 + tabsData.length) % tabsData.length;
+            showTab(newIndex);
+        });
+
+        tabNextBtn.addEventListener("click", () => {
+            const newIndex = (currentTabIndex + 1) % tabsData.length;
+            showTab(newIndex);
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            showTab(currentTabIndex);
+        });
+
+
+
+        // Smooth scroll cho cả desktop + mobile menu
+        document.querySelectorAll('#navbar a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetEl = document.getElementById(targetId);
+
+            if (targetEl) {
+                targetEl.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+                });
+            }
+
+            // Nếu click trong mobile menu thì đóng lại menu
+            const mobileMenu = document.getElementById("mobileMenu");
+            if (!mobileMenu.classList.contains("hidden")) {
+                mobileMenu.classList.add("hidden");
+            }
+            });
+        });
+
+
+    </script>
+
+
+
+</body>
+</html>
