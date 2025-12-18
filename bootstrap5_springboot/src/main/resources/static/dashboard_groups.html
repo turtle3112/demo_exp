@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Quản lý nhóm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/styles.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 280px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            margin: 4px 0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            background: rgba(52, 152, 219, 0.3);
+            color: white;
+            border-left: 4px solid #3498db;
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .navbar-custom {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-left: 280px;
+        }
+        
+        .dashboard-card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .dashboard-card:hover {
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
+        }
+        
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+        }
+        
+        .dashboard-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            height: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content, .navbar-custom {
+                margin-left: 70px;
+            }
+            
+            .sidebar-header h4, .user-info {
+                display: none;
+            }
+        }
+
+        /* Hộp thông báo xổ xuống */
+		#notiBox {
+            width: 350px;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.25s ease;
+            z-index: 1000;
+        }
+        #notiBox.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #notiBox h6 {
+            font-weight: 600;
+        }
+        .notification-item {
+            border-bottom: 1px solid #eee;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        #bellBtn {
+            position: relative;
+            background: none;
+            border: none;
+            outline: none;
+        }
+        #notiCount {
+            position: absolute;
+            top: 0;
+            right: -2px;
+            background: #dc3545;
+            color: white;
+            font-size: 0.7rem;
+            border-radius: 50%;
+            padding: 2px 5px;
+        }
+        /* Hiệu ứng badge rung */
+        @keyframes ring {
+            0% { transform: rotate(0); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-10deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-10deg); }
+            50% { transform: rotate(6deg); }
+            60% { transform: rotate(-4deg); }
+            70% { transform: rotate(2deg); }
+            80% { transform: rotate(0); }
+        }
+        .bell-shake {
+            animation: ring 0.8s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h4 class="text-center">👥 TaskFlow</h4>
+            <p class="text-center mb-0 text-light">Quản lý nhóm</p>
+        </div>
+        
+        <div class="user-info">
+            <small class="text-light">Xin chào</small>
+            <h6 id="sidebarUsername" class="mb-0"></h6>
+        </div>
+        
+        <nav class="nav flex-column">
+            <a class="nav-link" href="projects_groups.html">
+                <i class="fas fa-project-diagram"></i>
+                <span>Dự án nhóm</span>
+            </a>
+            <a class="nav-link active" href="dashboard_groups.html">
+                <i class="fas fa-chart-bar"></i>
+                <span>Dashboard nhóm</span>
+            </a>
+            <a class="nav-link" href="member_group.html">
+                <i class="fas fa-user"></i>
+                <span>Thành viên</span>
+            </a>
+            <a class="nav-link" href="document_group.html">
+                <i class="fas fa-file-alt"></i>
+                <span>Tài liệu</span>
+            </a>
+            <a class="nav-link settings-menu-item" href="settings_group.html">
+                <i class="fas fa-cog"></i>
+                <span>Thiết lập</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom px-4">
+        <div class="container-fluid">
+            <button class="btn btn-light me-3 d-md-none" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <span class="navbar-brand fw-bold" id="currentUsername"></span>
+            
+            <div class="ms-auto d-flex align-items-center gap-3">
+
+                <!-- Nút chuông thông báo -->
+				<div id="notificationIcon" class="position-relative cursor-pointer">
+					<img src="assets/bell.png" width="24" height="24" alt="Thông báo">
+					<span id="notiBadge"
+						class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning d-none">!</span>
+						
+					<div id="notificationDropdown" class="position-absolute bg-white shadow rounded p-2"
+						style="right: 20px; top: 60px; width: 700px; display: none; z-index: 1000;">
+						<h6>🔔 Thông báo mới</h6>
+						<ul id="notificationList" class="list-unstyled mb-0" style="max-height: 300px; overflow-y: auto;"></ul>
+					</div>
+				</div>
+
+                <button id="btnBackToPersonal" onclick="window.location.href = 'projects_personal.html'" 
+                        class="btn btn-outline-info">
+                    <i class="fas fa-user"></i> Trang cá nhân
+                </button>
+                <button id="btnInviteMember" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#inviteMemberModal">
+                    <i class="fas fa-user-plus"></i> Mời thành viên
+                </button>
+                
+
+                <button onclick="window.location.href = 'login.html'" class="btn btn-outline-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-bold">📊 Dashboard nhóm</h3>
+                    <p class="text-muted">Tổng quan và thống kê hoạt động nhóm của bạn</p>
+                </div>
+                <div class="text-muted" id="organizationInfo"></div>
+            </div>
+
+            <!-- Tổng quan nhóm -->
+            <div id="section-overview" class="dashboard-section">
+                <h4 class="fw-bold mb-4">📊 Tổng quan nhóm</h4>
+                
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="card dashboard-card bg-primary text-white stat-card">
+                            <div class="card-body text-center p-4">
+                                <h2 class="fw-bold" id="totalMembers">0</h2>
+                                <p class="mb-0">Thành viên</p>
+                                <i class="fas fa-users fa-2x mt-3 opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="card dashboard-card bg-success text-white stat-card">
+                            <div class="card-body text-center p-4">
+                                <h2 class="fw-bold" id="totalProjects">0</h2>
+                                <p class="mb-0">Dự án</p>
+                                <i class="fas fa-project-diagram fa-2x mt-3 opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="card dashboard-card bg-warning text-white stat-card">
+                            <div class="card-body text-center p-4">
+                                <h2 class="fw-bold" id="activeTasks">0</h2>
+                                <p class="mb-0">Task đang làm</p>
+                                <i class="fas fa-tasks fa-2x mt-3 opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="card dashboard-card bg-info text-white stat-card">
+                            <div class="card-body text-center p-4">
+                                <h2 class="fw-bold" id="completedTasks">0</h2>
+                                <p class="mb-0">Task hoàn thành</p>
+                                <i class="fas fa-check-circle fa-2x mt-3 opacity-75"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="fw-bold mb-3">📈 Dự Án Gần Đây</h5>
+                        <div class="card dashboard-card">
+                            <div class="card-body">
+                                <div id="recentActivity" class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2 text-muted">Đang tải hoạt động...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quản lý thành viên -->
+            <div id="section-members" class="dashboard-section d-none">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold">👥 Quản lý thành viên</h4>
+                    <button class="btn btn-success" id="btnInviteMember" data-bs-toggle="modal" data-bs-target="#inviteMemberModal">
+                        <i class="fas fa-user-plus"></i> Mời thành viên
+                    </button>
+                </div>
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <div id="memberList" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Đang tải danh sách thành viên...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quản lý lời mời -->
+            <div id="section-invitations" class="dashboard-section d-none">
+                <h4 class="fw-bold mb-4">📩 Lời mời tham gia nhóm</h4>
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <div id="invitationList" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Đang tải danh sách lời mời...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lịch sử hoạt động -->
+            <div id="section-log" class="dashboard-section d-none">
+                <h4 class="fw-bold mb-4">📜 Lịch sử hoạt động nhóm</h4>
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <div id="auditLog" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Đang tải lịch sử hoạt động...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal mời thành viên -->
+    <div class="modal fade" id="inviteMemberModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-user-plus"></i> Mời thành viên</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="inviteMemberForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email thành viên *</label>
+                            <input type="email" class="form-control" id="inviteEmail" required 
+                                   placeholder="nhập email người muốn mời">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button class="btn btn-success" id="btnSendInvite">
+                        <i class="fas fa-paper-plane"></i> Gửi lời mời
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard_groups.js"></script>
+    <script>
+    // ✅ 1. Khai báo mảng thông báo rỗng
+    let notifications = [];
+
+    // ✅ 2. Hàm tính thời gian tương đối
+    function timeAgo(dateString) {
+        const diff = (new Date() - new Date(dateString)) / 1000; // giây
+        if (diff < 60) return "Vừa xong";
+        if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
+        if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
+        return new Date(dateString).toLocaleString("vi-VN");
+    }
+
+    // ✅ 3. Hàm fetch dữ liệu thông báo từ API
+    async function fetchNotifications() {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch("http://localhost:8080/notifications", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!res.ok) {
+                throw new Error("Không thể tải thông báo");
+            }
+
+            notifications = await res.json();
+            console.log("🔔 Notifications fetched:", notifications);
+            renderNotifications();
+        } catch (err) {
+            console.error("❌ Lỗi khi tải thông báo:", err);
+            // Nếu API chưa sẵn, dùng dữ liệu mẫu
+            notifications = [
+                { message: "Dự án mới được giao cho bạn", createdAt: "2025-11-06T00:00:00" },
+                { message: "Công việc 'Thiết kế giao diện' sắp đến hạn", createdAt: "2025-11-06T00:05:00" }
+            ];
+            renderNotifications();
+        }
+    }
+
+    // ✅ 4. Lấy phần tử HTML
+    const bellBtn = document.getElementById("notificationIcon");
+    const notiBox = document.getElementById("notificationDropdown");
+    const notiList = document.getElementById("notificationList");
+    const notiBadge = document.getElementById("notiBadge");
+
+    // ✅ 5. Khi click chuông thì gọi API và toggle dropdown
+    $('#notificationIcon').on('click', function () {
+        $('#notificationDropdown').toggle();
+        fetchNotifications();
+    });
+
+    // ✅ 6. Hàm render thông báo ra giao diện
+    function renderNotifications() {
+        if (!notiList) return;
+
+        if (!notifications || notifications.length === 0) {
+            notiList.innerHTML = `<li class="text-center text-muted py-3">Không có thông báo mới</li>`;
+            notiBadge.classList.add("d-none");
+            return;
+        }
+
+        notiList.innerHTML = notifications.map(n => {
+            const time = n.createdAt ? timeAgo(n.createdAt) : "Không rõ thời gian";
+            return `
+                <li class="p-2 border-bottom small">
+                    <div>${n.message}</div>
+                    <div class="text-muted">${time}</div>
+                </li>`;
+        }).join("");
+
+        notiBadge.classList.remove("d-none");
+    }
+
+    
+    // ✅ 8. Click ra ngoài để đóng dropdown
+    document.addEventListener("click", (e) => {
+        if (!notiBox.contains(e.target) && !bellBtn.contains(e.target)) {
+            notiBox.style.display = "none";
+        }
+    });
+
+    // ✅ 9. Render ban đầu (nếu cần)
+    renderNotifications();
+</script>
+	<script src="js/auth-check.js"></script>
+</body>
+</html>

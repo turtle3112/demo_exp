@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thành viên nhóm - Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 280px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            margin: 4px 0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            background: rgba(52, 152, 219, 0.3);
+            color: white;
+            border-left: 4px solid #3498db;
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .project-table-wrapper {
+            margin: 0 auto;
+            max-width: 900px;
+            margin-top: 160px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .project-table-title {
+            font-size: 22px;
+            font-weight: 700;
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .project-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #C6E2FF;
+            font-size: 16px;
+        }
+
+        .project-table thead tr {
+            background: #6495ED;
+        }
+
+        .project-table th {
+            font-weight: 700;
+            padding: 14px 18px;
+            text-align: left;
+            text-align:center; 
+            vertical-align:middle; /* canh giữa dọc */
+        }
+
+        .project-table td {
+            padding: 14px 18px;
+            background: #C6E2FF;
+            font-weight: 500;
+            text-align:center; 
+            vertical-align:middle;
+        }
+
+        .project-table tbody tr + tr td {
+            border-top: 1px solid #C6E2FF;
+        }
+
+        /* Bo tròn viền bảng */
+        .project-table {
+            border: 1.5px solid #C6E2FF;
+            border-radius: 12px;
+        }
+
+        .project-table thead tr:first-child th:first-child {
+            border-top-left-radius: 12px;
+        }
+        .project-table thead tr:first-child th:last-child {
+            border-top-right-radius: 12px;
+        }
+        .project-table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 12px;
+        }
+        .project-table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 12px;
+        }
+
+        /* bổ sung nhỏ cho link xoá */
+        .delete-link { color:#e11; cursor:pointer; white-space:nowrap; }
+        .delete-link:hover { text-decoration: underline; }
+
+        /* chữ nhỏ cho email & mô tả công việc */
+        .sub-text { font-size: 13px; color:#666; margin-top: 2px; }
+        .member-name { font-weight: 700; }
+        .proj-title { font-weight: 700; }
+
+        #notiBox {
+            width: 350px;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.25s ease;
+            z-index: 1000;
+        }
+        #notiBox.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #notiBox h6 {
+            font-weight: 600;
+        }
+        .notification-item {
+            border-bottom: 1px solid #eee;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        #bellBtn {
+            position: relative;
+            background: none;
+            border: none;
+            outline: none;
+        }
+        #notiCount {
+            position: absolute;
+            top: 0;
+            right: -2px;
+            background: #dc3545;
+            color: white;
+            font-size: 0.7rem;
+            border-radius: 50%;
+            padding: 2px 5px;
+        }
+        /* Hiệu ứng badge rung */
+        @keyframes ring {
+            0% { transform: rotate(0); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-10deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-10deg); }
+            50% { transform: rotate(6deg); }
+            60% { transform: rotate(-4deg); }
+            70% { transform: rotate(2deg); }
+            80% { transform: rotate(0); }
+        }
+        .bell-shake {
+            animation: ring 0.8s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h4 class="text-center">👥 TaskFlow</h4>
+                    <p class="text-center mb-0 text-light">Quản lý nhóm</p>
+                </div>
+                
+                <div class="user-info">
+                    <small class="text-light">Xin chào</small>
+                    <h6 id="sidebarUsername" class="mb-0"></h6>
+                </div>
+                
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="projects_groups.html">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Dự án nhóm</span>
+                    </a>
+                    <a class="nav-link" href="dashboard_groups.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Dashboard nhóm</span>
+                    </a>
+                    <a class="nav-link active" href="member_group.html">
+                        <i class="fas fa-user"></i>
+                        <span>Thành viên</span>
+                    </a>
+                    <a class="nav-link" href="document_group.html">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Tài liệu</span>
+                    </a>
+                    <a class="nav-link settings-menu-item" href="settings_group.html">
+                        <i class="fas fa-cog"></i>
+                        <span>Thiết lập</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Top Navigation Bar -->
+                <nav class="navbar navbar-light bg-light px-4 py-3 border-bottom">
+                    <div class="d-flex align-items-center">
+                        <h4 class="mb-0 text-primary">
+                            <i class="fas fa-file me-2"></i>
+                            Danh sách thành viên
+                        </h4>
+                    </div>
+
+                    <!-- Nút chuông thông báo -->
+                    <div class="ms-auto d-flex align-items-center gap-3">
+                    <!-- Nút chuông thông báo -->
+                    <div id="notificationIcon" class="position-relative cursor-pointer">
+					<img src="assets/bell.png" width="24" height="24" alt="Thông báo">
+					<span id="notiBadge"
+						class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning d-none">!</span>
+						
+					<div id="notificationDropdown" class="position-absolute bg-white shadow rounded p-2"
+						style="right: 20px; top: 60px; width: 700px; display: none; z-index: 1000;">
+						<h6>🔔 Thông báo mới</h6>
+						<ul id="notificationList" class="list-unstyled mb-0" style="max-height: 300px; overflow-y: auto;"></ul>
+					</div>
+				</div>
+
+                    <div class="ms-auto d-flex align-items-center gap-3">
+                        <button onclick="window.location.href = 'login.html'" 
+                                class="btn btn-outline-secondary btn-sm">Đăng xuất</button>
+                    </div>
+                </nav>
+                
+                <select id="sortSelect" class="form-select" style="width: 200px; float: right; margin-top: 80px; margin-right: 50px;">
+                        <option value="">Sắp xếp</option>
+                        <option value="name-asc">Tên A-Z</option>
+                        <option value="name-desc">Tên Z-A</option>
+                        <option value="recent">Mới nhất</option>
+                        <option value="deadline">Hạn hoàn thành</option>
+                </select>
+
+                <!-- Project table -->
+                <div class="project-table-wrapper"  id="userList">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Xóa thành viên-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/member_group.js"></script>
+    <script>
+const user = JSON.parse(localStorage.getItem('user'));
+const token = localStorage.getItem('token');
+
+
+if (user) {
+  document.getElementById('sidebarUsername').innerText = user.fullName || user.username;
+}
+
+// ==================== XOÁ THÀNH VIÊN ====================
+document.addEventListener('click', async function(e) {
+  const btn = e.target.closest('[data-remove-member]');
+  if (!btn) return;
+
+  e.preventDefault();
+  const row = btn.closest('tr');
+  const name = row?.querySelector('.member-name')?.textContent?.trim() || 'thành viên';
+
+  if (confirm(`Bạn có chắc muốn xóa "${name}" khỏi nhóm?`)) {
+    // Nếu có backend thì gọi API thật:
+    try {
+      const userId = row.dataset.id; // giả sử có id trong dataset
+      const res = await fetch(`${API_BASE_URL}/group/members/${userId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        row.remove();
+        alert(`Đã xóa ${name} khỏi nhóm.`);
+      } else {
+        alert("Không thể xóa thành viên (có thể lỗi quyền hoặc server).");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi khi gọi API xóa thành viên.");
+    }
+  }
+});
+
+// ==================== THÔNG BÁO (REAL DATA) ====================
+const notificationIcon = document.getElementById("notificationIcon");
+const notiBadge = document.getElementById("notiBadge");
+const notificationDropdown = document.getElementById("notificationDropdown");
+const notificationList = document.getElementById("notificationList");
+
+// Mở/đóng dropdown
+notificationIcon.addEventListener('click', () => {
+  const isVisible = notificationDropdown.style.display === "block";
+  notificationDropdown.style.display = isVisible ? "none" : "block";
+  if (!isVisible) loadNotifications();
+});
+
+// Click ra ngoài để ẩn dropdown
+document.addEventListener("click", (e) => {
+  if (!notificationIcon.contains(e.target)) {
+    notificationDropdown.style.display = "none";
+  }
+});
+
+// Hàm tải thông báo thật từ backend
+async function loadNotifications() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/notifications`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!res.ok) throw new Error("Không thể tải thông báo");
+    const notifications = await res.json();
+    renderNotifications(notifications);
+    updateNotiBadge(notifications);
+
+    // Đánh dấu là đã đọc
+    notifications.forEach(n => {
+      if (!n.read) markAsRead(n.id);
+    });
+
+  } catch (err) {
+    console.error(err);
+    notificationList.innerHTML = `<li class="text-muted small px-2 py-1">Không thể tải thông báo.</li>`;
+  }
+}
+
+// Hiển thị danh sách thông báo thật
+function renderNotifications(notifications) {
+  notificationList.innerHTML = "";
+  if (!notifications || notifications.length === 0) {
+    notificationList.innerHTML = `<li class="dropdown-item text-muted small">Không có thông báo mới.</li>`;
+    return;
+  }
+
+  notifications.forEach(noti => {
+    const li = document.createElement('li');
+    li.className = `border-bottom py-2 small d-flex justify-content-between align-items-start ${noti.read ? '' : 'fw-bold'}`;
+    li.innerHTML = `
+      <div>
+        ${noti.message}
+        <div class="text-muted small">${new Date(noti.createdAt).toLocaleString()}</div>
+      </div>
+      <button class="btn btn-sm btn-link text-danger p-0 ms-2 btn-delete-noti" data-id="${noti.id}">🗑️</button>
+    `;
+    notificationList.appendChild(li);
+  });
+
+  // Gắn sự kiện xoá
+  document.querySelectorAll('.btn-delete-noti').forEach(btn => {
+    btn.addEventListener('click', () => deleteNotification(btn.dataset.id));
+  });
+}
+
+// Cập nhật badge số lượng chưa đọc
+function updateNotiBadge(notifications) {
+  const unreadCount = notifications.filter(n => !n.read).length;
+  if (unreadCount > 0) {
+    notiBadge.classList.remove('d-none');
+    notiBadge.textContent = unreadCount;
+  } else {
+    notiBadge.classList.add('d-none');
+  }
+}
+
+// Đánh dấu đã đọc
+async function markAsRead(id) {
+  try {
+    await fetch(`${API_BASE_URL}/notifications/${id}/read`, {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  } catch (err) {
+    console.error("Lỗi khi đánh dấu đã đọc:", err);
+  }
+}
+
+// Xoá thông báo
+async function deleteNotification(id) {
+  try {
+    await fetch(`${API_BASE_URL}/notifications/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    loadNotifications();
+  } catch (err) {
+    console.error("Lỗi khi xoá thông báo:", err);
+  }
+}
+
+// Kiểm tra thông báo chưa đọc để hiển thị badge ban đầu
+(async function checkUnreadNotifications() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/notifications/unread`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+    const unread = await res.json();
+    if (unread.length > 0) notiBadge.classList.remove('d-none');
+  } catch (err) {
+    console.error("Lỗi khi kiểm tra unread:", err);
+  }
+})();
+</script>
+    
+</body>
+</html>

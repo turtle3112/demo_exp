@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý công việc - Dự án nhóm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 280px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            margin: 4px 0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            background: rgba(52, 152, 219, 0.3);
+            color: white;
+            border-left: 4px solid #3498db;
+        }
+        
+        .sidebar .nav-link i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .navbar-custom {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-left: 280px;
+        }
+        
+        .task-card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .task-card:hover {
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+        }
+        
+        .task-priority-high { border-left: 4px solid #dc3545; }
+        .task-priority-medium { border-left: 4px solid #ffc107; }
+        .task-priority-low { border-left: 4px solid #28a745; }
+        
+        .task-completed { 
+            opacity: 0.7; 
+            background-color: #f8f9fa;
+        }
+        
+        .task-completed .card-title {
+            text-decoration: line-through;
+        }
+        
+        .status-badge { font-size: 0.8em; }
+        
+        .project-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0.5rem;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
+        }
+        
+        .user-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+        }
+        
+        .filter-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content, .navbar-custom {
+                margin-left: 70px;
+            }
+            
+            .sidebar-header h4, .user-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h4 class="text-center">🏢 TaskFlow</h4>
+            <p class="text-center mb-0 text-light">Quản lý nhóm</p>
+        </div>
+        
+        <div class="user-info">
+            <small class="text-light">Xin chào</small>
+            <h6 id="sidebarUsername" class="mb-0"></h6>
+        </div>
+        
+        <nav class="nav flex-column">
+            <!-- CHỈNH SỬA: Active "Dự án nhóm" và ẩn "Công việc" -->
+            <a class="nav-link active" href="projects_groups.html">
+                <i class="fas fa-project-diagram"></i>
+                <span>Dự án nhóm</span>
+            </a>
+            <a class="nav-link" href="dashboard_groups.html">
+                <i class="fas fa-chart-bar"></i>
+                <span>Dashboard nhóm</span>
+            </a>
+            <a class="nav-link" href="member_group.html">
+                <i class="fas fa-user"></i>
+                <span>Thành viên</span>
+            <a class="nav-link" href="document_group.html">
+                <i class="fas fa-file-alt"></i>
+                <span>Tài liệu</span>
+            </a>
+            <a class="nav-link settings-menu-item" href="#">
+                <i class="fas fa-cog"></i>
+                <span>Thiết lập</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom px-4">
+        <div class="container-fluid">
+            <button class="btn btn-light me-3 d-md-none" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="d-flex align-items-center">
+                <button onclick="window.location.href='projects_groups.html'" class="btn btn-outline-secondary btn-sm me-3">
+                    <i class="fas fa-arrow-left"></i> Quay lại dự án
+                </button>
+                <span class="navbar-brand fw-bold" id="projectTitle">Đang tải...</span>
+            </div>
+            
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <span id="currentUsername" class="fw-bold me-2"></span>
+                <button onclick="window.location.href = 'login.html'" class="btn btn-outline-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- Project Info & Progress -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card project-header border-0">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h4 id="projectName" class="card-title text-white">Đang tải...</h4>
+                                    <p id="projectDescription" class="card-text text-light"></p>
+                                    <div class="d-flex gap-3 flex-wrap">
+                                        <small class="text-light">
+                                            <i class="fas fa-tasks"></i> 
+                                            <span id="totalTasks">0</span> công việc
+                                        </small>
+                                        <small class="text-light">
+                                            <i class="fas fa-check-circle"></i> 
+                                            <span id="completedTasks">0</span> hoàn thành
+                                        </small>
+                                        <small class="text-light">
+                                            <i class="fas fa-calendar-plus"></i> 
+                                            Tạo ngày: <span id="createdDate"></span>
+                                        </small>
+                                        <small class="text-light" id="deadlineSection">
+                                            <i class="fas fa-hourglass-end"></i> 
+                                            Hạn hoàn thành: <span id="projectDeadlineDisplay"></span>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="progress mb-2 bg-white bg-opacity-25">
+                                        <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <span id="progressText" class="fw-bold text-white">0% hoàn thành</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+
+			<!-- Permission Notice -->
+			<div class="row mb-3">
+			    <div class="col-12">
+			        <div id="permissionNotice" class="alert alert-info d-none">
+			            <i class="fas fa-info-circle"></i> 
+			            Bạn là thành viên của nhóm. Bạn chỉ có quyền xem công việc.
+			        </div>
+			    </div>
+			</div>
+
+            <!-- Action Buttons & Filters -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="filter-section">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <div class="action-buttons d-flex gap-2">
+                                <button id="btnAddTask" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Thêm công việc
+                                </button>
+                                <button id="btnExportTasks" class="btn btn-outline-secondary">
+                                    <i class="fas fa-download"></i> Xuất file
+                                </button>
+                                <a href="document_group.html" id="btnTasks" class="btn btn-outline-secondary">
+                                	<i class="bi bi-eye-fill"></i> Xem file
+                                </a>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <input type="text" id="searchTaskInput" class="form-control" 
+                                       placeholder="Tìm kiếm công việc..." style="width: 250px;">
+                                <select id="filterStatus" class="form-select" style="width: 150px;">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="TODO">Chưa hoàn thành</option>
+                                    <option value="DONE">Hoàn thành</option>
+                                </select>
+                                <select id="filterPriority" class="form-select" style="width: 150px;">
+                                    <option value="">Tất cả mức độ</option>
+                                    <option value="HIGH">Ưu tiên cao</option>
+                                    <option value="MEDIUM">Ưu tiên trung bình</option>
+                                    <option value="LOW">Ưu tiên thấp</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks List -->
+            <div class="row">
+                <div class="col-12">
+                    <div id="tasksContainer" class="row">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                    <div id="emptyState" class="text-center py-5 d-none">
+                        <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Chưa có công việc nào</h5>
+                        <p class="text-muted">Hãy thêm công việc đầu tiên để bắt đầu!</p>
+                        <button id="btnAddFirstTask" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Thêm công việc đầu tiên
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Task Modal -->
+    <div class="modal fade" id="taskModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskModalTitle">Thêm công việc mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="taskForm">
+                        <input type="hidden" id="taskId">
+                        <div class="mb-3">
+                            <label class="form-label">Tên công việc *</label>
+                            <input type="text" class="form-control" id="taskTitle" required 
+                                   placeholder="Nhập tên công việc...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="taskDescription" rows="3" 
+                                      placeholder="Mô tả chi tiết công việc..."></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Mức độ ưu tiên</label>
+                                    <select class="form-select" id="taskPriority">
+                                        <option value="LOW">Thấp</option>
+                                        <option value="MEDIUM" selected>Trung bình</option>
+                                        <option value="HIGH">Cao</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Ngày bắt đầu</label>
+                                    <input type="datetime-local" class="form-control" id="taskStartDate">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Hạn hoàn thành</label>
+                                    <input type="datetime-local" class="form-control" id="taskDueDate">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="btnSaveTask">
+                        <i class="fas fa-save"></i> Lưu công việc
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteTaskModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
+                    </div>
+                    <p>Bạn có chắc chắn muốn xóa công việc <strong id="taskToDeleteName"></strong>?</p>
+                    <p class="text-danger"><small>Hành động này không thể hoàn tác!</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteTask">
+                        <i class="fas fa-trash"></i> Xóa vĩnh viễn
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/tasks_details_groups.js"></script>
+	<script src="js/auth-check.js"></script>
+</body>
+</html>

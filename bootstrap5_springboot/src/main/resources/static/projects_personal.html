@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Quản lý dự án cá nhân - Task Manager</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/styles.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+	<style>
+		.user-info {
+			padding: 20px 15px;
+			border-bottom: 1px solid #dee2e6;
+			background-color: #fff;
+		}
+		.main-content {
+			background-color: #fff;
+			min-height: 100vh;
+		}
+
+		/* Hộp thông báo xổ xuống */
+		#notiBox {
+            width: 350px;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.25s ease;
+            z-index: 1000;
+        }
+        #notiBox.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #notiBox h6 {
+            font-weight: 600;
+        }
+        .notification-item {
+            border-bottom: 1px solid #eee;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        #bellBtn {
+            position: relative;
+            background: none;
+            border: none;
+            outline: none;
+        }
+        #notiCount {
+            position: absolute;
+            top: 0;
+            right: -2px;
+            background: #dc3545;
+            color: white;
+            font-size: 0.7rem;
+            border-radius: 50%;
+            padding: 2px 5px;
+        }
+        /* Hiệu ứng badge rung */
+        @keyframes ring {
+            0% { transform: rotate(0); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-10deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-10deg); }
+            50% { transform: rotate(6deg); }
+            60% { transform: rotate(-4deg); }
+            70% { transform: rotate(2deg); }
+            80% { transform: rotate(0); }
+        }
+        .bell-shake {
+            animation: ring 0.8s ease;
+        }
+        
+        .modal-body .form-label {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: block;
+		}
+
+		/* CSS cho invitation card */
+		.invitation-card {
+			border-left: 4px solid #0d6efd;
+		}
+		.invitation-card:hover {
+			box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- Sidebar -->
+			<div class="col-md-3 col-lg-2 sidebar sidebar-personal p-0">
+				<div class="user-info">
+					<h6 class="mb-1 fw-bold" id="sidebarUsername"></h6>
+					<small class="text-muted">Tài khoản cá nhân</small>
+				</div>
+				<nav class="nav flex-column mt-3">
+					<a class="nav-link active" href="projects_personal.html">
+						<i class="fas fa-folder me-2"></i>
+						Dự án của tôi
+					</a>
+					<a class="nav-link" href="dashboard_personal.html">
+						<i class="fas fa-tachometer-alt me-2"></i>
+						Dashboard
+					</a>
+					<a class="nav-link" href="document_personal.html">
+						<i class="fas fa-file me-2"></i>
+						Tài liệu
+					</a>
+					<a class="nav-link" href="settings_personal.html">
+						<i class="fas fa-cog me-2"></i>
+						Thiết lập
+					</a>
+				</nav>
+			</div>
+
+			<!-- Main Content -->
+			<div class="col-md-9 col-lg-10 main-content main-content-personal">
+				<!-- Top Navigation Bar -->
+				<nav class="navbar navbar-light bg-light px-4 py-3 border-bottom">
+					<div class="d-flex align-items-center">
+					    <h4 class="mb-0 text-primary">
+					        <i class="fas fa-folder me-2"></i>
+					        Dự án của tôi
+					    </h4>
+					</div>
+				    <div class="ms-auto d-flex align-items-center gap-3">
+						<!-- Nút chuyển đến dự án nhóm -->
+						<button id="btnToGroups" class="btn btn-outline-info d-none" 
+							onclick="window.location.href='projects_groups.html'">
+								🏢 Dự án nhóm
+						</button>
+						
+						<!-- Nút chuông thông báo -->
+						<div id="notificationIcon" class="position-relative cursor-pointer">
+							<img src="assets/bell.png" width="24" height="24" alt="Thông báo">
+							<span id="notiBadge"
+								class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning d-none">!</span>
+								
+							<div id="notificationDropdown" class="position-absolute bg-white shadow rounded p-2"
+								style="right: 20px; top: 60px; width: 700px; display: none; z-index: 1000;">
+								<h6>🔔 Thông báo mới</h6>
+								<ul id="notificationList" class="list-unstyled mb-0" style="max-height: 300px; overflow-y: auto;"></ul>
+							</div>
+						</div>
+
+				        <!-- Nút xem lời mời -->
+				        <button id="btnViewInvitations" class="btn btn-outline-warning position-relative" data-bs-toggle="modal" 
+				                data-bs-target="#invitationsModal">
+				            <i class="fas fa-envelope me-1"></i>Lời mời
+				            <span id="invitationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">0</span>
+				        </button>
+				        
+				        <button id="btnCreateProject" class="btn btn-primary d-none" data-bs-toggle="modal"
+				            data-bs-target="#createProjectModal">Tạo dự án mới</button>
+				        <button onclick="window.location.href = 'login.html'" class="btn btn-outline-secondary btn-sm">Đăng xuất</button>
+				    </div>
+				</nav>
+
+				<!-- Page Content -->
+				<div class="container mt-4">
+					<h3>Danh sách dự án</h3>
+
+					<!-- Search + Sort -->
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<input type="text" id="searchInput" class="form-control w-50" placeholder="Tìm kiếm theo tên dự án...">
+						<select id="sortSelect" class="form-select w-25">
+							<option value="">-- Sắp xếp --</option>
+							<option value="name-asc">Tên A-Z</option>
+							<option value="name-desc">Tên Z-A</option>
+						</select>
+					</div>
+
+					<div id="projectList" class="row mt-3"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modals -->
+	<div class="modal fade" id="createProjectModal" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			    <div class="modal-header">
+			        <h5 class="modal-title">Tạo Dự Án Cá Nhân</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			    </div>
+			    <div class="modal-body">
+			        <div class="mb-3">
+			            <label class="form-label">Tên dự án cá nhân *</label>
+			            <input type="text" class="form-control" id="newProjectName" placeholder="Ví dụ: Kế hoạch học tập 2024" required>
+			        </div>
+			        <div class="mb-3">
+			            <label class="form-label">Mô tả dự án (tuỳ chọn)</label>
+			            <textarea class="form-control" id="newProjectDescription" rows="3" placeholder="Mục tiêu và kế hoạch thực hiện..."></textarea>
+			        </div>
+			        <div class="row align-items-end">
+					    <div class="col-md-6">
+					        <div class="mb-3">
+					            <label class="form-label">Ngày tạo</label>
+					            <input type="date" class="form-control" id="newProjectCreatedDate" readonly>
+					            <small class="text-muted">Tự động là ngày hiện tại</small>
+					        </div>
+					    </div>
+					    <div class="col-md-6">
+					        <div class="mb-3">
+					            <label class="form-label">Hạn hoàn thành dự án</label>
+					            <input type="date" class="form-control" id="newProjectDeadline">
+					            <small class="text-muted">Không được trước ngày tạo</small>
+					        </div>
+					    </div>
+					</div>
+			    </div>
+			    <div class="modal-footer">
+			        <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+			        <button class="btn btn-primary" id="btnSubmitCreateProject">Tạo dự án</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">Xác nhận xóa</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	            </div>
+	            <div class="modal-body">
+	                <p>Bạn có chắc chắn muốn xóa dự án <strong id="projectToDeleteName"></strong>?</p>
+	                <p class="text-danger">Hành động này không thể hoàn tác! Tất cả công việc và dữ liệu liên quan sẽ bị xóa vĩnh viễn.</p>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+	                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa vĩnh viễn</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- Modal lời mời đã được cải thiện -->
+	<div class="modal fade" id="invitationsModal" tabindex="-1">
+	    <div class="modal-dialog modal-lg">
+	        <div class="modal-content">
+	            <div class="modal-header bg-primary text-white">
+	                <h5 class="modal-title">
+	                    <i class="fas fa-envelope me-2"></i>
+	                    Lời mời tham gia nhóm
+	                </h5>
+	                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+	            </div>
+	            <div class="modal-body">
+	                <div id="invitationsList">
+	                    <div class="text-center py-3">
+	                        <div class="spinner-border text-primary" role="status">
+	                            <span class="visually-hidden">Loading...</span>
+	                        </div>
+	                        <p class="mt-2">Đang tải lời mời...</p>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- Edit Project Modal -->
+	<div class="modal fade" id="editProjectModal" tabindex="-1">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">Sửa Dự Án</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	            </div>
+	            <div class="modal-body">
+	                <form id="editProjectForm">
+	                    <input type="hidden" id="editProjectId">
+	                    <div class="mb-3">
+	                        <label class="form-label">Tên dự án *</label>
+	                        <input type="text" class="form-control" id="editProjectName" required>
+	                    </div>
+	                    <div class="mb-3">
+	                        <label class="form-label">Mô tả dự án</label>
+	                        <textarea class="form-control" id="editProjectDescription" rows="3"></textarea>
+	                    </div>
+	                    <div class="mb-3">
+	                        <label class="form-label">Hạn hoàn thành dự án</label>
+	                        <input type="date" class="form-control" id="editProjectDeadline">
+	                        <small class="text-muted">Để trống nếu không có hạn</small>
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+	                <button type="button" class="btn btn-primary" id="btnSubmitEditProject">Lưu thay đổi</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<!-- Toast Container cho thông báo -->
+	<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="js/projects-personal.js"></script>
+	<script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        document.getElementById('sidebarUsername').innerText = user.fullName || user.username;
+    }
+    // ✅ 1. Khai báo mảng thông báo rỗng
+    let notifications = [];
+
+    // ✅ 2. Hàm tính thời gian tương đối
+    function timeAgo(dateString) {
+        const diff = (new Date() - new Date(dateString)) / 1000; // giây
+        if (diff < 60) return "Vừa xong";
+        if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
+        if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
+        return new Date(dateString).toLocaleString("vi-VN");
+    }
+
+    // ✅ 3. Hàm fetch dữ liệu thông báo từ API
+    async function fetchNotifications() {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch("http://localhost:8080/notifications", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+
+            if (!res.ok) {
+                throw new Error("Không thể tải thông báo");
+            }
+
+            notifications = await res.json();
+            console.log("🔔 Notifications fetched:", notifications);
+            renderNotifications();
+        } catch (err) {
+            console.error("❌ Lỗi khi tải thông báo:", err);
+            // Nếu API chưa sẵn, dùng dữ liệu mẫu
+            notifications = [
+                { message: "Dự án mới được giao cho bạn", createdAt: "2025-11-06T00:00:00" },
+                { message: "Công việc 'Thiết kế giao diện' sắp đến hạn", createdAt: "2025-11-06T00:05:00" }
+            ];
+            renderNotifications();
+        }
+    }
+
+    // ✅ 4. Lấy phần tử HTML
+    const bellBtn = document.getElementById("notificationIcon");
+    const notiBox = document.getElementById("notificationDropdown");
+    const notiList = document.getElementById("notificationList");
+    const notiBadge = document.getElementById("notiBadge");
+
+    // ✅ 5. Khi click chuông thì gọi API và toggle dropdown
+    $('#notificationIcon').on('click', function () {
+        $('#notificationDropdown').toggle();
+        fetchNotifications();
+    });
+
+    // ✅ 6. Hàm render thông báo ra giao diện
+    function renderNotifications() {
+        if (!notiList) return;
+
+        if (!notifications || notifications.length === 0) {
+            notiList.innerHTML = `<li class="text-center text-muted py-3">Không có thông báo mới</li>`;
+            notiBadge.classList.add("d-none");
+            return;
+        }
+
+        notiList.innerHTML = notifications.map(n => {
+            const time = n.createdAt ? timeAgo(n.createdAt) : "Không rõ thời gian";
+            return `
+                <li class="p-2 border-bottom small">
+                    <div>${n.message}</div>
+                    <div class="text-muted">${time}</div>
+                </li>`;
+        }).join("");
+
+        notiBadge.classList.remove("d-none");
+    }
+
+    // ✅ 7. Click ra ngoài để đóng dropdown
+    document.addEventListener("click", (e) => {
+        if (notiBox && bellBtn && !notiBox.contains(e.target) && !bellBtn.contains(e.target)) {
+            notiBox.style.display = "none";
+        }
+    });
+
+    // ✅ 8. Render ban đầu (nếu cần)
+    renderNotifications();
+</script>
+	<script src="js/auth-check.js"></script>
+</body>
+
+</html>

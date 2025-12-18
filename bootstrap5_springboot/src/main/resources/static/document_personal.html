@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tài liệu - Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+        }
+        .sidebar .nav-link {
+            color: #495057;
+            padding: 12px 20px;
+            border-radius: 0.375rem;
+            margin: 4px 8px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+            color: #000;
+        }
+        .sidebar .nav-link.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .user-info {
+            padding: 20px 15px;
+            border-bottom: 1px solid #dee2e6;
+            background-color: #fff;
+        }
+        .main-content {
+            background-color: #fff;
+            min-height: 100vh;
+        }
+        
+        /* Document-specific styles */
+        .document-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-color: #007bff;
+        }
+        .file-icon {
+            font-size: 3rem;
+            color: #6c757d;
+        }
+        .file-icon.pdf { color: #e74c3c; }
+        .file-icon.doc { color: #2c5aa0; }
+        .file-icon.xls { color: #1d6f42; }
+        .file-icon.ppt { color: #d35400; }
+        .file-icon.img { color: #9b59b6; }
+        .file-icon.zip { color: #f39c12; }
+        .file-icon.txt { color: #7f8c8d; }
+        
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+            background-color: #e7f3ff;
+        }
+        .document-actions .btn {
+            border-radius: 0.375rem;
+        }
+        .category-badge {
+            font-size: 0.7rem;
+        }
+        .file-preview {
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 0.375rem;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0.5rem;
+        }
+
+        #notiBox {
+            width: 350px;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.25s ease;
+            z-index: 1000;
+        }
+        #notiBox.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        #notiBox h6 {
+            font-weight: 600;
+        }
+        .notification-item {
+            border-bottom: 1px solid #eee;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        #bellBtn {
+            position: relative;
+            background: none;
+            border: none;
+            outline: none;
+        }
+        #notiCount {
+            position: absolute;
+            top: 0;
+            right: -2px;
+            background: #dc3545;
+            color: white;
+            font-size: 0.7rem;
+            border-radius: 50%;
+            padding: 2px 5px;
+        }
+        /* Hiệu ứng badge rung */
+        @keyframes ring {
+            0% { transform: rotate(0); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-10deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-10deg); }
+            50% { transform: rotate(6deg); }
+            60% { transform: rotate(-4deg); }
+            70% { transform: rotate(2deg); }
+            80% { transform: rotate(0); }
+        }
+        .bell-shake {
+            animation: ring 0.8s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="user-info">
+                    <h6 class="mb-1 fw-bold" id="sidebarUsername"></h6>
+                    <small class="text-muted">Tài khoản cá nhân</small>
+                </div>
+                <nav class="nav flex-column mt-3">
+                    <a class="nav-link" href="projects_personal.html">
+                        <i class="fas fa-folder me-2"></i>
+                        Dự án của tôi
+                    </a>
+                    <a class="nav-link" href="dashboard_personal.html">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                    <a class="nav-link active" href="document_personal.html">
+                        <i class="fas fa-file me-2"></i>
+                        Tài liệu
+                    </a>
+                    <a class="nav-link" href="settings_personal.html">
+                        <i class="fas fa-cog me-2"></i>
+                        Thiết lập
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Top Navigation Bar -->
+                <nav class="navbar navbar-light bg-light px-4 py-3 border-bottom">
+                    <div class="d-flex align-items-center">
+                        <h4 class="mb-0 text-primary">
+                            <i class="fas fa-file me-2"></i>
+                            Tài liệu của tôi
+                        </h4>
+                    </div>
+
+                <!-- Nút chuông thông báo -->
+				<div class="ms-auto d-flex align-items-center gap-3">
+                <!-- Nút chuông thông báo -->
+                <div id="notificationIcon" class="position-relative cursor-pointer">
+							<img src="assets/bell.png" width="24" height="24" alt="Thông báo">
+							<span id="notiBadge"
+								class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning d-none">!</span>
+						
+							<div id="notificationDropdown" class="position-absolute bg-white shadow rounded p-2"
+								style="right: 20px; top: 60px; width: 700px; display: none; z-index: 1000;">
+								<h6>🔔 Thông báo mới</h6>
+								<ul id="notificationList" class="list-unstyled mb-0" style="max-height: 300px; overflow-y: auto;"></ul>
+							</div>
+						</div>
+
+                    <!-- Nút đăng xuất -->
+                    <button onclick="window.location.href = 'login.html'" 
+                            class="btn btn-outline-secondary btn-sm">
+                        Đăng xuất
+                    </button>
+                </div>
+                </nav>
+
+                <!-- Page Content -->
+                <div class="container-fluid mt-4">
+                    <!-- Stats Overview -->
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="card stats-card border-0">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="card-title text-light opacity-75">Tổng tài liệu</h6>
+                                            <h2 class="text-white" id="totalDocuments">24</h2>
+                                        </div>
+                                        <div class="text-white opacity-75">
+                                            <i class="fas fa-file fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="card-title text-muted">Tài liệu gần đây</h6>
+                                            <h2 class="text-success" id="recentDocuments">5</h2>
+                                        </div>
+                                        <div class="text-success">
+                                            <i class="fas fa-clock fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="card border-warning">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="card-title text-muted">Dung lượng đã dùng</h6>
+                                            <h2 class="text-warning" id="usedStorage">156 MB</h2>
+                                        </div>
+                                        <div class="text-warning">
+                                            <i class="fas fa-hdd fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="card-title text-muted">Dung lượng còn lại</h6>
+                                            <h2 class="text-info" id="remainingStorage">844 MB</h2>
+                                        </div>
+                                        <div class="text-info">
+                                            <i class="fas fa-database fa-2x"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Filters & Search -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <select id="filterCategory" class="form-select">
+                                        <option value="">Tất cả danh mục</option>
+                                        <option value="pdf">PDF</option>
+                                        <option value="doc">Word</option>
+                                        <option value="xls">Excel</option>
+                                        <option value="img">Hình ảnh</option>
+                                        <option value="other">Khác</option>
+                                    </select>
+                                    <select id="sortDocuments" class="form-select">
+                                        <option value="newest">Mới nhất</option>
+                                        <option value="oldest">Cũ nhất</option>
+                                        <option value="name">Tên A-Z</option>
+                                        <option value="size">Kích thước</option>
+                                    </select>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <input type="text" id="searchDocuments" class="form-control" 
+                                           placeholder="Tìm kiếm tài liệu...">
+                                    <button class="btn btn-outline-secondary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documents List -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h5 class="mb-3">Tài liệu đã tải lên</h5>
+                            <div id="documentsList" class="row">
+                                <!-- Documents will be loaded here -->
+                            </div>
+                            <div id="emptyState" class="text-center py-5 d-none">
+                                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">Chưa có tài liệu nào</h5>
+                                <p class="text-muted">Hãy tải lên tài liệu đầu tiên của bạn!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Document Preview Modal -->
+    <div class="modal fade" id="documentPreviewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewDocumentName">Xem trước tài liệu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img id="previewImage" src="" alt="Preview" class="file-preview d-none">
+                        <div id="previewPlaceholder" class="file-icon pdf">
+                            <i class="fas fa-file-pdf fa-5x"></i>
+                        </div>
+                    </div>
+                    <div class="document-info">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Tên file:</strong> <span id="infoFileName"></span></p>
+                                <p><strong>Loại file:</strong> <span id="infoFileType"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Kích thước:</strong> <span id="infoFileSize"></span></p>
+                                <p><strong>Ngày tải lên:</strong> <span id="infoUploadDate"></span></p>
+                            </div>
+                        </div>
+     
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-download me-1"></i> Tải xuống
+                    </button>
+                    <button type="button" class="btn btn-outline-danger">
+                        <i class="fas fa-trash me-1"></i> Xóa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Folder Modal -->
+    <div class="modal fade" id="createFolderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tạo thư mục mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createFolderForm">
+                        <div class="mb-3">
+                            <label class="form-label">Tên thư mục *</label>
+                            <input type="text" class="form-control" id="folderName" required 
+                                   placeholder="Ví dụ: Tài liệu dự án ABC">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả (tuỳ chọn)</label>
+                            <textarea class="form-control" id="folderDescription" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="btnCreateFolder">Tạo thư mục</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="js/document_personal.js"></script>
+	<script src="js/auth-check.js"></script>
+	
+	<script>
+	const bellBtn = document.getElementById("notificationIcon");
+    const notiBox = document.getElementById("notificationDropdown");
+    const notiList = document.getElementById("notificationList");
+    const notiBadge = document.getElementById("notiBadge");
+
+    let notifications = [];
+
+    // ✅ Thêm hàm này vào — đây là phần bị thiếu
+    async function fetchNotifications() {
+        try {
+            const token = localStorage.getItem("token");
+
+            // Giả lập dữ liệu tạm (nếu chưa có API thật)
+            // Nếu có API thật thì thay URL tại đây
+            
+
+            // Nếu có API thật:
+            
+            const res = await fetch("http://localhost:8080/notifications", {
+                headers: { "Authorization": "Bearer " + token }
+            });
+            notifications = await res.json();
+            
+
+            renderNotifications();
+        } catch (err) {
+            console.error("❌ Lỗi khi tải thông báo:", err);
+        }
+    }
+
+    $('#notificationIcon').on('click', function () {
+        $('#notificationDropdown').toggle(); // Mở / đóng dropdown
+        fetchNotifications(); // ✅ Bây giờ đã có định nghĩa
+    });
+
+    function renderNotifications() {
+        if (!notiList) return;
+
+        if (notifications.length === 0) {
+            notiList.innerHTML = `<li class="text-center text-muted py-3">Không có thông báo mới</li>`;
+            notiBadge.classList.add("d-none");
+            return;
+        }
+
+        notiList.innerHTML = notifications.map(n => {
+            const createdTime = n.created_at ? new Date(n.created_at).toLocaleString() : "";
+            return `
+                <li class="p-2 border-bottom small">
+                    <div>${n.message || "Thông báo"}</div>
+                    <div class="text-muted">${createdTime}</div>
+                </li>
+            `;
+        }).join("");
+
+        notiBadge.classList.remove("d-none");
+    }
+
+
+    // Toggle hiển thị thông báo
+    
+
+    // Click ra ngoài để đóng
+    document.addEventListener("click", (e) => {
+        if (!notiBox.contains(e.target) && !bellBtn.contains(e.target)) {
+            notiBox.style.display = "none";
+        }
+    });
+
+    renderNotifications();
+	</script>
+
+</body>
+</html>

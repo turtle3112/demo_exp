@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký - Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #fff;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .account-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .account-card:hover {
+            transform: translateY(-5px);
+            border-color: #0d6efd;
+        }
+        .account-card.selected {
+            border-color: #0d6efd;
+            background-color: #f8f9fa;
+        }
+        .card-icon {
+            font-size: 3rem;
+            color: #0d6efd;
+            margin-bottom: 1rem;
+        }
+
+        /* Gradient shape nền dưới */
+        body::after {
+            content: "";
+            position: absolute;
+            bottom: -180px;
+            left: -100px;
+            width: 130%;
+            height: 400px;
+            background: linear-gradient(135deg, #7b2ff7, #f107a3);
+            border-top-left-radius: 250px;
+            border-top-right-radius: 250px;
+            z-index: 0;
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 25px;
+            left: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #333;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        .btn-login-header {
+            background: #7b2ff7;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .btn-login-header:hover {
+            background: #5e1fd4;
+        }
+        .nut {
+            border: 1px solid #0d6efd;
+            color: #0d6efd;
+            background-color: transparent;
+            border-radius: 8px;
+            padding: 6px 12px;
+            transition: 0.3s;
+        }
+        .nut:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        /* Căn giữa form đăng ký tài khoản cá nhân */
+        .centered-form {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin-top: -100px !important;
+        }
+
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <div class="header">
+        <a href="#" class="logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png" width="28" height="28" alt="">
+            PlanLume
+        </a>
+        <div>
+            <button class="btn-login-header">
+                <a href="login.html" style="text-decoration: none; color: white;">Quay lại đăng nhập</a>
+            </button>
+        </div>
+    </div>
+
+    <div class="container my-5" style="padding-top: 100px; position: relative; z-index: 1;">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                
+
+                <!-- Account Type Selection -->
+                <div class="row g-4 mb-5" id="accountTypeSelection">
+                    <!-- Header -->
+                <div class="text-center mb-5">
+                    <h1 class="display-4 fw-bold text-primary">ĐĂNG KÝ TÀI KHOẢN</h1>
+                    <p class="lead">Chọn loại tài khoản phù hợp với nhu cầu của bạn</p>
+                </div>
+                    <!-- Cá nhân -->
+                    <div class="col-md-4">
+                        <div class="card account-card h-100 text-center p-4" data-account-type="PERSONAL">
+                            <div class="card-icon">👤</div>
+                            <h4 class="card-title">Tài khoản cá nhân</h4>
+                            <p class="card-text">
+                                Dành cho người dùng cá nhân quản lý công việc riêng
+                            </p>
+                            <div class="mt-3">
+                                <span class="badge bg-success">Miễn phí</span>
+                            </div>
+                            <div class="mt-3">
+                                <button type="button" class="nut" data-bs-toggle="modal" data-bs-target="#personalModal">
+                                    Chi tiết
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nhóm -->
+                    <div class="col-md-4">
+                        <div class="card account-card h-100 text-center p-4" data-account-type="TEAM">
+                            <div class="card-icon">👥</div>
+                            <h4 class="card-title">Tài khoản nhóm nhỏ</h4>
+                            <p class="card-text">
+                                Dành cho trưởng nhóm quản lý nhóm làm việc
+                            </p>
+                            <div class="mt-3">
+                                <span class="badge bg-warning">Vai trò: Admin</span>
+                            </div>
+                            <div class="mt-3">
+                                <button type="button" class="nut" data-bs-toggle="modal" data-bs-target="#personalModal">
+                                    Chi tiết
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doanh nghiệp -->
+                    <div class="col-md-4">
+                        <div class="card account-card h-100 text-center p-4" data-account-type="ENTERPRISE">
+                            <div class="card-icon">🏢</div>
+                            <h4 class="card-title">Tài khoản doanh nghiệp</h4>
+                            <p class="card-text">
+                                Dành cho giám đốc quản lý toàn bộ doanh nghiệp
+                            </p>
+                            <div class="mt-3">
+                                <span class="badge bg-warning">Vai trò: Admin</span>
+                            </div>
+                            <div class="mt-3">
+                                <button type="button" class="nut" data-bs-toggle="modal" data-bs-target="#personalModal">
+                                    Chi tiết
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- (Các phần form đăng ký giữ nguyên nếu bạn đã có trong file cũ) -->
+                 <!-- Registration Form (Hidden Initially) -->
+                <div class="row justify-content-center d-none" id="registrationForm" style="margin-top: -120px;">
+                    <div class="col-md-8 col-lg-6">
+                        <div class="card shadow">
+                            <div class="card-header text-white"  style="background-color: #7b2ff7;">
+                                <h4 class="mb-0" id="formTitle">Đăng ký tài khoản</h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form id="registerForm">
+                                    <input type="hidden" id="accountType" name="accountType">
+                                    
+                                    <div class="mb-3">
+                                        <label for="fullName" class="form-label"><b>Họ và tên</b></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-person-fill"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="fullName" placeholder="Nhập họ tên" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label"><b>Email</b></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-envelope-fill"></i>
+                                            </span>
+                                            <input type="email" class="form-control" id="email" placeholder="Nhập email" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label"><b>Tên đăng nhập</b></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-person-lines-fill"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label"><b>Mật khẩu</b></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-lock-fill"></i>
+                                            </span>
+                                            <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label"><b>Xác nhận mật khẩu</b></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi bi-lock-fill"></i>
+                                            </span>
+                                            <input type="password" class="form-control" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Additional fields for TEAM and ENTERPRISE -->
+                                    <div class="mb-3 d-none" id="teamNameField">
+                                        <label for="teamName" class="form-label">Tên nhóm *</label>
+                                        <input type="text" class="form-control" id="teamName">
+                                    </div>
+                                    
+                                    <div class="mb-3 d-none" id="companyNameField">
+                                        <label for="companyName" class="form-label">Tên doanh nghiệp *</label>
+                                        <input type="text" class="form-control" id="companyName">
+                                    </div>
+
+                                    <div class="d-grid gap-2">
+                                        <!-- Nút -->
+                                        <button type="submit" class="btn btn-lg text-white" style="background-color: #7b2ff7;" onclick="showSuccessToast()">Đăng ký</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="backToSelection">
+                                            ← Quay lại chọn loại tài khoản
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <div id="successMsg" class="alert alert-success mt-3 d-none"></div>
+                                <div id="errorMsg" class="alert alert-danger mt-3 d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết tài khoản cá nhân -->
+    <div class="modal fade" id="personalModal" tabindex="-1" aria-labelledby="personalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="personalModalLabel">👤 Tài khoản cá nhân</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <p><b>👤 Tài khoản cá nhân:</b><br>
+                    Dành cho người dùng muốn tự quản lý công việc, dự án và thời gian cá nhân hiệu quả.</p>
+
+                    <p><b>✨ Tính năng nổi bật:</b></p>
+                    <ul class="list-unstyled">
+                        <li>📂 <b>Tạo và quản lý công việc cá nhân:</b><br>
+                            Dễ dàng thêm, sửa, xóa và theo dõi tiến độ từng công việc hoặc dự án.</li>
+                        <li>🕓 <b>Theo dõi tiến độ trực quan:</b><br>
+                            Hiển thị % hoàn thành, trạng thái công việc (Đang làm / Hoàn thành / Trễ hạn).</li>
+                        <li>⏰ <b>Đặt nhắc nhở và thời gian hoàn thành:</b><br>
+                            Cài đặt ngày bắt đầu – kết thúc để hệ thống tự động nhắc bạn.</li>
+                        <li>📅 <b>Lịch công việc cá nhân:</b><br>
+                            Xem toàn bộ lịch trình theo ngày, tuần hoặc tháng.</li>
+                        <li>💾 <b>Tự động lưu tiến độ (gợi ý thêm):</b><br>
+                            Dữ liệu công việc được tự động lưu giúp bạn không lo bị mất thông tin.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal chi tiết tài khoản nhóm nhỏ-->
+    <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="groupModalLabel">Tài khoản nhóm nhỏ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <p><b>🧑‍🤝‍🧑 Tài khoản nhóm nhỏ:</b><br>
+                     Dành cho nhóm làm việc từ 2–10 thành viên, giúp quản lý công việc, phân chia nhiệm vụ và theo dõi tiến độ chung dễ dàng.</p>
+
+                    <p><b>✨ Tính năng nổi bật:</b></p>
+                    <ul class="list-unstyled">
+                        <li>👥 <b>Tạo và quản lý doanh nghiệp làm việc:</b><br>
+                            Người quản trị (Admin) có thể tạo nhóm, thêm thành viên, và phân quyền  cơ bản (người theo dõi, người thực hiện).</li>
+                        <li>🗂️ <b>Phân chia công việc cho từng thành viên:</b><br>
+                            Giao việc trực tiếp cho từng người, kèm hạn hoàn thành, mô tả chi tiết, file đính kèm.</li>
+                        <li>📊 <b>Theo dõi tiến độ nhóm theo thanh % hoàn thành.</b></li>
+                        <li>💬 <b> Trao đổi, bình luận trong từng công việc:</b><br>
+                            Thành viên có thể bình luận ngay trong nhiệm vụ.</li>
+                        <li>🔔 <b>Thông báo hoạt động của doanh nghiệp:</b><br>
+                            Hệ thống gửi thông báo khi có công việc mới, khi gần đến hạn hoặc khi ai đó cập nhật tiến độ.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal chi tiết tài khoản doanh nghiệp-->
+    <div class="modal fade" id="businessModal" tabindex="-1" aria-labelledby="businessModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="businessModalLabel">Tài khoản doanh nghiệp</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <p><b>🏢 Tài khoản doanh nghiệp:</b><br>
+                    Dành cho doanh nghiệp tối đa 50  thành viên, giúp quản lý công việc, phân chia nhiệm vụ và theo dõi tiến độ chung dễ dàng.</p>
+
+                    <p><b>✨ Tính năng nổi bật:</b></p>
+                    <ul class="list-unstyled">
+                        <li>👥 <b>Tạo và quản lý doanh nghiệp làm việc:</b><br>
+                            Người quản trị (Admin) có thể tạo nhóm, thêm thành viên, và phân quyền  cơ bản (người theo dõi, người thực hiện).</li>
+                        <li>🗂️ <b>Phân chia công việc cho từng thành viên:</b><br>
+                            Giao việc trực tiếp cho từng người, kèm hạn hoàn thành, mô tả chi tiết, file đính kèm.</li>
+                        <li>📊 <b>Theo dõi tiến độ nhóm theo thanh % hoàn thành.</b></li>
+                        <li>💬 <b> Trao đổi, bình luận trong từng công việc:</b><br>
+                            Thành viên có thể bình luận ngay trong nhiệm vụ.</li>
+                        <li>🔔 <b>Thông báo hoạt động của doanh nghiệp:</b><br>
+                            Hệ thống gửi thông báo khi có công việc mới, khi gần đến hạn hoặc khi ai đó cập nhật tiến độ.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Bootstrap JS + jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let selectedAccountType = '';
+            
+            // Account type selection
+            $('.account-card').click(function() {
+                $('.account-card').removeClass('selected');
+                $(this).addClass('selected');
+                selectedAccountType = $(this).data('account-type');
+                
+                // Show registration form after 500ms
+                setTimeout(() => {
+                    $('#accountTypeSelection').addClass('d-none');
+                    $('#registrationForm').removeClass('d-none');
+                    updateFormTitle(selectedAccountType);
+                    showAdditionalFields(selectedAccountType);
+
+                    //Nếu là tài khoản cá nhân thì căn giữa màn hình
+                    if (selectedAccountType === 'PERSONAL') {
+                        $('#registrationForm').addClass('centered-form');
+                    } else {
+                        $('#registrationForm').removeClass('centered-form');
+                    }
+                }, 500);
+            });
+            
+            // Back to selection
+            $('#backToSelection').click(function() {
+                $('#registrationForm').addClass('d-none');
+                $('#registrationForm').removeClass('centered-form'); //Khi quay lại chọn tài khoản bỏ căn giữa
+                $('#accountTypeSelection').removeClass('d-none');
+                $('.account-card').removeClass('selected');
+                selectedAccountType = '';
+            });
+            
+            // Update form title based on account type
+            function updateFormTitle(accountType) {
+                const titles = {
+                    'PERSONAL': 'Đăng ký tài khoản cá nhân',
+                    'TEAM': 'Đăng ký tài khoản nhóm nhỏ',
+                    'ENTERPRISE': 'Đăng ký tài khoản doanh nghiệp'
+                };
+                $('#formTitle').text(titles[accountType]);
+                $('#accountType').val(accountType);
+            }
+            
+            // Show additional fields based on account type
+            function showAdditionalFields(accountType) {
+                $('#teamNameField, #companyNameField').addClass('d-none');
+                
+                if (accountType === 'TEAM') {
+                    $('#teamNameField').removeClass('d-none');
+                } else if (accountType === 'ENTERPRISE') {
+                    $('#companyNameField').removeClass('d-none');
+                }
+            }
+            
+            // Form submission
+            $('#registerForm').on('submit', function(e) {
+                e.preventDefault();
+                registerUser();
+            });
+        });
+        
+        function registerUser() {
+            const formData = {
+                fullName: $('#fullName').val(),
+                email: $('#email').val(),
+                username: $('#username').val(),
+                password: $('#password').val(),
+                accountType: $('#accountType').val(),
+                organizationName: $('#teamName').val() || $('#companyName').val() || ''
+            };
+            
+            // Basic validation
+            if (formData.password !== $('#confirmPassword').val()) {
+                showError('Mật khẩu xác nhận không khớp!');
+                return;
+            }
+            
+            // Gọi API đăng ký
+            $.ajax({
+                url: '/auth/public/register',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    showSuccess('Đăng ký thành công! Chuyển hướng đến trang đăng nhập...');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                },
+                error: function(xhr) {
+                    const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : xhr.statusText;
+                    showError('Đăng ký thất bại: ' + errorMessage);
+                }
+            });
+        }
+        
+        function showError(message) {
+            $('#errorMsg').text(message).removeClass('d-none');
+            $('#successMsg').addClass('d-none');
+        }
+        
+        function showSuccess(message) {
+            $('#successMsg').text(message).removeClass('d-none');
+            $('#errorMsg').addClass('d-none');
+        }
+
+        //Toast function
+        function toast({title = '', message = '', type = 'info', duration = 3000}){
+            const main = document.getElementById('toast');
+            if (main){
+                const toast = document.createElement('div');
+
+                //Auto remove toast
+                const autoRemoveId = setTimeout(function(){
+                    main.removeChild(toast);
+                }, duration + 1000);
+
+                //Remove toast when clicked
+                toast.onclick = function(e){
+                    if(e.target.closest('.toast__close')){
+                        main.removeChild(toast);
+                        clearTimeout(autoRemoveId);
+                    }
+                }
+
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    info: 'fas fa-info-circle',
+                    warning: 'fas fa-exclamation-circle',
+                    error: 'fas fa-exclamation-circle'
+                };
+                const icon = icons[type];
+                const delay = (duration/1000).toFixed(2);
+
+                toast.classList.add('toast', `toast--${type}`);
+                toast.style.animation = `slideInLeft ease 0.3s, fadeOut linear 1s ${delay}s forwards`;
+                toast.innerHTML = `
+                    <div class="toast__icon">
+                        <i class="${icon}"></i>
+                    </div>
+                    <div class="toast__body">
+                        <h3 class="toast__title">${title}</h3>
+                        <p class="toast__msg">${message}</p>
+                    </div>
+                    <div class="toast__close">
+                        <i class="fas fa-times"></i>
+                    </div>`;
+                main.appendChild(toast);
+            }
+        }
+
+        function showSuccessToast(){
+            toast({
+            title: 'Thành công!',
+            message: 'Bạn đã đăng kí thành công tài khoản',
+            type: 'success',
+            duration: 3000
+            });
+        }
+    </script>
+
+</body>
+</html>

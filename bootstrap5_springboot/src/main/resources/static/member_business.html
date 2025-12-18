@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý nhân viên doanh nghiệp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 280px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            margin: 4px 0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .sidebar .nav-link.active {
+            background: rgba(52, 152, 219, 0.3);
+            color: white;
+            border-left: 4px solid #3498db;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .navbar-custom {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-left: 280px;
+        }
+        
+        .employee-card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .employee-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            border: none;
+        }
+        
+        .admin-row {
+            background-color: #fff3cd !important;
+            border-left: 4px solid #ffc107;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .main-content, .navbar-custom {
+                margin-left: 70px;
+            }
+        }
+        
+        /* Modal tạo nhiều tài khoản */
+        .multiple-accounts-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background: #f8f9fa;
+        }
+        
+        .account-item {
+            padding: 5px 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .account-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header text-center py-4">
+            <h4>🏢 TaskFlow</h4>
+            <p class="mb-0 text-light">Quản lý doanh nghiệp</p>
+        </div>
+        
+        <div class="user-info text-center p-3">
+            <small class="text-light">Xin chào</small>
+            <h6 id="sidebarUsername" class="mb-0"></h6>
+        </div>
+        
+        <nav class="nav flex-column px-3">
+            <a class="nav-link" href="project_business.html">
+                <i class="fas fa-project-diagram"></i>
+                <span>Dự án doanh nghiệp</span>
+            </a>
+            <a class="nav-link" href="dashboard_business.html">
+                <i class="fas fa-chart-bar"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-link active" href="member_business.html">
+                <i class="fas fa-users"></i>
+                <span>Nhân viên</span>
+            </a>
+            <a class="nav-link" href="document_business.html">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Tài liệu</span>
+                    </a>
+            <a class="nav-link" href="settings_business.html">
+                <i class="fas fa-cog"></i>
+                <span>Thiết lập</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom px-4">
+        <div class="container-fluid">
+            <span class="navbar-brand fw-bold" id="currentUsername"></span>
+            
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <!-- THÊM NÚT TẠO NHIỀU TÀI KHOẢN -->
+                <button id="btnCreateMultiple" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMultipleEmployeesModal">
+                    <i class="fas fa-users"></i> Tạo nhiều tài khoản
+                </button>
+                <button id="btnCreateEmployee" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createEmployeeModal">
+                    <i class="fas fa-user-plus"></i> Tạo tài khoản nhân viên
+                </button>
+                <button onclick="window.location.href = 'login.html'" class="btn btn-outline-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="fw-bold">👥 Quản lý nhân viên</h3>
+                    <p class="text-muted">Quản lý tài khoản nhân viên trong doanh nghiệp của bạn</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <div class="input-group" style="width: 300px;">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm nhân viên...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics - Chỉ giữ Tổng nhân viên -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card stats-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 id="totalEmployees">0</h4>
+                                    <p class="mb-0">Tổng nhân viên</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employees List -->
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Danh sách nhân viên</h5>
+                    <div>
+                        <!-- THÊM NÚT TẠO NHIỀU TÀI KHOẢN TRONG CARD HEADER -->
+                        <button class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#createMultipleEmployeesModal">
+                            <i class="fas fa-users"></i> Tạo nhiều
+                        </button>
+                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createEmployeeModal">
+                            <i class="fas fa-plus"></i> Thêm nhân viên
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tài khoản</th>
+                                    <th>Họ tên</th>
+                                    <th>Email</th>
+                                    <th>Mã nhân viên</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeesTableBody">
+                                <!-- Employees will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div id="emptyState" class="text-center py-5" style="display: none;">
+                        <div class="empty-icon mb-4">
+                            <i class="fas fa-users fa-4x text-muted"></i>
+                        </div>
+                        <h4 class="text-muted">Chưa có nhân viên nào</h4>
+                        <p class="text-muted mb-4">Tạo tài khoản nhân viên đầu tiên để bắt đầu quản lý</p>
+                        <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#createEmployeeModal">
+                            <i class="fas fa-user-plus"></i> Tạo nhân viên đầu tiên
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal tạo nhân viên (TỪNG TÀI KHOẢN) -->
+    <div class="modal fade" id="createEmployeeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-user-plus"></i> Tạo tài khoản nhân viên</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tên đăng nhập *</label>
+                        <input type="text" class="form-control" id="employeeUsername" placeholder="Nhập tên đăng nhập" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu *</label>
+                        <input type="password" class="form-control" id="employeePassword" placeholder="Nhập mật khẩu" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Họ và tên *</label>
+                        <input type="text" class="form-control" id="employeeFullName" placeholder="Nhập họ tên đầy đủ" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="employeeEmail" placeholder="email@congty.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mã nhân viên</label>
+                        <input type="text" class="form-control" id="employeeId" placeholder="NV001 (tùy chọn)">
+                    </div>
+                    <div class="alert alert-info">
+                        <small>
+                            <i class="fas fa-info-circle"></i> 
+                            Tài khoản nhân viên sẽ được tạo với quyền EMPLOYEE và chỉ có thể đăng nhập vào hệ thống doanh nghiệp
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-success" id="btnCreateEmployeeSubmit">
+                        <i class="fas fa-save"></i> Tạo tài khoản
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal tạo NHIỀU nhân viên (HÀNG LOẠT) -->
+    <div class="modal fade" id="createMultipleEmployeesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-users-cog"></i> Tạo nhiều tài khoản nhân viên</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tên đăng nhập cơ sở *</label>
+                            <input type="text" class="form-control" id="baseUsername" 
+                                   placeholder="Ví dụ: nhanvien" required>
+                            <div class="form-text">Tài khoản sẽ được đánh số: nhanvien1, nhanvien2, ...</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Số lượng tài khoản *</label>
+                            <input type="number" class="form-control" id="accountCount" 
+                                   min="1" max="50" value="1" required>
+                            <div class="form-text">Tối đa 50 tài khoản mỗi lần tạo</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mã nhân viên (tiền tố)</label>
+                        <input type="text" class="form-control" id="staffCodePrefix" 
+                               placeholder="Ví dụ: NV">
+                        <div class="form-text">Mã nhân viên sẽ được đánh số: NV001, NV002, ...</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Domain email</label>
+                        <input type="text" class="form-control" id="emailDomain" 
+                               placeholder="company.com" value="company.com">
+                        <div class="form-text">Email sẽ có dạng: username@domain</div>
+                    </div>
+                    <div class="alert alert-warning">
+                        <small>
+                            <i class="fas fa-info-circle"></i> 
+                            <strong>Lưu ý:</strong><br>
+                            • Mật khẩu mặc định sẽ là email của tài khoản<br>
+                            • Tên đầy đủ mặc định: Nhân viên 1, Nhân viên 2, ...<br>
+                            • Email sẽ có dạng: [username]@[domain]
+                        </small>
+                    </div>
+                    <!-- Kết quả tạo tài khoản -->
+                    <div class="alert alert-success" id="batchResult" style="display:none;">
+                        <h6><i class="fas fa-check-circle"></i> Kết quả:</h6>
+                        <div id="createdAccountsList" class="multiple-accounts-list"></div>
+                        <p class="mt-2 mb-0"><small><strong>Mật khẩu mặc định:</strong> Email của tài khoản (nhân viên nên đổi sau khi đăng nhập)</small></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="btnCreateMultipleEmployees">
+                        <i class="fas fa-bolt"></i> Tạo hàng loạt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal chỉnh sửa nhân viên -->
+    <div class="modal fade" id="editEmployeeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title"><i class="fas fa-edit"></i> Chỉnh sửa nhân viên</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editEmployeeId">
+                    <div class="mb-3">
+                        <label class="form-label">Tên đăng nhập</label>
+                        <input type="text" class="form-control" id="editEmployeeUsername" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Họ và tên *</label>
+                        <input type="text" class="form-control" id="editEmployeeFullName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="editEmployeeEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mã nhân viên</label>
+                        <input type="text" class="form-control" id="editEmployeeCode">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-warning text-white" id="btnSubmitEditEmployee">
+                        <i class="fas fa-save"></i> Cập nhật
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Thêm biến API_BASE_URL
+        const API_BASE_URL = "http://localhost:8080";
+
+        class EmployeeBusiness {
+            constructor() {
+                this.currentUser = JSON.parse(localStorage.getItem('user'));
+                this.init();
+            }
+
+            async init() {
+                console.log('=== DEBUG START ===');
+                console.log('User Data:', this.currentUser);
+                
+                if (!this.currentUser) {
+                    alert('Vui lòng đăng nhập');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Kiểm tra quyền ENTERPRISE ADMIN
+                if (this.currentUser.accountType !== 'ENTERPRISE' || this.currentUser.role !== 'ADMIN') {
+                    console.log('Permission denied - Account type:', this.currentUser.accountType, 'Role:', this.currentUser.role);
+                    alert('Chỉ Admin doanh nghiệp mới có quyền truy cập trang này');
+                    window.location.href = 'dashboard_business.html';
+                    return;
+                }
+
+                this.organizationId = this.currentUser.organizationId || 
+                                     (this.currentUser.organization ? this.currentUser.organization.id : null);
+                console.log('Organization ID:', this.organizationId);
+                console.log('Current User Object:', this.currentUser);
+                console.log('Available keys:', Object.keys(this.currentUser));
+                // Hiển thị thông tin user
+                document.getElementById('sidebarUsername').textContent = this.currentUser.fullName;
+                document.getElementById('currentUsername').textContent = this.currentUser.fullName;
+
+                console.log('=== DEBUG END ===');
+                
+                await this.loadEmployees();
+                this.setupEventListeners();
+            }
+
+            async loadEmployees() {
+                try {
+                    console.log('Loading employees for organization:', this.organizationId);
+                    console.log('Token:', localStorage.getItem('token'));
+                    
+                    // ✅ GỌI API THẬT - Thêm error handling
+                    const response = await fetch(`/api/organizations/${this.organizationId}/employees`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    console.log('Response status:', response.status);
+                    
+                    if (response.status === 401) {
+                        alert('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                    }
+                    
+                    const employees = await response.json();
+                    console.log('Real API response:', employees);
+                    this.renderEmployees(employees);
+                    this.updateStatistics(employees);
+                    
+                } catch (error) {
+                    console.error('Error loading employees:', error);
+                    
+                    // ❌ TẠM THỜI: Fallback to mock data để test UI
+                    console.log('Using mock data for UI testing');
+                    const mockEmployees = [
+                        {
+                            id: this.currentUser.id,
+                            username: this.currentUser.username,
+                            fullName: this.currentUser.fullName,
+                            email: this.currentUser.email,
+                            employeeId: "ADMIN001",
+                            createdAt: new Date().toISOString(),
+                            admin: true
+                        },
+                        {
+                            id: 13,
+                            username: "nhanvien1",
+                            fullName: "Nguyễn Văn A",
+                            email: "nva@company.com",
+                            employeeId: "NV001",
+                            createdAt: "2024-01-15T00:00:00",
+                            admin: false
+                        },
+                        {
+                            id: 14,
+                            username: "nhanvien2",
+                            fullName: "Trần Thị B", 
+                            email: "ttb@company.com",
+                            employeeId: "NV002",
+                            createdAt: "2024-02-20T00:00:00",
+                            admin: false
+                        }
+                    ];
+                    this.renderEmployees(mockEmployees);
+                    this.updateStatistics(mockEmployees);
+                }
+            }
+
+            renderEmployees(employees) {
+                const tbody = document.getElementById('employeesTableBody');
+                const emptyState = document.getElementById('emptyState');
+
+                if (!employees || employees.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+                
+                tbody.innerHTML = employees.map(emp => {
+                    const isCurrentAdmin = emp.id === this.currentUser.id;
+                    const rowClass = isCurrentAdmin ? 'admin-row' : '';
+                    
+                    return `
+                        <tr class="${rowClass}">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                         style="width: 35px; height: 35px;">
+                                        <span class="text-white fw-bold small">${emp.username?.charAt(0) || 'U'}</span>
+                                    </div>
+                                    <div>
+                                        <strong>${emp.username}</strong>
+                                        ${isCurrentAdmin ? '<br><small class="text-warning"><i class="fas fa-crown"></i> Quản trị</small>' : ''}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                ${emp.fullName}
+                                ${isCurrentAdmin ? '<br><small class="text-muted">(Tài khoản của bạn)</small>' : ''}
+                            </td>
+                            <td>${emp.email}</td>
+                            <td>${emp.employeeId || '-'}</td>
+                            <td>${new Date(emp.createdAt).toLocaleDateString('vi-VN')}</td>
+                            <td>
+                                ${!isCurrentAdmin ? `
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary edit-employee" 
+                                            data-employee-id="${emp.id}"
+                                            data-username="${emp.username}"
+                                            data-fullname="${emp.fullName}"
+                                            data-email="${emp.email}"
+                                            data-employee-id="${emp.employeeId}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger delete-employee" data-employee-id="${emp.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                ` : '<span class="text-muted">Không thể chỉnh sửa</span>'}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Add event listeners chỉ cho nhân viên (không phải admin)
+                document.querySelectorAll('.edit-employee').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.openEditModal(e.target.closest('.edit-employee'));
+                    });
+                });
+
+                document.querySelectorAll('.delete-employee').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const employeeId = e.target.closest('.delete-employee').getAttribute('data-employee-id');
+                        this.deleteEmployee(employeeId);
+                    });
+                });
+            }
+
+            updateStatistics(employees) {
+                // Chỉ hiển thị tổng số nhân viên (bao gồm cả admin)
+                document.getElementById('totalEmployees').textContent = employees.length;
+            }
+
+            showEmptyState() {
+                document.getElementById('employeesTableBody').innerHTML = '';
+                document.getElementById('emptyState').style.display = 'block';
+            }
+
+            setupEventListeners() {
+                // Create single employee
+                document.getElementById('btnCreateEmployeeSubmit').addEventListener('click', () => {
+                    this.createEmployee();
+                });
+
+                // Create multiple employees
+                document.getElementById('btnCreateMultipleEmployees').addEventListener('click', () => {
+                    this.createMultipleEmployees();
+                });
+
+                // Edit employee
+                document.getElementById('btnSubmitEditEmployee').addEventListener('click', () => {
+                    this.updateEmployee();
+                });
+
+                // Search functionality
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    this.searchEmployees(e.target.value);
+                });
+
+                // Reset modal khi đóng
+                const multipleModal = document.getElementById('createMultipleEmployeesModal');
+                if (multipleModal) {
+                    multipleModal.addEventListener('hidden.bs.modal', () => {
+                        document.getElementById('baseUsername').value = '';
+                        document.getElementById('accountCount').value = 1;
+                        document.getElementById('staffCodePrefix').value = '';
+                        document.getElementById('emailDomain').value = 'company.com';
+                        document.getElementById('batchResult').style.display = 'none';
+                    });
+                }
+            }
+
+            async createEmployee() {
+                const username = document.getElementById('employeeUsername').value;
+                const password = document.getElementById('employeePassword').value;
+                const fullName = document.getElementById('employeeFullName').value;
+                const email = document.getElementById('employeeEmail').value;
+                const employeeId = document.getElementById('employeeId').value;
+
+                if (!username || !password || !fullName || !email) {
+                    alert('Vui lòng điền đầy đủ thông tin bắt buộc');
+                    return;
+                }
+
+                try {
+                    // ✅ GỌI API THẬT
+                    const response = await fetch(`/api/organizations/${this.organizationId}/employees`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        body: JSON.stringify({
+                            username,
+                            password,
+                            fullName,
+                            email,
+                            employeeId
+                        })
+                    });
+
+                    if (response.ok) {
+                        alert('Tạo tài khoản nhân viên thành công!');
+                        $('#createEmployeeModal').modal('hide');
+                        
+                        // Reset form
+                        document.getElementById('employeeUsername').value = '';
+                        document.getElementById('employeePassword').value = '';
+                        document.getElementById('employeeFullName').value = '';
+                        document.getElementById('employeeEmail').value = '';
+                        document.getElementById('employeeId').value = '';
+                        
+                        // ✅ Load lại danh sách TỪ SERVER
+                        await this.loadEmployees();
+                    } else {
+                        const errorData = await response.text();
+                        throw new Error(errorData || 'Failed to create employee');
+                    }
+
+                } catch (error) {
+                    console.error('Error creating employee:', error);
+                    alert('Lỗi khi tạo tài khoản nhân viên: ' + error.message);
+                }
+            }
+
+            // PHƯƠNG THỨC MỚI: Tạo nhiều tài khoản nhân viên
+            async createMultipleEmployees() {
+                const baseUsername = document.getElementById('baseUsername').value.trim();
+                const accountCount = parseInt(document.getElementById('accountCount').value);
+                const staffCodePrefix = document.getElementById('staffCodePrefix').value.trim();
+                const emailDomain = document.getElementById('emailDomain').value.trim() || 'company.com';
+
+                if (!baseUsername || !accountCount) {
+                    alert('Vui lòng điền đầy đủ thông tin bắt buộc');
+                    return;
+                }
+
+                if (accountCount > 50) {
+                    alert('Số lượng tài khoản tối đa là 50');
+                    return;
+                }
+
+                try {
+                    // Hiển thị loading
+                    const submitBtn = document.getElementById('btnCreateMultipleEmployees');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tạo...';
+                    submitBtn.disabled = true;
+
+                    // Sử dụng vòng lặp để tạo từng tài khoản
+                    const createdAccounts = [];
+                    const failedAccounts = [];
+
+                    for (let i = 1; i <= accountCount; i++) {
+                        try {
+                            // Tạo username: baseUsername + số thứ tự
+                            const username = `${baseUsername}${i}`;
+                            
+                            // Tạo email dựa trên username và domain
+                            const email = `${username}@${emailDomain}`;
+                            
+                            // Tạo employeeId nếu có prefix
+                            const employeeId = staffCodePrefix ? 
+                                `${staffCodePrefix}${i.toString().padStart(3, '0')}` : 
+                                `NV${i.toString().padStart(3, '0')}`;
+                            
+                            // Tên đầy đủ mặc định
+                            const fullName = `Nhân viên ${i}`;
+                            
+                            // Mật khẩu là email (theo yêu cầu)
+                            const password = email;
+
+                            console.log(`Đang tạo tài khoản ${i}/${accountCount}:`, { 
+                                username, email, employeeId 
+                            });
+
+                            // Gọi API tạo từng tài khoản
+                            const response = await fetch(`/api/organizations/${this.organizationId}/employees`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                },
+                                body: JSON.stringify({
+                                    username: username,
+                                    password: password, // Mật khẩu là email
+                                    fullName: fullName,
+                                    email: email,
+                                    employeeId: employeeId
+                                })
+                            });
+
+                            if (response.ok) {
+                                createdAccounts.push({
+                                    username: username,
+                                    password: password, // Mật khẩu (email)
+                                    email: email,
+                                    employeeId: employeeId
+                                });
+                                console.log(`✅ Đã tạo tài khoản ${username}`);
+                            } else {
+                                const errorText = await response.text();
+                                failedAccounts.push({
+                                    username: username,
+                                    error: errorText || 'Lỗi không xác định'
+                                });
+                                console.error(`❌ Lỗi tạo tài khoản ${username}:`, errorText);
+                            }
+                        } catch (error) {
+                            failedAccounts.push({
+                                username: `${baseUsername}${i}`,
+                                error: error.message
+                            });
+                            console.error(`❌ Lỗi khi tạo tài khoản ${baseUsername}${i}:`, error);
+                        }
+                    }
+
+                    // Hiển thị kết quả
+                    const resultDiv = document.getElementById('batchResult');
+                    const accountsList = document.getElementById('createdAccountsList');
+                    
+                    if (createdAccounts.length > 0) {
+                        accountsList.innerHTML = `
+                            <p><strong>✅ Đã tạo ${createdAccounts.length} tài khoản thành công${failedAccounts.length > 0 ? ` (${failedAccounts.length} thất bại)` : ''}:</strong></p>
+                            <div class="multiple-accounts-list">
+                                ${createdAccounts.map(acc => `
+                                    <div class="account-item">
+                                        <strong>${acc.username}</strong><br>
+                                        <small>Mật khẩu: ${acc.password}</small><br>
+                                        <small>Email: ${acc.email}</small><br>
+                                        <small>Mã NV: ${acc.employeeId}</small>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                        resultDiv.style.display = 'block';
+                        
+                        // Cuộn đến kết quả
+                        resultDiv.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Đợi 3 giây rồi reload danh sách và đóng modal
+                        setTimeout(async () => {
+                            await this.loadEmployees();
+                            $('#createMultipleEmployeesModal').modal('hide');
+                            // Reset form
+                            document.getElementById('baseUsername').value = '';
+                            document.getElementById('accountCount').value = 1;
+                            document.getElementById('staffCodePrefix').value = '';
+                            resultDiv.style.display = 'none';
+                        }, 3000);
+                        
+                    } else {
+                        alert(`❌ Không thể tạo bất kỳ tài khoản nào. Vui lòng kiểm tra lại API hoặc thử tạo từng tài khoản.`);
+                    }
+
+                } catch (error) {
+                    console.error("❌ Lỗi khi tạo tài khoản hàng loạt:", error);
+                    alert("Có lỗi xảy ra khi tạo tài khoản: " + error.message);
+                } finally {
+                    // Khôi phục nút
+                    const submitBtn = document.getElementById('btnCreateMultipleEmployees');
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="fas fa-bolt"></i> Tạo hàng loạt';
+                        submitBtn.disabled = false;
+                    }
+                }
+            }
+
+            openEditModal(button) {
+                const employeeId = button.getAttribute('data-employee-id');
+                const username = button.getAttribute('data-username');
+                const fullName = button.getAttribute('data-fullname');
+                const email = button.getAttribute('data-email');
+                const empId = button.getAttribute('data-employee-id');
+
+                document.getElementById('editEmployeeId').value = employeeId;
+                document.getElementById('editEmployeeUsername').value = username;
+                document.getElementById('editEmployeeFullName').value = fullName;
+                document.getElementById('editEmployeeEmail').value = email;
+                document.getElementById('editEmployeeCode').value = empId || '';
+
+                $('#editEmployeeModal').modal('show');
+            }
+
+            async updateEmployee() {
+                const employeeId = document.getElementById('editEmployeeId').value;
+                const fullName = document.getElementById('editEmployeeFullName').value;
+                const email = document.getElementById('editEmployeeEmail').value;
+                const empId = document.getElementById('editEmployeeCode').value;
+
+                if (!fullName || !email) {
+                    alert('Vui lòng điền đầy đủ thông tin bắt buộc');
+                    return;
+                }
+
+                try {
+                    // Gọi API cập nhật thông tin nhân viên
+                    const response = await fetch(`/api/organizations/${this.organizationId}/employees/${employeeId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        },
+                        body: JSON.stringify({
+                            fullName: fullName,
+                            email: email,
+                            employeeId: empId
+                        })
+                    });
+
+                    if (response.ok) {
+                        alert('Cập nhật thông tin nhân viên thành công!');
+                        $('#editEmployeeModal').modal('hide');
+                        await this.loadEmployees();
+                    } else {
+                        const errorData = await response.text();
+                        throw new Error(errorData || 'Failed to update employee');
+                    }
+
+                } catch (error) {
+                    console.error('Error updating employee:', error);
+                    alert('Lỗi khi cập nhật thông tin nhân viên: ' + error.message);
+                }
+            }
+
+            async deleteEmployee(employeeId) {
+                if (!confirm('Bạn có chắc chắn muốn xóa nhân viên này? Hành động này không thể hoàn tác.')) {
+                    return;
+                }
+
+                try {
+                    // ✅ GỌI API THẬT
+                    const response = await fetch(`/api/organizations/${this.organizationId}/employees/${employeeId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        alert('Đã xóa nhân viên thành công!');
+                        // ✅ Load lại danh sách TỪ SERVER
+                        await this.loadEmployees();
+                    } else {
+                        const errorData = await response.text();
+                        throw new Error(errorData || 'Failed to delete employee');
+                    }
+
+                } catch (error) {
+                    console.error('Error deleting employee:', error);
+                    alert('Lỗi khi xóa nhân viên: ' + error.message);
+                }
+            }
+
+            searchEmployees(query) {
+                console.log('Searching employees for:', query);
+                // Implement search functionality here
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new EmployeeBusiness();
+        });
+    </script>
+    <script src="js/auth-check.js"></script>
+</body>
+</html>
