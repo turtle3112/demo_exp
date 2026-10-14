@@ -1,0 +1,288 @@
+[19-Jun-2026 20:25:42 Asia/Ho_Chi_Minh] PHP Notice:  Undefined variable: productType in /home/dcdtpglk/public_html/product_main.php on line 144
+[19-Jun-2026 20:25:42 Asia/Ho_Chi_Minh] PHP Notice:  Undefined variable: productType in /home/dcdtpglk/public_html/product_main.php on line 144
+[19-Jun-2026 20:25:42 Asia/Ho_Chi_Minh] PHP Notice:  Undefined variable: productType in /home/dcdtpglk/public_html/product_main.php on line 144
+[23-Jun-2026 23:40:00 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function buildMenuHTML() in /home/dcdtpglk/public_html/nhasanxuat.php:1093
+Stack trace:
+#0 /home/dcdtpglk/public_html/router.php(199): require()
+#1 {main}
+  thrown in /home/dcdtpglk/public_html/nhasanxuat.php on line 1093
+[23-Jun-2026 23:44:26 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function buildMenuHTML() in /home/dcdtpglk/public_html/nhasanxuat.php:1101
+Stack trace:
+#0 /home/dcdtpglk/public_html/router.php(199): require()
+#1 {main}
+  thrown in /home/dcdtpglk/public_html/nhasanxuat.php on line 1101
+[26-Jun-2026 20:55:19 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function getDBConnection() in /home/dcdtpglk/public_html/post.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/post.php on line 17
+[26-Jun-2026 20:55:26 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function getDBConnection() in /home/dcdtpglk/public_html/post.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/post.php on line 17
+[26-Jun-2026 20:56:15 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function getDBConnection() in /home/dcdtpglk/public_html/post.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/post.php on line 27
+[26-Jun-2026 20:56:16 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function getDBConnection() in /home/dcdtpglk/public_html/post.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/post.php on line 27
+[26-Jun-2026 20:56:45 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function getDBConnection() in /home/dcdtpglk/public_html/post.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/post.php on line 28
+[26-Jun-2026 20:56:48 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function getDBConnection() in /home/dcdtpglk/public_html/post.php:28
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/post.php on line 28
+[26-Jun-2026 20:58:19 Asia/Ho_Chi_Minh] PHP Notice:  Undefined variable: db in /home/dcdtpglk/public_html/post.php on line 15
+[26-Jun-2026 20:58:19 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/dcdtpglk/public_html/post.php:39
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/post.php on line 39
+[26-Jun-2026 20:58:20 Asia/Ho_Chi_Minh] PHP Notice:  Undefined variable: db in /home/dcdtpglk/public_html/post.php on line 15
+[26-Jun-2026 20:58:20 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/dcdtpglk/public_html/post.php:39
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/post.php on line 39
+[06-Jul-2026 13:24:00 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/sp1.php:27
+Stack trace:
+#0 [internal function]: {closure}('sp1.php')
+#1 /home/dcdtpglk/public_html/sp1.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/sp1.php on line 27
+[06-Jul-2026 13:24:02 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/sp1.php:27
+Stack trace:
+#0 [internal function]: {closure}('sp1.php')
+#1 /home/dcdtpglk/public_html/sp1.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/sp1.php on line 27
+[06-Jul-2026 13:24:03 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/sp1.php:27
+Stack trace:
+#0 [internal function]: {closure}('sp1.php')
+#1 /home/dcdtpglk/public_html/sp1.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/sp1.php on line 27
+[08-Jul-2026 20:55:38 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:41 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:42 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:43 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:44 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang-hong')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:46 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:47 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:47 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:48 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:55:56 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:57:16 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang-trang')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:57:19 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang-trang')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:57:20 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang-trang')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:57:26 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 20:57:41 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[08-Jul-2026 21:10:22 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:34
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang')
+#1 /home/dcdtpglk/public_html/product_main.php(35): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 34
+[08-Jul-2026 21:10:25 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:34
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang')
+#1 /home/dcdtpglk/public_html/product_main.php(35): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 34
+[08-Jul-2026 21:10:26 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:34
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang')
+#1 /home/dcdtpglk/public_html/product_main.php(35): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 34
+[08-Jul-2026 21:10:32 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:34
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang')
+#1 /home/dcdtpglk/public_html/product_main.php(35): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 34
+[08-Jul-2026 21:11:07 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:34
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang')
+#1 /home/dcdtpglk/public_html/product_main.php(35): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 34
+[08-Jul-2026 21:11:11 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:34
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang')
+#1 /home/dcdtpglk/public_html/product_main.php(35): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 34
+[08-Jul-2026 21:11:12 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:34
+Stack trace:
+#0 [internal function]: {closure}('ruou-vang')
+#1 /home/dcdtpglk/public_html/product_main.php(35): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 34
+[08-Jul-2026 21:13:20 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/product_main.php:27
+Stack trace:
+#0 [internal function]: {closure}('product_main.ph...')
+#1 /home/dcdtpglk/public_html/product_main.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 27
+[09-Jul-2026 10:48:39 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/dcdtpglk/public_html/product_main.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 19
+[13-Jul-2026 20:44:16 Asia/Ho_Chi_Minh] Reset password token received: f80928051f1bb426fc6d373aad69fbc0b9f3030bc1db8d8c4c7c4d17b8ce5acc
+[13-Jul-2026 20:44:38 Asia/Ho_Chi_Minh] Reset password token received: f80928051f1bb426fc6d373aad69fbc0b9f3030bc1db8d8c4c7c4d17b8ce5acc
+[13-Jul-2026 23:49:24 Asia/Ho_Chi_Minh] Reset password token received: 01e4b638fe4ceea3778b13ac35d5b8a5726a9f3fb8d1c69646441c30820306eb
+[13-Jul-2026 23:52:40 Asia/Ho_Chi_Minh] Reset password token received: 01e4b638fe4ceea3778b13ac35d5b8a5726a9f3fb8d1c69646441c30820306eb
+[13-Jul-2026 23:57:12 Asia/Ho_Chi_Minh] Reset password token received: 01e4b638fe4ceea3778b13ac35d5b8a5726a9f3fb8d1c69646441c30820306eb
+[13-Jul-2026 23:57:53 Asia/Ho_Chi_Minh] Reset password token received: 01e4b638fe4ceea3778b13ac35d5b8a5726a9f3fb8d1c69646441c30820306eb
+[15-Jul-2026 19:11:03 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/sp1.php:27
+Stack trace:
+#0 [internal function]: {closure}('sp1.php')
+#1 /home/dcdtpglk/public_html/sp1.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/sp1.php on line 27
+[21-Jul-2026 22:17:12 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/sp1.php:27
+Stack trace:
+#0 [internal function]: {closure}('sp1.php')
+#1 /home/dcdtpglk/public_html/sp1.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/sp1.php on line 27
+[21-Jul-2026 22:17:20 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/sp1.php:27
+Stack trace:
+#0 [internal function]: {closure}('sp1.php')
+#1 /home/dcdtpglk/public_html/sp1.php(28): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/sp1.php on line 27
+[28-Jul-2026 10:40:55 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function buildMenuHTML() in /home/dcdtpglk/public_html/product_main.php:100
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 100
+[06-Aug-2026 23:36:33 Asia/Ho_Chi_Minh] PHP Warning:  require_once(config/database.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 12
+[06-Aug-2026 23:36:33 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'config/database.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 12
+[06-Aug-2026 23:36:36 Asia/Ho_Chi_Minh] PHP Warning:  require_once(config/database.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 12
+[06-Aug-2026 23:36:36 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'config/database.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 12
+[06-Aug-2026 23:45:50 Asia/Ho_Chi_Minh] PHP Warning:  require_once(includes/functions.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:50 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'includes/functions.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:51 Asia/Ho_Chi_Minh] PHP Warning:  require_once(includes/functions.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:51 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'includes/functions.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:52 Asia/Ho_Chi_Minh] PHP Warning:  require_once(includes/functions.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:52 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'includes/functions.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:52 Asia/Ho_Chi_Minh] PHP Warning:  require_once(includes/functions.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:52 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'includes/functions.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:52 Asia/Ho_Chi_Minh] PHP Warning:  require_once(includes/functions.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:52 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'includes/functions.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:52 Asia/Ho_Chi_Minh] PHP Warning:  require_once(includes/functions.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:45:52 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'includes/functions.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 13
+[06-Aug-2026 23:46:05 Asia/Ho_Chi_Minh] PHP Warning:  require_once(config/database.php): failed to open stream: No such file or directory in /home/dcdtpglk/public_html/product_main.php on line 12
+[06-Aug-2026 23:46:05 Asia/Ho_Chi_Minh] PHP Fatal error:  require_once(): Failed opening required 'config/database.php' (include_path='.:/opt/alt/php74/usr/share/pear') in /home/dcdtpglk/public_html/product_main.php on line 12
+[06-Aug-2026 23:48:22 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/dcdtpglk/public_html/product_main.php:272
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 272
+[06-Aug-2026 23:48:23 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/dcdtpglk/public_html/product_main.php:272
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 272
+[06-Aug-2026 23:48:23 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/dcdtpglk/public_html/product_main.php:272
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 272
+[06-Aug-2026 23:48:24 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to a member function bind_param() on bool in /home/dcdtpglk/public_html/product_main.php:272
+Stack trace:
+#0 {main}
+  thrown in /home/dcdtpglk/public_html/product_main.php on line 272
+[07-Aug-2026 00:04:41 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:23 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:24 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:25 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:26 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:26 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:26 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:28 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:29 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:31 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:32 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 00:06:33 Asia/Ho_Chi_Minh] PHP Notice:  session_start(): A session had already been started - ignoring in /home/dcdtpglk/public_html/api/config.php on line 2
+[07-Aug-2026 22:50:25 Asia/Ho_Chi_Minh] Reset password token received: f80928051f1bb426fc6d373aad69fbc0b9f3030bc1db8d8c4c7c4d17b8ce5acc
+[09-Aug-2026 14:53:33 Asia/Ho_Chi_Minh] PHP Fatal error:  Uncaught Error: Call to undefined function str_ends_with() in /home/dcdtpglk/public_html/sp1.php:26
+Stack trace:
+#0 [internal function]: {closure}('sp1.php')
+#1 /home/dcdtpglk/public_html/sp1.php(27): array_filter(Array, Object(Closure))
+#2 {main}
+  thrown in /home/dcdtpglk/public_html/sp1.php on line 26

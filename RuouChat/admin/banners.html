@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ruouchat Admin | Quản lý Banner & Hero Slider</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & LAYOUT ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; overflow-x: hidden; height: 100vh; }
+
+        .app-wrapper {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== SIDEBAR (giống product_form) ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            box-shadow: 12px 0 28px -12px rgba(0,0,0,0.25);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            padding: 0 4px;
+        }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .sidebar::-webkit-scrollbar-thumb { background: #eab308; border-radius: 10px; }
+
+        .sidebar .brand {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #e2e8f0 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 0.9rem 0.5rem !important;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 14px;
+            margin: 3px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            transition: all 0.2s;
+            background: transparent;
+            white-space: nowrap;
+        }
+        .sidebar a i {
+            width: 24px;
+            font-size: 1rem;
+            text-align: center;
+            color: #94a3b8;
+            transition: all 0.2s;
+        }
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.08);
+            color: white;
+            transform: translateX(4px);
+        }
+        .sidebar a:hover i {
+            color: #facc15;
+            transform: scale(1.05);
+        }
+        .sidebar a.active {
+            background: linear-gradient(95deg, rgba(234,179,8,0.18), rgba(234,179,8,0.05));
+            color: white;
+            border-left: 3px solid #eab308;
+        }
+        .sidebar a.active i { color: #facc15; }
+        #logoutBtn {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            color: #facc15;
+            font-weight: 600;
+        }
+        #logoutBtn i { color: #facc15; }
+        #logoutBtn:hover {
+            background: rgba(250,204,21,0.15);
+            color: #fde047;
+            transform: translateX(4px);
+        }
+
+        /* ===== NỘI DUNG CHÍNH ===== */
+        .main-content {
+            margin-left: 200px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 100vh;
+            background: #f8fafc;
+            padding: 24px 28px;
+        }
+
+        /* ===== MOBILE TOGGLE & OVERLAY ===== */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1060;
+            background: #eab308;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: #0f172a;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 260px;
+                z-index: 1050;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main-content {
+                margin-left: 0;
+                padding-top: 70px;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .mobile-menu-toggle { display: block; }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-toggle { display: none; }
+            .sidebar-overlay { display: none !important; }
+        }
+
+        @media (max-width: 576px) {
+            .main-content { padding: 70px 12px 12px 12px; }
+        }
+
+        /* ===== BANNER STYLES (co nhỏ) ===== */
+        .content { padding: 0; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            gap: 12px;
+        }
+        .page-header h2 {
+            font-weight: 500;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #eab308, #f59e0b, #d97706);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-left: 5px solid #eab308;
+            padding-left: 18px;
+            margin: 0;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(234, 179, 8, 0.2);
+        }
+
+        .filter-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 6px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+        .filter-bar select {
+            border-radius: 10px;
+            padding: 4px 12px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+        }
+
+        /* Tất cả nút border-radius: 10px */
+        .btn, .btn-primary, .btn-warning, .btn-danger, .btn-outline-secondary,
+        .btn-sm, .btn-action, .btn-edit, .btn-delete {
+            border-radius: 10px !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            border: none;
+            padding: 6px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #3b82f6, #1e3a8a);
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            border: none;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.2s;
+        }
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+            color: white;
+        }
+        .btn-danger {
+            background: #ef4444;
+            border: none;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.2s;
+        }
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+        .table th {
+            background: #f8fafc;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 10px;
+            font-size: 0.7rem;
+            color: #334155;
+            white-space: nowrap;
+        }
+        .table td {
+            vertical-align: middle;
+            padding: 10px 10px;
+            font-size: 0.78rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .banner-img {
+            width: 60px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .badge-active {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-inactive {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .modal-header {
+            background: linear-gradient(105deg, #fffaf5, #fff7ed);
+            border-bottom: 1px solid #fed7aa;
+            padding: 0.8rem 1.2rem;
+        }
+        .modal-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #7c2d12;
+        }
+        .modal-footer {
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 0.8rem 1.2rem;
+        }
+        .modal .form-control, .modal .form-select {
+            border-radius: 10px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+        .modal .form-label {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #334155;
+            margin-bottom: 2px;
+        }
+
+        .dropzone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background: #f8fafc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+        .dropzone.drag-over { border-color: #eab308; background: #fef9e3; }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+        }
+        .loading-spinner {
+            background: white;
+            padding: 24px 32px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .table td, .table th { padding: 6px 6px; font-size: 0.7rem; }
+            .banner-img { width: 45px; height: 35px; }
+            .page-header h2 { font-size: 1.2rem; }
+            .filter-bar { font-size: 0.8rem; padding: 4px 12px; }
+            .filter-bar select { font-size: 0.75rem; padding: 3px 8px; }
+            .btn-primary { font-size: 0.8rem; padding: 5px 12px; }
+            .btn-warning, .btn-danger { font-size: 0.65rem; padding: 3px 8px; }
+        }
+
+        @media (max-width: 480px) {
+            .table td, .table th { padding: 4px 4px; font-size: 0.6rem; }
+            .banner-img { width: 35px; height: 28px; }
+            .btn-primary { font-size: 0.75rem; padding: 4px 10px; }
+            .btn-warning, .btn-danger { font-size: 0.6rem; padding: 2px 6px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <!-- SIDEBAR (giống product_form) -->
+    <div class="sidebar" id="sidebar">
+        <div class="brand">Ruouchat Admin</div>
+        <div class="d-flex flex-column">
+            <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="products.html"><i class="fas fa-wine-bottle"></i> Sản phẩm</a>
+            <a href="flash_sales.html"><i class="fas fa-bolt"></i> Flash sale</a>
+            <a href="categories.html"><i class="fas fa-folder"></i> Danh mục</a>
+            <a href="orders.html"><i class="fas fa-shopping-cart"></i> Đơn hàng</a>
+            <a href="customers.html"><i class="fas fa-users"></i> Khách hàng</a>
+            <a href="contacts.html"><i class="fas fa-envelope"></i> Liên hệ</a>
+            <a href="posts.html"><i class="fas fa-newspaper"></i> Bài viết</a>
+            <a href="gift_products.html"><i class="fas fa-gift"></i> Quà tặng</a>
+            <a href="glasses.html"><i class="fas fa-glass-martini"></i> Ly pha lê</a>
+            <a href="other_products.html"><i class="fas fa-box"></i> Sản phẩm khác</a>
+            <a href="promotions.html"><i class="fas fa-bullhorn"></i> Khuyến mãi</a>
+            <a href="producers.php"><i class="fas fa-building"></i> Nhà sản xuất</a>
+            <a href="policies.html"><i class="fas fa-file-contract"></i> Chính sách</a>
+            <a href="index.php"><i class="fas fa-list"></i> Menu</a>
+            <a href="pages.php"><i class="fas fa-file-alt"></i> Trang mới</a>
+            <a href="banners.html" class="active"><i class="fas fa-image"></i> Banner</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+        </div>
+    </div>
+
+    <!-- OVERLAY mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- NÚT TOGGLE mobile -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i> Menu</button>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <div class="main-content">
+        <div class="content">
+            <div class="page-header">
+                <h2>Quản lý Banner & Hero Slider</h2>
+                <button class="btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus-circle me-2"></i>Thêm banner</button>
+            </div>
+
+            <div class="filter-bar">
+                <span><i class="fas fa-filter"></i> Lọc theo vị trí:</span>
+                <select id="filterPosition" onchange="loadBanners()">
+                    <option value="">Tất cả</option>
+                    <option value="hero_slider">🔥 Hero Slider (trang chủ)</option>
+                    <option value="home_sidebar">🏠 Home Sidebar (2 banner nhỏ)</option>
+                    <option value="home_top">📢 Home Top</option>
+                    <option value="product_sidebar">📦 Product Sidebar</option>
+                    <option value="wine_sidebar">🍷 Wine Sidebar (bên trái phần rượu vang)</option>
+                </select>
+            </div>
+
+            <div class="table-wrapper">
+                <div id="bannerList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner">
+        <i class="fas fa-spinner fa-pulse fa-2x text-primary"></i>
+        <p class="mt-2 mb-0">Đang xử lý...</p>
+    </div>
+</div>
+
+<div class="modal fade" id="bannerModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bannerModalTitle">Thêm banner mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bannerForm">
+                    <input type="hidden" id="bannerId" value="0">
+                    <div class="mb-2">
+                        <label class="form-label">Tiêu đề (không bắt buộc)</label>
+                        <input type="text" id="title" class="form-control" placeholder="VD: Khuyến mãi lớn, Tết 2026...">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Hình ảnh <span class="text-danger">*</span></label>
+                        <div id="dropzone" class="dropzone">
+                            <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                            <p>Kéo thả ảnh hoặc nhấn để chọn file</p>
+                            <input type="file" id="fileInput" accept="image/*" style="display:none">
+                        </div>
+                        <div id="uploadProgress" class="text-center mt-1" style="display:none">
+                            <div class="spinner-border spinner-border-sm text-primary"></div> Đang upload...
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">Hoặc nhập URL ảnh</label>
+                            <input type="url" id="image_url" class="form-control" placeholder="https://...">
+                        </div>
+                        <div id="imagePreview" class="mt-2" style="display:none">
+                            <img id="previewImg" style="max-height:80px; border-radius:8px;">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Đường dẫn liên kết</label>
+                        <input type="url" id="link" class="form-control" placeholder="https://...">
+                        <small class="text-muted">Để trống nếu không có link</small>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Vị trí <span class="text-danger">*</span></label>
+                        <select id="position" class="form-select" required>
+                            <option value="hero_slider">🔥 Hero Slider (đầu trang chủ)</option>
+                            <option value="lyphale_hero">🥂 Hero Slider (trang Ly pha lê)</option>
+                            <option value="gift_hero">🎁 Hero Slider (trang Quà tặng doanh nghiệp)</option>
+                            <option value="home_sidebar">🏠 Home Sidebar (2 banner nhỏ)</option>
+                            <option value="home_top">📢 Home Top</option>
+                            <option value="product_sidebar">📦 Product Sidebar</option>
+                            <option value="wine_sidebar">🍷 Wine Sidebar (bên trái phần rượu vang)</option>
+                        </select>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Thứ tự (số nhỏ lên trước)</label>
+                            <input type="number" id="sort_order" class="form-control" value="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Trạng thái</label>
+                            <select id="active" class="form-select">
+                                <option value="1">Hiển thị</option>
+                                <option value="0">Ẩn</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary px-4" onclick="saveBanner()">Lưu banner</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ========== TOGGLE SIDEBAR MOBILE ==========
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggleBtn = document.getElementById('mobileMenuToggle');
+
+    function closeMobileMenu() {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+    }
+
+    function openMobileMenu() {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        }
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (sidebar.classList.contains('open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', closeMobileMenu);
+    }
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+    });
+
+    // ========== BANNER LOGIC ==========
+    const API_BASE = (() => {
+        const path = window.location.pathname;
+        return path.includes('/admin/') ? '../api/' : '/api/';
+    })();
+
+    let currentModal = null;
+
+    function showLoading(show) {
+        document.getElementById('loadingOverlay').style.visibility = show ? 'visible' : 'hidden';
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m]));
+    }
+
+    async function apiRequest(url, options = {}) {
+        const fullUrl = url.startsWith('http') ? url : API_BASE + url;
+        try {
+            showLoading(true);
+            const response = await fetch(fullUrl, {
+                ...options,
+                headers: { 'Content-Type': 'application/json', ...options.headers },
+                credentials: 'include'
+            });
+            const text = await response.text();
+            let data;
+            try { data = JSON.parse(text); } catch(e) {
+                console.error('Parse error:', text);
+                throw new Error('Phản hồi không phải JSON');
+            }
+            if (!response.ok) throw new Error(data.message || data.error || `Lỗi ${response.status}`);
+            return data;
+        } catch(err) {
+            console.error('API Error:', err);
+            throw err;
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    async function uploadImage(file) {
+        const formData = new FormData();
+        formData.append('image', file);
+        const response = await fetch(API_BASE + 'upload.php?type=banner', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+        });
+        const text = await response.text();
+        let data;
+        try { data = JSON.parse(text); } catch(e) { throw new Error('Upload response error'); }
+        if (!response.ok || !data.success) throw new Error(data.message || 'Upload failed');
+        return data.url;
+    }
+
+    function initDragDrop() {
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+
+        const newDropzone = dropzone.cloneNode(true);
+        dropzone.parentNode.replaceChild(newDropzone, dropzone);
+
+        const newFileInput = fileInput.cloneNode(true);
+        fileInput.parentNode.replaceChild(newFileInput, fileInput);
+
+        const finalDropzone = document.getElementById('dropzone');
+        const finalFileInput = document.getElementById('fileInput');
+
+        finalDropzone.addEventListener('click', () => finalFileInput.click());
+        finalDropzone.addEventListener('dragover', (e) => { e.preventDefault(); finalDropzone.classList.add('drag-over'); });
+        finalDropzone.addEventListener('dragleave', () => finalDropzone.classList.remove('drag-over'));
+        finalDropzone.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            finalDropzone.classList.remove('drag-over');
+            if (e.dataTransfer.files.length) await handleFileUpload(e.dataTransfer.files[0]);
+        });
+        finalFileInput.addEventListener('change', async (e) => {
+            if (finalFileInput.files.length) await handleFileUpload(finalFileInput.files[0]);
+            finalFileInput.value = '';
+        });
+    }
+
+    async function handleFileUpload(file) {
+        if (!file.type.startsWith('image/')) return alert('Chỉ chấp nhận file ảnh');
+        if (file.size > 5 * 1024 * 1024) return alert('Ảnh tối đa 5MB');
+        const progressDiv = document.getElementById('uploadProgress');
+        progressDiv.style.display = 'block';
+        try {
+            const imageUrl = await uploadImage(file);
+            document.getElementById('image_url').value = imageUrl;
+            document.getElementById('previewImg').src = imageUrl;
+            document.getElementById('imagePreview').style.display = 'block';
+            alert('Upload ảnh thành công!');
+        } catch(err) {
+            alert('Upload thất bại: ' + err.message);
+        } finally {
+            progressDiv.style.display = 'none';
+        }
+    }
+
+    async function loadBanners() {
+        const position = document.getElementById('filterPosition').value;
+        let url = 'banners.php?active=1&limit=100';
+        if (position) url += `&position=${position}`;
+        try {
+            const data = await apiRequest(url);
+            if (data.success && Array.isArray(data.banners)) renderBannerTable(data.banners);
+            else document.getElementById('bannerList').innerHTML = '<div class="alert alert-warning m-3">Không có banner nào</div>';
+        } catch(err) {
+            document.getElementById('bannerList').innerHTML = '<div class="alert alert-danger m-3">Lỗi tải dữ liệu: ' + err.message + '</div>';
+        }
+    }
+
+    function getPositionLabel(position) {
+        const labels = {
+            'hero_slider': '🔥 Hero Slider',
+            'home_sidebar': '🏠 Home Sidebar',
+            'home_top': '📢 Home Top',
+            'product_sidebar': '📦 Product Sidebar',
+            'wine_sidebar': '🍷 Wine Sidebar'
+        };
+        return labels[position] || position;
+    }
+
+    function renderBannerTable(banners) {
+        if (!banners.length) {
+            document.getElementById('bannerList').innerHTML = '<div class="text-center p-4 text-muted">Chưa có banner nào</div>';
+            return;
+        }
+        let html = `<div class="table-responsive"><table class="table align-middle"><thead><tr>
+            <th>ID</th><th>Ảnh</th><th>Tiêu đề</th><th>Vị trí</th><th>Thứ tự</th><th>Trạng thái</th><th>Thao tác</th>
+            </tr></thead><tbody>`;
+        banners.forEach(b => {
+            const activeBadge = b.active == 1 ? '<span class="badge-active">Hiển thị</span>' : '<span class="badge-inactive">Ẩn</span>';
+            const imageHtml = b.image_url ? `<img src="${escapeHtml(b.image_url)}" class="banner-img" onerror="this.src='https://placehold.co/80x60?text=Error'">` : '<span class="text-muted">Không ảnh</span>';
+            const titleDisplay = b.title ? escapeHtml(b.title) : '<span class="text-muted">—</span>';
+            html += `<tr>
+                <td>${b.id}</td>
+                <td>${imageHtml}</td>
+                <td><strong>${titleDisplay}</strong><br><small class="text-muted">${b.link ? escapeHtml(b.link) : ''}</small></td>
+                <td>${escapeHtml(getPositionLabel(b.position))}</td>
+                <td>${b.sort_order}</td>
+                <td>${activeBadge}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm me-1" onclick="editBanner(${b.id})"><i class="fas fa-edit"></i> Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteBanner(${b.id})"><i class="fas fa-trash"></i> Xóa</button>
+                </td>
+            </tr>`;
+        });
+        html += `</tbody></table></div>`;
+        document.getElementById('bannerList').innerHTML = html;
+    }
+
+    function resetForm() {
+        document.getElementById('bannerId').value = '0';
+        document.getElementById('title').value = '';
+        document.getElementById('image_url').value = '';
+        document.getElementById('link').value = '';
+        document.getElementById('position').value = 'hero_slider';
+        document.getElementById('sort_order').value = '0';
+        document.getElementById('active').value = '1';
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('previewImg').src = '';
+    }
+
+    function openAddModal() {
+        resetForm();
+        document.getElementById('bannerModalTitle').innerText = 'Thêm banner mới';
+        if (currentModal) {
+            currentModal.show();
+        } else {
+            currentModal = new bootstrap.Modal(document.getElementById('bannerModal'));
+            currentModal.show();
+        }
+    }
+
+    async function editBanner(id) {
+        try {
+            showLoading(true);
+            const response = await fetch(`${API_BASE}banners.php?id=${id}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            const text = await response.text();
+            let data;
+            try { data = JSON.parse(text); } catch(e) {
+                console.error('Parse error:', text);
+                throw new Error('Không thể parse dữ liệu từ server');
+            }
+
+            if (!response.ok) throw new Error(data.message || 'Lỗi tải banner');
+
+            if (data.success && data.banner) {
+                const b = data.banner;
+                document.getElementById('bannerId').value = b.id;
+                document.getElementById('title').value = b.title || '';
+                document.getElementById('image_url').value = b.image_url || '';
+                document.getElementById('link').value = b.link || '';
+                document.getElementById('position').value = b.position || 'hero_slider';
+                document.getElementById('sort_order').value = b.sort_order || 0;
+                document.getElementById('active').value = b.active == 1 ? '1' : '0';
+
+                if (b.image_url) {
+                    document.getElementById('previewImg').src = b.image_url;
+                    document.getElementById('imagePreview').style.display = 'block';
+                } else {
+                    document.getElementById('imagePreview').style.display = 'none';
+                }
+
+                document.getElementById('bannerModalTitle').innerText = 'Sửa banner';
+
+                if (currentModal) {
+                    currentModal.show();
+                } else {
+                    currentModal = new bootstrap.Modal(document.getElementById('bannerModal'));
+                    currentModal.show();
+                }
+            } else {
+                alert('Không tìm thấy banner với ID: ' + id);
+            }
+        } catch(err) {
+            console.error('Edit error:', err);
+            alert('Lỗi tải banner: ' + err.message);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    async function saveBanner() {
+        const id = document.getElementById('bannerId').value;
+        const title = document.getElementById('title').value.trim();
+        const image_url = document.getElementById('image_url').value.trim();
+        const position = document.getElementById('position').value;
+
+        if (!image_url) {
+            alert('Vui lòng nhập URL hình ảnh');
+            return;
+        }
+        if (!position) {
+            alert('Vui lòng chọn vị trí');
+            return;
+        }
+
+        const data = {
+            title: title,
+            image_url: image_url,
+            link: document.getElementById('link').value.trim() || null,
+            position: position,
+            sort_order: parseInt(document.getElementById('sort_order').value) || 0,
+            active: parseInt(document.getElementById('active').value)
+        };
+
+        try {
+            if (id && id !== '0') {
+                data.id = parseInt(id);
+                await apiRequest('banners.php', { method: 'PUT', body: JSON.stringify(data) });
+                alert('Cập nhật banner thành công!');
+            } else {
+                await apiRequest('banners.php', { method: 'POST', body: JSON.stringify(data) });
+                alert('Thêm banner thành công!');
+            }
+            if (currentModal) currentModal.hide();
+            resetForm();
+            loadBanners();
+        } catch(err) {
+            alert('Lỗi: ' + err.message);
+        }
+    }
+
+    async function deleteBanner(id) {
+        if (!confirm('Xóa banner này?')) return;
+        try {
+            await apiRequest(`banners.php?id=${id}`, { method: 'DELETE' });
+            alert('Đã xóa');
+            loadBanners();
+        } catch(err) {
+            alert('Lỗi xóa: ' + err.message);
+        }
+    }
+
+    document.getElementById('image_url')?.addEventListener('input', function() {
+        if (this.value.trim()) {
+            document.getElementById('previewImg').src = this.value;
+            document.getElementById('imagePreview').style.display = 'block';
+        } else {
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+    });
+
+    document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        if (confirm('Bạn có chắc muốn đăng xuất?')) {
+            try {
+                await fetch(API_BASE + 'auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'logout' }),
+                    credentials: 'include'
+                });
+            } catch(e) {}
+            window.location.href = 'login.html';
+        }
+    });
+
+    window.onload = async () => {
+        await loadBanners();
+        initDragDrop();
+    };
+</script>
+</body>
+</html>

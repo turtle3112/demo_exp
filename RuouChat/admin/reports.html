@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ruouchat Admin | Báo cáo thống kê</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; overflow-x: hidden; }
+        .sidebar {
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            box-shadow: 12px 0 28px -12px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+        .sidebar .p-3.text-white.text-center {
+            font-size: 1.45rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #e2e8f0 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 1.3rem 0.75rem !important;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .sidebar .d-flex.flex-column { padding: 0 8px; }
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 18px;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: 20px;
+            transition: all 0.25s;
+            background: transparent;
+        }
+        .sidebar a i { width: 28px; font-size: 1.25rem; text-align: center; color: #94a3b8; }
+        .sidebar a:hover { background: rgba(255,255,255,0.1); color: white; transform: translateX(6px); }
+        .sidebar a:hover i { color: #facc15; transform: scale(1.08); }
+        .sidebar a.active {
+            background: linear-gradient(95deg, rgba(234,179,8,0.18), rgba(234,179,8,0.05));
+            color: white;
+            border-left: 3px solid #eab308;
+        }
+        .sidebar a.active i { color: #facc15; }
+        #logoutBtn {
+            margin-top: 28px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            color: #facc15;
+            font-weight: 600;
+        }
+        #logoutBtn i { color: #facc15; }
+        #logoutBtn:hover { background: rgba(250,204,21,0.2); color: #fde047; transform: translateX(6px); }
+        .content { padding: 28px 32px; background: #f8fafc; min-height: 100vh; }
+        .page-header h2 {
+            font-weight: 800;
+            font-size: 2rem;
+            background: linear-gradient(125deg, #0f172a, #2d3a4e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-left: 5px solid #eab308;
+            padding-left: 20px;
+            margin-bottom: 1.5rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 20px 35px rgba(0,0,0,0.1); }
+        .stat-title { font-size: 14px; color: #64748b; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+        .stat-value { font-size: 32px; font-weight: 800; color: #0f172a; }
+        .stat-unit { font-size: 14px; color: #94a3b8; margin-left: 4px; }
+        .btn-detail {
+            margin-top: 15px;
+            background: none;
+            border: none;
+            color: #eab308;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+        }
+        .btn-detail:hover { text-decoration: underline; }
+        .modal-xl { max-width: 1200px; }
+        .filter-bar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; align-items: flex-end; }
+        /* Responsive */
+        @media (max-width: 992px) {
+            .content { padding: 22px 24px; }
+            .sidebar a { padding: 10px 14px; font-size: 0.88rem; gap: 10px; }
+            .sidebar a i { width: 24px; font-size: 1.1rem; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+                position: relative;
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                padding-bottom: 12px;
+            }
+            .sidebar .d-flex.flex-column {
+                flex-direction: row !important;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 6px;
+                padding: 0 12px;
+            }
+            .sidebar a {
+                display: inline-flex;
+                width: auto;
+                margin: 4px 3px;
+                padding: 10px 16px;
+                border-radius: 40px;
+                background: rgba(255,255,255,0.04);
+                white-space: nowrap;
+            }
+            .sidebar a:hover { transform: translateY(-2px) translateX(0); }
+            .sidebar .p-3.text-white.text-center {
+                width: 100%;
+                padding: 0.9rem 0.5rem !important;
+                margin-bottom: 8px;
+                font-size: 1.3rem;
+            }
+            #logoutBtn {
+                margin-top: 0;
+                border-top: none;
+                background: rgba(250,204,21,0.12);
+            }
+            .content h2 { font-size: 1.7rem; margin-top: 8px; }
+            .card-modern { padding: 1.2rem; }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar {
+                overflow-x: auto;
+                white-space: nowrap;
+                scrollbar-width: thin;
+            }
+            .sidebar .d-flex.flex-column {
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+            .content { padding: 16px; }
+            .table-custom { font-size: 0.8rem; }
+            .btn-edit, .btn-delete { padding: 3px 10px; font-size: 0.7rem; }
+        }
+
+        .menu-label { display: inline-block; }
+        .badge-heading {
+            background: #eab30820;
+            color: #b45309;
+            font-size: 0.7rem;
+            border-radius: 50px;
+            padding: 2px 8px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-md-2 p-0 sidebar">
+            <div class="p-3 text-white text-center">Ruouchat Admin</div>
+            <div class="d-flex flex-column">
+                <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="products.html"><i class="fas fa-wine-bottle"></i> Sản phẩm</a>
+                <a href="orders.html"><i class="fas fa-shopping-cart"></i> Đơn hàng</a>
+                <a href="customers.html"><i class="fas fa-users"></i> Khách hàng</a>
+                <a href="contacts.html"><i class="fas fa-envelope"></i> Liên hệ</a>
+                <a href="posts.html"><i class="fas fa-newspaper"></i> Bài viết</a>
+                <a href="gift_products.html"><i class="fas fa-gift"></i> Quà tặng</a>
+                <a href="glasses.html"><i class="fas fa-glass-martini"></i> Ly pha lê</a>
+                <a href="other_products.html"><i class="fas fa-user-shield"></i> Sản phẩm khác</a>
+                <a href="promotions.html"><i class="fas fa-bullhorn"></i> Khuyến mãi</a>
+                <a href="producers.php"><i class="fas fa-bullhorn"></i> Nhà sản xuất</a>
+                <a href="policies.html"><i class="fas fa-file-contract"></i> Chính sách</a>
+                <a href="reports.html" class="active"><i class="fas fa-chart-bar"></i> Thống kê</a>
+                <a href="index.php"><i class="fas fa-list"></i> Menu</a>
+                <a href="pages.php"><i class="fas fa-list"></i> Trang mới</a>
+                <a href="banners.html"><i class="fas fa-list"></i> Banner</a>
+                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            </div>
+        </div>
+        <div class="col-md-10 content">
+            <div class="page-header">
+                <h2>Báo cáo thống kê</h2>
+            </div>
+
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-dollar-sign me-1"></i> DOANH THU</div>
+                    <div class="stat-value" id="statRevenue">0₫</div>
+                    <button class="btn-detail" data-action="revenue_detail">Xem chi tiết →</button>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-user-plus me-1"></i> KHÁCH HÀNG MỚI (tháng này)</div>
+                    <div class="stat-value" id="statNewCustomers">0</div>
+                    <button class="btn-detail" data-action="customers_detail">Xem chi tiết →</button>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-eye me-1"></i> NGƯỜI TRUY CẬP (hôm nay)</div>
+                    <div class="stat-value" id="statVisitors">0</div>
+                    <button class="btn-detail" data-action="visitors_detail">Xem chi tiết →</button>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-chart-simple me-1"></i> TỈ LỆ ĐẶT HÀNG</div>
+                    <div class="stat-value" id="statConversion">0%</div>
+                    <button class="btn-detail" data-action="conversion_detail">Xem chi tiết →</button>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-cart-shopping me-1"></i> TỶ LỆ BỎ GIỎ</div>
+                    <div class="stat-value" id="statAbandon">0%</div>
+                    <button class="btn-detail" data-action="abandon_detail">Xem chi tiết →</button>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-wine-bottle me-1"></i> SẢN PHẨM ĐƯỢC QUAN TÂM</div>
+                    <div class="stat-value" id="statTopProduct">--</div>
+                    <button class="btn-detail" data-action="products_detail">Xem chi tiết →</button>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title"><i class="fas fa-newspaper me-1"></i> BÀI VIẾT ĐƯỢC QUAN TÂM</div>
+                    <div class="stat-value" id="statTopPost">--</div>
+                    <button class="btn-detail" data-action="posts_detail">Xem chi tiết →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal chi tiết -->
+<div class="modal fade" id="detailModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Chi tiết</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="filter-bar" id="modalFilterBar">
+                    <div class="col-auto">
+                        <label class="form-label">Năm</label>
+                        <select id="filterYear" class="form-select" style="width: 100px;"></select>
+                    </div>
+                    <div class="col-auto">
+                        <label class="form-label">Từ ngày</label>
+                        <input type="date" id="filterStartDate" class="form-control">
+                    </div>
+                    <div class="col-auto">
+                        <label class="form-label">Đến ngày</label>
+                        <input type="date" id="filterEndDate" class="form-control">
+                    </div>
+                    <div class="col-auto" id="searchBox" style="display:none;">
+                        <label class="form-label">Tìm kiếm</label>
+                        <input type="text" id="searchInput" class="form-control" placeholder="Nhập tên...">
+                    </div>
+                    <div class="col-auto" id="sortBox" style="display:none;">
+                        <label class="form-label">Sắp xếp</label>
+                        <select id="sortSelect" class="form-select"></select>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" id="applyFilterBtn">Lọc</button>
+                    </div>
+                </div>
+                <canvas id="detailChart" style="max-height: 300px; margin-bottom: 30px;"></canvas>
+                <div id="detailTable" class="table-responsive"></div>
+                <div id="pagination" class="d-flex justify-content-center mt-3"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const ADMIN_SECRET = "RuouchatAdmin2024!";
+    let currentAction = '';
+    let chartInstance = null;
+    let currentPage = 1;
+    let totalPages = 1;
+
+    async function fetchDashboard() {
+        try {
+            const res = await fetch('../api/admin_reports.php?action=dashboard', {
+                headers: { 'X-Admin-Secret': ADMIN_SECRET }
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('statRevenue').innerText = formatCurrency(data.total_revenue);
+                document.getElementById('statNewCustomers').innerText = data.new_customers;
+                document.getElementById('statVisitors').innerText = data.visitors;
+                document.getElementById('statConversion').innerText = data.conversion_rate + '%';
+                document.getElementById('statAbandon').innerText = data.abandon_rate + '%';
+                if (data.top_products.length) {
+                    document.getElementById('statTopProduct').innerHTML = `<small>${escapeHtml(data.top_products[0].name)}<br>(${data.top_products[0].order_count} đơn)</small>`;
+                }
+                if (data.top_posts.length) {
+                    document.getElementById('statTopPost').innerHTML = `<small>${escapeHtml(data.top_posts[0].title)}<br>(${data.top_posts[0].view_count} lượt)</small>`;
+                }
+            }
+        } catch(err) { console.error(err); }
+    }
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('vi-VN').format(amount) + '₫';
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m]));
+    }
+
+    async function showDetail(action) {
+        currentAction = action;
+        currentPage = 1;
+        document.getElementById('modalTitle').innerText = getTitle(action);
+        // Hiển thị/ẩn các bộ lọc tùy action
+        const isProductOrPost = (action === 'products_detail' || action === 'posts_detail');
+        document.getElementById('searchBox').style.display = isProductOrPost ? 'flex' : 'none';
+        document.getElementById('sortBox').style.display = isProductOrPost ? 'flex' : 'none';
+        
+        if (action === 'products_detail') {
+            document.getElementById('sortSelect').innerHTML = `
+                <option value="views_desc">Lượt mua (cao → thấp)</option>
+                <option value="views_asc">Lượt mua (thấp → cao)</option>
+                <option value="name_asc">Tên A → Z</option>
+                <option value="name_desc">Tên Z → A</option>
+            `;
+        } else if (action === 'posts_detail') {
+            document.getElementById('sortSelect').innerHTML = `
+                <option value="views_desc">Lượt xem (cao → thấp)</option>
+                <option value="views_asc">Lượt xem (thấp → cao)</option>
+                <option value="title_asc">Tiêu đề A → Z</option>
+                <option value="title_desc">Tiêu đề Z → A</option>
+                <option value="date_desc">Mới nhất trước</option>
+                <option value="date_asc">Cũ nhất trước</option>
+            `;
+        }
+        
+        await loadDetailData();
+        const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+        modal.show();
+    }
+
+    async function loadDetailData() {
+        const action = currentAction;
+        const year = document.getElementById('filterYear').value || new Date().getFullYear();
+        const startDate = document.getElementById('filterStartDate').value;
+        const endDate = document.getElementById('filterEndDate').value;
+        const search = document.getElementById('searchInput')?.value || '';
+        const sort = document.getElementById('sortSelect')?.value || '';
+
+        if (action === 'revenue_detail' || action === 'customers_detail') {
+            let url = `../api/admin_reports.php?action=${action}&year=${year}`;
+            if (startDate) url += `&start_date=${startDate}`;
+            if (endDate) url += `&end_date=${endDate}`;
+            const res = await fetch(url, { headers: { 'X-Admin-Secret': ADMIN_SECRET } });
+            const data = await res.json();
+            if (data.success) {
+                // Vẽ biểu đồ cột theo tháng
+                const labels = data.monthly.map(m => `Tháng ${m.month}`);
+                const values = data.monthly.map(m => action === 'revenue_detail' ? m.revenue : m.customers);
+                if (chartInstance) chartInstance.destroy();
+                const ctx = document.getElementById('detailChart').getContext('2d');
+                chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: { labels: labels, datasets: [{ label: action === 'revenue_detail' ? 'Doanh thu (VNĐ)' : 'Khách hàng mới', data: values, backgroundColor: '#990D23' }] },
+                    options: { responsive: true, maintainAspectRatio: true }
+                });
+                // Hiển thị bảng lịch sử theo ngày
+                let tableHtml = `<table class="table table-striped"><thead><tr><th>Ngày</th><th>${action === 'revenue_detail' ? 'Doanh thu' : 'Số lượng'}</th></tr></thead><tbody>`;
+                data.daily.forEach(d => {
+                    tableHtml += `<tr><td>${d.date}</td><td>${action === 'revenue_detail' ? formatCurrency(d.revenue) : d.new_customers}</td></tr>`;
+                });
+                tableHtml += `</tbody></table>`;
+                document.getElementById('detailTable').innerHTML = tableHtml;
+            }
+        } else if (action === 'products_detail') {
+            let url = `../api/admin_reports.php?action=products_detail&page=${currentPage}&limit=20`;
+            if (search) url += `&search=${encodeURIComponent(search)}`;
+            if (sort) url += `&sort=${sort}`;
+            const res = await fetch(url, { headers: { 'X-Admin-Secret': ADMIN_SECRET } });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('detailChart').style.display = 'none';
+                let tableHtml = `<table class="table table-striped"><thead><tr><th>ID</th><th>Tên sản phẩm</th><th>Giá</th><th>Số lượt mua</th></tr></thead><tbody>`;
+                data.products.forEach(p => {
+                    tableHtml += `<tr><td>${p.id}</td><td>${escapeHtml(p.name)}</td><td>${formatCurrency(p.price)}</td><td>${p.order_count}</td></tr>`;
+                });
+                tableHtml += `</tbody></table>`;
+                document.getElementById('detailTable').innerHTML = tableHtml;
+                totalPages = Math.ceil(data.total / 20);
+                renderPagination();
+            }
+        } else if (action === 'posts_detail') {
+            let url = `../api/admin_reports.php?action=posts_detail&page=${currentPage}&limit=20`;
+            if (search) url += `&search=${encodeURIComponent(search)}`;
+            if (sort) url += `&sort=${sort}`;
+            const res = await fetch(url, { headers: { 'X-Admin-Secret': ADMIN_SECRET } });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('detailChart').style.display = 'none';
+                let tableHtml = `<table class="table table-striped"><thead><tr><th>ID</th><th>Tiêu đề</th><th>Lượt xem</th><th>Ngày đăng</th></tr></thead><tbody>`;
+                data.posts.forEach(p => {
+                    tableHtml += `<tr><td>${p.id}</td><td>${escapeHtml(p.title)}</td><td>${p.view_count || 0}</td><td>${p.created_at ? new Date(p.created_at).toLocaleDateString('vi') : ''}</td></tr>`;
+                });
+                tableHtml += `</tbody></table>`;
+                document.getElementById('detailTable').innerHTML = tableHtml;
+                totalPages = Math.ceil(data.total / 20);
+                renderPagination();
+            }
+        }
+    }
+
+    function renderPagination() {
+        let html = `<nav><ul class="pagination">`;
+        for (let i = 1; i <= totalPages; i++) {
+            html += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a></li>`;
+        }
+        html += `</ul></nav>`;
+        document.getElementById('pagination').innerHTML = html;
+    }
+
+    function changePage(page) {
+        currentPage = page;
+        loadDetailData();
+    }
+
+    function getTitle(action) {
+        const titles = {
+            'revenue_detail': 'Chi tiết doanh thu',
+            'customers_detail': 'Chi tiết khách hàng mới',
+            'visitors_detail': 'Chi tiết lượt truy cập',
+            'conversion_detail': 'Chi tiết tỉ lệ đặt hàng',
+            'abandon_detail': 'Chi tiết tỉ lệ bỏ giỏ',
+            'products_detail': 'Chi tiết sản phẩm được quan tâm',
+            'posts_detail': 'Chi tiết bài viết được quan tâm'
+        };
+        return titles[action] || 'Chi tiết';
+    }
+
+    // Gán sự kiện cho các nút "Xem chi tiết"
+    document.querySelectorAll('.btn-detail').forEach(btn => {
+        btn.addEventListener('click', () => showDetail(btn.getAttribute('data-action')));
+    });
+    document.getElementById('applyFilterBtn')?.addEventListener('click', () => {
+        currentPage = 1;
+        loadDetailData();
+    });
+    document.getElementById('logoutBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('admin');
+        window.location.href = 'login.html';
+    });
+    
+    // Tạo option năm cho bộ lọc
+    const currentYear = new Date().getFullYear();
+    const yearSelect = document.getElementById('filterYear');
+    for (let y = currentYear - 3; y <= currentYear; y++) {
+        yearSelect.innerHTML += `<option value="${y}" ${y === currentYear ? 'selected' : ''}>${y}</option>`;
+    }
+    
+    fetchDashboard();
+</script>
+</body>
+</html>

@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ruouchat Admin | Chi tiết chính sách</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <style>
+        /* ===== RESET & LAYOUT ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; overflow-x: hidden; height: 100vh; }
+
+        .app-wrapper {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== SIDEBAR (giống product_form) ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            box-shadow: 12px 0 28px -12px rgba(0,0,0,0.25);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            padding: 0 4px;
+        }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .sidebar::-webkit-scrollbar-thumb { background: #eab308; border-radius: 10px; }
+
+        .sidebar .brand {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #e2e8f0 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 0.9rem 0.5rem !important;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 14px;
+            margin: 3px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            transition: all 0.2s;
+            background: transparent;
+            white-space: nowrap;
+        }
+        .sidebar a i {
+            width: 24px;
+            font-size: 1rem;
+            text-align: center;
+            color: #94a3b8;
+            transition: all 0.2s;
+        }
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.08);
+            color: white;
+            transform: translateX(4px);
+        }
+        .sidebar a:hover i {
+            color: #facc15;
+            transform: scale(1.05);
+        }
+        .sidebar a.active {
+            background: linear-gradient(95deg, rgba(234,179,8,0.18), rgba(234,179,8,0.05));
+            color: white;
+            border-left: 3px solid #eab308;
+        }
+        .sidebar a.active i { color: #facc15; }
+        #logoutBtn {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            color: #facc15;
+            font-weight: 600;
+        }
+        #logoutBtn i { color: #facc15; }
+        #logoutBtn:hover {
+            background: rgba(250,204,21,0.15);
+            color: #fde047;
+            transform: translateX(4px);
+        }
+
+        /* ===== NỘI DUNG CHÍNH ===== */
+        .main-content {
+            margin-left: 200px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 100vh;
+            background: #f8fafc;
+            padding: 24px 28px;
+        }
+
+        /* ===== MOBILE TOGGLE & OVERLAY ===== */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1060;
+            background: #eab308;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: #0f172a;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 260px;
+                z-index: 1050;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main-content {
+                margin-left: 0;
+                padding-top: 70px;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .mobile-menu-toggle { display: block; }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-toggle { display: none; }
+            .sidebar-overlay { display: none !important; }
+        }
+
+        @media (max-width: 576px) {
+            .main-content { padding: 70px 12px 12px 12px; }
+        }
+
+        /* ===== POLICY FORM STYLES (co nhỏ) ===== */
+        .content { padding: 0; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            gap: 12px;
+        }
+        .page-header h2 {
+            font-weight: 500;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #eab308, #f59e0b, #d97706);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-left: 5px solid #eab308;
+            padding-left: 18px;
+            margin: 0;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(234, 179, 8, 0.2);
+        }
+
+        .editor-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            transition: box-shadow 0.2s;
+        }
+        .editor-card:hover {
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+        .editor-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            border-left: 3px solid #eab308;
+            padding-left: 12px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #334155;
+            margin-bottom: 2px;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+        }
+
+        /* Tất cả nút border-radius: 10px */
+        .btn, .btn-primary, .btn-secondary, .btn-save, .btn-draft,
+        .btn-preview, .btn-clone, .btn-outline-primary,
+        .btn-close, .btn-sm, .btn-action {
+            border-radius: 10px !important;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 10px rgba(5,150,105,0.3);
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(5,150,105,0.4);
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+        .btn-draft {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 10px rgba(245,158,11,0.3);
+            transition: all 0.2s;
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-draft:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245,158,11,0.4);
+        }
+        .btn-preview {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 700;
+            color: white;
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        .btn-preview:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59,130,246,0.4);
+        }
+        .btn-clone {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border: none;
+            padding: 10px 20px;
+            font-weight: 700;
+            color: white;
+            font-size: 0.9rem;
+        }
+        .btn-clone:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139,92,246,0.4);
+        }
+        .btn-secondary {
+            background: #64748b;
+            border: none;
+            padding: 6px 16px;
+            color: white;
+            transition: background 0.2s;
+            font-size: 0.85rem;
+        }
+        .btn-secondary:hover {
+            background: #475569;
+            color: white;
+        }
+
+        .action-buttons-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .seo-preview {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #e9ecef;
+            margin-top: 8px;
+        }
+        .preview-title {
+            color: #1a0dab;
+            font-size: 16px;
+            line-height: 1.3;
+            cursor: default;
+        }
+        .preview-url {
+            color: #006621;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        .preview-desc {
+            color: #545454;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .url-demo-box {
+            background: linear-gradient(135deg, #fefce8 0%, #f8fafc 100%);
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 2px solid #eab308;
+            position: relative;
+            margin-top: 6px;
+        }
+        .url-demo-box .url-label {
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+        }
+        .url-demo-box .url-value {
+            color: #006621;
+            font-size: 0.9rem;
+            word-break: break-all;
+            font-weight: 500;
+        }
+        .url-demo-box .url-badge {
+            position: absolute;
+            top: -10px;
+            right: 12px;
+            background: #eab308;
+            color: #0f172a;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+        .url-demo-box .url-hint {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 4px;
+            border-top: 1px dashed #e2e8f0;
+            padding-top: 4px;
+        }
+        .url-demo-box .url-hint strong { color: #0f172a; }
+
+        .char-count {
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-top: 0.15rem;
+        }
+        .char-count.warning { color: #dc3545; }
+
+        .gallery-img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .gallery-img.active {
+            border-color: #eab308;
+            box-shadow: 0 0 0 2px rgba(234,179,8,0.3);
+        }
+        .gallery-item-wrapper {
+            position: relative;
+            cursor: grab;
+            transition: transform 0.2s ease;
+            touch-action: none;
+        }
+        .gallery-item-wrapper:active { cursor: grabbing; }
+        .gallery-item-wrapper.sortable-chosen { opacity: 0.8; transform: scale(0.95); }
+        .gallery-item-wrapper.sortable-ghost {
+            opacity: 0.4;
+            border: 2px dashed #eab308;
+            background: #fef3c7;
+            border-radius: 8px;
+        }
+        .gallery-item-wrapper .gallery-img { pointer-events: none; }
+        .gallery-container-sortable { min-height: 60px; }
+        .gallery-container-sortable.empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            border: 2px dashed #e2e8f0;
+            border-radius: 10px;
+        }
+        .drag-handle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            z-index: 10;
+            pointer-events: auto;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .drag-handle:hover { opacity: 1; background: rgba(0,0,0,0.8); }
+        .gallery-item-wrapper:hover .drag-handle { opacity: 1; }
+
+        .delete-img-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: rgba(220,38,38,0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        .delete-img-btn:hover { background: #dc2626; }
+        .main-badge {
+            position: absolute;
+            bottom: 3px;
+            left: 3px;
+            background: #eab308;
+            color: #000;
+            font-size: 8px;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        .edit-alt-btn {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        .edit-alt-btn:hover { background: #eab308; color: #000; }
+        .gallery-alt-badge {
+            position: absolute;
+            bottom: 3px;
+            left: 26px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 8px;
+            padding: 1px 6px;
+            border-radius: 8px;
+            pointer-events: auto;
+            max-width: calc(100% - 32px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .gallery-alt-badge:hover { background: rgba(0,0,0,0.8); }
+
+        .sortable-hint {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            padding: 8px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .sortable-hint i { color: #64748b; }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+        }
+        .loading-spinner {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-alt-edit {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 0;
+        }
+        .modal-alt-edit img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .preview-mode-banner {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 12px;
+        }
+        .preview-mode-banner i { font-size: 12px; }
+        .policy-status-badge {
+            display: inline-block;
+            background: #ef4444;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .policy-status-badge.hidden { background: #f59e0b; }
+
+        .auto-save-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .note-editor {
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .note-toolbar {
+            background: #f8fafc;
+            border-radius: 12px 12px 0 0;
+        }
+        .note-editor.note-frame.fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 1050 !important;
+            background: white !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+        }
+        .note-editor.note-frame.fullscreen .note-editable {
+            background: white !important;
+            padding: 20px !important;
+        }
+        .note-editor.note-frame.fullscreen .note-toolbar {
+            border-radius: 0 !important;
+        }
+        body.fullscreen-active { overflow: hidden; }
+
+        /* ===== SWITCH TOGGLE CÁCH XA LABEL ===== */
+        .status-toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 6px 0;
+        }
+        .status-toggle-wrapper .form-switch {
+            margin-bottom: 0;
+            padding-left: 0;
+        }
+        .status-toggle-wrapper .form-switch .form-check-input {
+            width: 48px;
+            height: 24px;
+            margin-left: 0;
+            cursor: pointer;
+        }
+        .status-toggle-wrapper .status-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-toggle-wrapper .status-label .status-icon {
+            font-size: 1rem;
+        }
+        .status-toggle-wrapper .status-hint {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-left: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .editor-card { padding: 12px 14px; }
+            .editor-card h3 { font-size: 0.95rem; }
+            .form-control, .form-select { font-size: 0.8rem; padding: 5px 10px; }
+            .page-header h2 { font-size: 1.2rem; }
+            .btn-save, .btn-draft, .btn-preview, .btn-clone { padding: 8px 16px; font-size: 0.8rem; }
+            .action-buttons-group { gap: 6px; }
+            .gallery-img { height: 60px; }
+            .preview-mode-banner { font-size: 10px; padding: 3px 10px; }
+            .status-toggle-wrapper { gap: 12px; }
+            .status-toggle-wrapper .status-label { font-size: 0.85rem; }
+        }
+
+        @media (max-width: 480px) {
+            .btn-save, .btn-draft, .btn-preview, .btn-clone {
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+            .gallery-img { height: 50px; }
+            .drag-handle, .delete-img-btn, .edit-alt-btn { width: 18px; height: 18px; font-size: 8px; }
+            .main-badge { font-size: 7px; padding: 1px 4px; }
+            .status-toggle-wrapper { gap: 8px; }
+            .status-toggle-wrapper .status-label { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-wrapper">
+    <!-- SIDEBAR (giống product_form) -->
+    <div class="sidebar" id="sidebar">
+        <div class="brand">Ruouchat Admin</div>
+        <div class="d-flex flex-column">
+            <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="products.html"><i class="fas fa-wine-bottle"></i> Sản phẩm</a>
+            <a href="flash_sales.html"><i class="fas fa-bolt"></i> Flash sale</a>
+            <a href="categories.html"><i class="fas fa-folder"></i> Danh mục</a>
+            <a href="orders.html"><i class="fas fa-shopping-cart"></i> Đơn hàng</a>
+            <a href="customers.html"><i class="fas fa-users"></i> Khách hàng</a>
+            <a href="contacts.html"><i class="fas fa-envelope"></i> Liên hệ</a>
+            <a href="posts.html"><i class="fas fa-newspaper"></i> Bài viết</a>
+            <a href="gift_products.html"><i class="fas fa-gift"></i> Quà tặng</a>
+            <a href="glasses.html"><i class="fas fa-glass-martini"></i> Ly pha lê</a>
+            <a href="other_products.html"><i class="fas fa-box"></i> Sản phẩm khác</a>
+            <a href="promotions.html"><i class="fas fa-bullhorn"></i> Khuyến mãi</a>
+            <a href="producers.php"><i class="fas fa-building"></i> Nhà sản xuất</a>
+            <a href="policies.html" class="active"><i class="fas fa-file-contract"></i> Chính sách</a>
+            <a href="index.php"><i class="fas fa-list"></i> Menu</a>
+            <a href="pages.php"><i class="fas fa-file-alt"></i> Trang mới</a>
+            <a href="banners.html"><i class="fas fa-image"></i> Banner</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+        </div>
+    </div>
+
+    <!-- OVERLAY mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- NÚT TOGGLE mobile -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i> Menu</button>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <div class="main-content">
+        <div class="content">
+            <div class="page-header">
+                <div class="d-flex align-items-center flex-wrap">
+                    <h2 id="formTitle">Thêm chính sách mới</h2>
+                    <span class="preview-mode-banner" id="previewModeBanner" style="display:none;">
+                        <i class="fas fa-eye"></i> ĐANG XEM TRƯỚC
+                    </span>
+                    <span class="policy-status-badge hidden" id="statusBadge" style="display:none;">
+                        <i class="fas fa-eye-slash"></i> ĐANG TẮT
+                    </span>
+                </div>
+                <a href="#" class="btn btn-secondary" id="backToListBtn"><i class="fas fa-arrow-left me-2"></i>Quay lại</a>
+            </div>
+
+            <div class="alert alert-warning d-none" id="previewNotice" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Bạn đang xem trước chính sách.</strong>
+                Chính sách này đang ở trạng thái <strong>Tắt</strong> và chỉ hiển thị với admin.
+                <button type="button" class="btn-close float-end" onclick="document.getElementById('previewNotice').classList.add('d-none')"></button>
+            </div>
+
+            <form id="policyForm">
+                <input type="hidden" id="policyId">
+                <input type="hidden" id="isPreviewMode" value="0">
+                <div class="row g-3">
+                    <div class="col-lg-8">
+                        <div class="editor-card">
+                            <h3>Thông tin cơ bản</h3>
+                            <div class="mb-2">
+                                <label class="form-label">Slug (đường dẫn) <span class="text-danger">*</span></label>
+                                <input type="text" id="slug" class="form-control" placeholder="Ví dụ: chinh-sach-bao-mat" required>
+                                <div class="form-text text-muted">Không dấu, viết thường, dùng dấu gạch ngang (-) thay cho khoảng trắng</div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Tiêu đề <span class="text-danger">*</span></label>
+                                <input type="text" id="title" class="form-control" placeholder="Tiêu đề chính sách" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Nội dung</label>
+                                <textarea id="content" class="form-control" rows="3" placeholder="Nội dung chi tiết..."></textarea>
+                                <small class="text-muted">📹 Có thể chèn video (YouTube, Vimeo) bằng nút <i class="fas fa-video"></i>.</small>
+                            </div>
+                        </div>
+
+                        <div class="editor-card">
+                            <h3>SEO</h3>
+                            <div class="url-demo-box">
+                                <span class="url-badge">🔗 URL</span>
+                                <div class="url-label"><i class="fas fa-globe me-1"></i> Đường dẫn chính sách:</div>
+                                <div class="url-value" id="demoUrlDisplay">https://ruouchat.vn/chinh-sach.php?slug=</div>
+                                <div class="url-hint">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Cấu trúc: <strong>https://ruouchat.vn/chinh-sach.php?slug=[slug]</strong>
+                                </div>
+                            </div>
+                            <div class="mb-1 mt-2">
+                                <div class="char-count" id="seo_title_count">0/70 ký tự</div>
+                                <label class="form-label">Meta Title (Tiêu đề SEO)</label>
+                                <input type="text" id="seo_title" class="form-control" maxlength="70" placeholder="Tiêu đề hiển thị trên Google">
+                            </div>
+                            <div class="mb-1">
+                                <div class="char-count" id="seo_desc_count">0/175 ký tự</div>
+                                <label class="form-label">Meta Description (Mô tả SEO)</label>
+                                <textarea id="seo_description" class="form-control" rows="2" maxlength="175" placeholder="Mô tả ngắn hiển thị trên Google"></textarea>
+                            </div>
+                            <div class="seo-preview">
+                                <label class="form-label">Google Preview</label>
+                                <div class="preview-title" id="google_preview_title">Tiêu đề trang</div>
+                                <div class="preview-url" id="google_preview_url">https://ruouchat.vn/chinh-sach.php?slug=</div>
+                                <div class="preview-desc" id="google_preview_desc">Mô tả ngắn sẽ hiển thị trên kết quả tìm kiếm Google...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <!-- ===== TRẠNG THÁI - SWITCH CÁCH XA ===== -->
+                        <div class="editor-card">
+                            <h3>Trạng thái</h3>
+                            <div class="status-toggle-wrapper">
+                                <div class="form-switch">
+                                    <input class="form-check-input" type="checkbox" id="status" checked>
+                                </div>
+                                <div class="status-label">
+                                    <span class="status-icon" id="statusIcon"><i class="fas fa-check-circle text-success"></i></span>
+                                    <span id="statusLabel">Kích hoạt</span>
+                                    <span class="status-hint">(Bật để hiển thị, tắt để ẩn)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="editor-card">
+                            <h3>Thư viện ảnh</h3>
+                            <div class="sortable-hint">
+                                <i class="fas fa-arrows-alt"></i> Kéo thả ảnh để sắp xếp thứ tự
+                            </div>
+                            <button type="button" class="btn btn-outline-primary w-100 mb-2" onclick="uploadGalleryImages()" style="font-size:0.8rem; padding:4px 12px;">
+                                <i class="fas fa-images me-1"></i>Thêm ảnh vào thư viện
+                            </button>
+                            <div id="galleryContainer" class="row g-2 mt-2 gallery-container-sortable" style="max-height:350px; overflow-y:auto;"></div>
+                            <small class="text-muted">Click vào ảnh để chọn làm đại diện. Kéo thả để sắp xếp vị trí.</small>
+                        </div>
+
+                        <div class="editor-card">
+                            <h3>Ảnh đại diện</h3>
+                            <div id="mainImagePreview" class="text-center p-2 bg-light rounded-3" style="min-height:80px;">
+                                <div class="text-muted">Chưa chọn ảnh đại diện</div>
+                            </div>
+                            <div class="mt-2" id="mainImageAltContainer" style="display:none;">
+                                <label class="form-label">Alt text cho ảnh đại diện:</label>
+                                <input type="text" id="main_image_alt" class="form-control" placeholder="Mô tả ảnh (SEO)">
+                            </div>
+                        </div>
+
+                        <div class="editor-card">
+                            <div class="action-buttons-group">
+                                <button type="button" class="btn btn-save" onclick="savePolicy(false)">
+                                    <i class="fas fa-save me-2"></i>Lưu & Xuất bản
+                                </button>
+                                <button type="button" class="btn btn-draft" onclick="savePolicy(true)">
+                                    <i class="fas fa-pen-fancy me-2"></i>Lưu nháp
+                                </button>
+                                <button type="button" class="btn btn-preview" onclick="previewPolicy()">
+                                    <i class="fas fa-eye me-2"></i>Xem trước
+                                </button>
+                                <button type="button" class="btn btn-clone" onclick="clonePolicy()">
+                                    <i class="fas fa-copy me-2"></i>Nhân bản
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner">
+        <i class="fas fa-spinner fa-pulse fa-2x text-primary"></i>
+        <p class="mt-2 mb-0">Đang xử lý...</p>
+    </div>
+</div>
+
+<div class="modal fade" id="altTextModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-tag me-2"></i>Chỉnh sửa ALT Text cho ảnh</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="altTextModalBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="saveAltTextForCurrentImage()">
+                    <i class="fas fa-save me-1"></i>Lưu thay đổi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="autoSaveToast" class="auto-save-toast">📝 Đã tự động lưu nháp</div>
+
+<script>
+    // ========== TOGGLE SIDEBAR MOBILE ==========
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggleBtn = document.getElementById('mobileMenuToggle');
+
+    function closeMobileMenu() {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+    }
+
+    function openMobileMenu() {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        }
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (sidebar.classList.contains('open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
+    }
+
+    overlay.addEventListener('click', closeMobileMenu);
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+    });
+
+    // ========== CẤU HÌNH ==========
+    const ADMIN_SECRET = "RuouchatAdmin2024!";
+    const API_BASE = (() => {
+        const path = window.location.pathname;
+        if (path.includes('/admin/')) return '../api/';
+        if (path.includes('/pages/')) return '../api/';
+        return '/api/';
+    })();
+
+    // ========== BIẾN TOÀN CỤC ==========
+    let isDirty = false;
+    let autoSaveTriggered = false;
+    let currentPolicyId = null;
+    let galleryImages = [];
+    let mainImage = '';
+    let mainImageAlt = '';
+    let editor = null;
+    let currentEditingImage = null;
+    let sortableInstance = null;
+    let isPreviewMode = false;
+
+    // ========== HÀM TIỆN ÍCH ==========
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m]));
+    }
+
+    function createSlug(str) {
+        if (!str) return '';
+        return str.toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[đĐ]/g, 'd')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+
+    function showLoading(show) {
+        document.getElementById('loadingOverlay').style.visibility = show ? 'visible' : 'hidden';
+    }
+
+    function markDirty() {
+        if (!isDirty) isDirty = true;
+    }
+
+    function resetDirty() {
+        isDirty = false;
+        autoSaveTriggered = false;
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('autoSaveToast');
+        toast.textContent = msg;
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+    }
+
+    function hasFormData() {
+        const title = document.getElementById('title').value.trim();
+        const slug = document.getElementById('slug').value.trim();
+        const content = editor ? editor.summernote('code') : document.getElementById('content').value;
+        return title !== '' || slug !== '' || (content && content !== '<p><br></p>' && content !== '');
+    }
+
+    // ========== API REQUEST ==========
+    async function apiRequest(url, options = {}) {
+        const fullUrl = url.startsWith('http') ? url : API_BASE + url;
+        try {
+            showLoading(true);
+            const response = await fetch(fullUrl, {
+                ...options,
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET, ...options.headers }
+            });
+            const text = await response.text();
+            if (!text.trim()) throw new Error('Server trả về rỗng');
+            let data;
+            try { data = JSON.parse(text); } catch(e) { throw new Error('Phản hồi không phải JSON'); }
+            if (!response.ok) throw new Error(data.message || data.error || `Lỗi ${response.status}`);
+            return data;
+        } catch(err) {
+            console.error(err);
+            throw err;
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    // ========== AUTO SAVE ==========
+    async function autoSaveDraftOnLeave() {
+        if (autoSaveTriggered) return;
+        if (!hasFormData()) return;
+        const policyData = collectPolicyData(true);
+        if (!policyData) return;
+        autoSaveTriggered = true;
+        const url = API_BASE + 'admin_policies.php';
+        const method = (policyData.id && policyData.id !== 0) ? 'PUT' : 'POST';
+        const body = JSON.stringify(policyData);
+        try {
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
+                body: body,
+                keepalive: true
+            });
+            showToast('📝 Đã tự động lưu nháp');
+        } catch(e) {
+            console.log('Auto save error:', e);
+            const blob = new Blob([body], { type: 'application/json' });
+            navigator.sendBeacon(url, blob);
+        }
+    }
+
+    // ========== CẬP NHẬT DEMO URL ==========
+    function updateDemoUrl() {
+        const slug = document.getElementById('slug').value.trim() || 'slug-cua-ban';
+        const demoUrl = `https://ruouchat.vn/chinh-sach.php?slug=${slug}`;
+
+        const demoDisplay = document.getElementById('demoUrlDisplay');
+        if (demoDisplay) demoDisplay.textContent = demoUrl;
+
+        const previewUrl = document.getElementById('google_preview_url');
+        if (previewUrl) previewUrl.textContent = demoUrl;
+    }
+
+    // ========== GALLERY ==========
+    function initSortableGallery() {
+        const container = document.getElementById('galleryContainer');
+        if (sortableInstance) {
+            sortableInstance.destroy();
+            sortableInstance = null;
+        }
+
+        if (!container) return;
+
+        const children = container.querySelectorAll('.gallery-item-wrapper');
+        if (children.length <= 1) return;
+
+        sortableInstance = new Sortable(container, {
+            animation: 150,
+            handle: '.drag-handle',
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            forceFallback: true,
+            fallbackTolerance: 3,
+            onEnd: function(evt) {
+                const items = container.querySelectorAll('.gallery-item-wrapper');
+                const newOrder = [];
+                items.forEach(item => {
+                    const url = item.dataset.url;
+                    const img = galleryImages.find(i => i.url === url);
+                    if (img) newOrder.push(img);
+                });
+                if (newOrder.length === galleryImages.length) {
+                    galleryImages = newOrder;
+                    markDirty();
+                    if (mainImage && galleryImages.length > 0) {
+                        const mainExists = galleryImages.some(i => i.url === mainImage);
+                        if (!mainExists && galleryImages.length > 0) {
+                            mainImage = galleryImages[0].url;
+                            mainImageAlt = galleryImages[0].alt || '';
+                            document.getElementById('main_image_alt').value = mainImageAlt;
+                            document.getElementById('mainImageAltContainer').style.display = 'block';
+                        }
+                    }
+                    renderGallery();
+                }
+            }
+        });
+    }
+
+    function renderGallery() {
+        const container = document.getElementById('galleryContainer');
+        if (!galleryImages.length) {
+            container.innerHTML = '<div class="text-muted w-100 text-center py-3">Chưa có ảnh. Nhấn "Thêm ảnh" để bắt đầu.</div>';
+            container.classList.add('empty');
+            document.getElementById('mainImagePreview').innerHTML = '<div class="text-muted">Chưa chọn ảnh đại diện</div>';
+            if (sortableInstance) { sortableInstance.destroy(); sortableInstance = null; }
+            return;
+        }
+        container.classList.remove('empty');
+        let html = '';
+        galleryImages.forEach((img, idx) => {
+            const isActive = (img.url === mainImage);
+            const altDisplay = img.alt ? (img.alt.length > 20 ? img.alt.substring(0, 20) + '...' : img.alt) : 'Chưa có alt';
+            html += `<div class="col-md-3 col-4 position-relative gallery-item-wrapper" data-url="${escapeHtml(img.url)}" data-index="${idx}">
+                        <div class="drag-handle" title="Kéo để sắp xếp">
+                            <i class="fas fa-grip-vertical"></i>
+                        </div>
+                        <img src="${img.url}" class="gallery-img ${isActive ? 'active' : ''}" onclick="setAsMainImage('${escapeHtml(img.url)}')" onerror="this.src='https://placehold.co/100x100?text=Error'">
+                        <div class="gallery-alt-badge" title="${escapeHtml(img.alt)}" onclick="event.stopPropagation(); openAltTextModal(${idx})">
+                            <i class="fas fa-tag"></i> ${escapeHtml(altDisplay)}
+                        </div>
+                        <button type="button" class="delete-img-btn" onclick="event.stopPropagation(); removeGalleryImage('${escapeHtml(img.url)}')" title="Xóa ảnh">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <button type="button" class="edit-alt-btn" onclick="event.stopPropagation(); openAltTextModal(${idx})" title="Chỉnh sửa ALT text">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        ${isActive ? '<span class="main-badge"><i class="fas fa-star"></i> Chính</span>' : ''}
+                    </div>`;
+        });
+        container.innerHTML = html;
+
+        const previewContainer = document.getElementById('mainImagePreview');
+        if (mainImage) {
+            previewContainer.innerHTML = `
+                <img src="${mainImage}" style="max-width:100%; max-height:150px; border-radius:10px; object-fit:contain;">
+                <br><small class="text-muted mt-1 d-block">Alt: ${escapeHtml(mainImageAlt || 'Chưa có')}</small>
+            `;
+        } else {
+            previewContainer.innerHTML = '<div class="text-muted">Chưa chọn ảnh đại diện</div>';
+        }
+
+        setTimeout(() => { initSortableGallery(); }, 100);
+    }
+
+    function openAltTextModal(imageIndex) {
+        event.stopPropagation();
+        const img = galleryImages[imageIndex];
+        if (!img) return;
+        currentEditingImage = { index: imageIndex, ...img };
+
+        const modalBody = document.getElementById('altTextModalBody');
+        modalBody.innerHTML = `
+            <div class="modal-alt-edit d-flex align-items-start">
+                <img src="${img.url}" alt="Preview" onerror="this.src='https://placehold.co/80x80?text=Error'">
+                <div class="flex-grow-1">
+                    <label class="form-label fw-bold">ALT Text (mô tả ảnh cho SEO)</label>
+                    <input type="text" id="edit_alt_text" class="form-control" value="${escapeHtml(img.alt)}" placeholder="Mô tả ngắn gọn về nội dung ảnh" autofocus>
+                    <small class="text-muted d-block mt-2">
+                        <i class="fas fa-info-circle"></i> ALT text giúp Google hiểu nội dung ảnh và hỗ trợ người khiếm thị.
+                    </small>
+                </div>
+            </div>
+        `;
+
+        const modal = new bootstrap.Modal(document.getElementById('altTextModal'));
+        modal.show();
+        setTimeout(() => {
+            const input = document.getElementById('edit_alt_text');
+            if (input) input.focus();
+        }, 100);
+    }
+
+    function saveAltTextForCurrentImage() {
+        if (!currentEditingImage) return;
+        const newAlt = document.getElementById('edit_alt_text').value.trim();
+        if (galleryImages[currentEditingImage.index]) {
+            galleryImages[currentEditingImage.index].alt = newAlt;
+            if (galleryImages[currentEditingImage.index].url === mainImage) {
+                mainImageAlt = newAlt;
+                document.getElementById('main_image_alt').value = newAlt;
+            }
+        }
+        renderGallery();
+        markDirty();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('altTextModal'));
+        if (modal) modal.hide();
+        showToast('✅ Đã cập nhật ALT text cho ảnh');
+    }
+
+    async function uploadGalleryImages() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.multiple = true;
+        input.onchange = async function(e) {
+            for (const file of e.target.files) {
+                const formData = new FormData();
+                formData.append('upload', file);
+                formData.append('type', 'policy_gallery');
+
+                let altText = prompt(`Nhập ALT text cho ảnh "${file.name}":`, file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '));
+                if (altText !== null && altText.trim() !== '') {
+                    formData.append('alt_text', altText);
+                }
+
+                try {
+                    const res = await fetch(API_BASE + 'upload_image.php', {
+                        method: 'POST',
+                        headers: { 'X-Admin-Secret': ADMIN_SECRET },
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (data.uploaded) {
+                        galleryImages.push({
+                            url: data.url,
+                            thumb_url: data.thumb_url,
+                            alt: data.alt || altText || ''
+                        });
+                        if (!mainImage) {
+                            mainImage = data.url;
+                            mainImageAlt = data.alt || altText || '';
+                            document.getElementById('main_image_alt').value = mainImageAlt;
+                            document.getElementById('mainImageAltContainer').style.display = 'block';
+                        }
+                        renderGallery();
+                        markDirty();
+                        showToast('✅ Đã tải lên: ' + file.name);
+                    } else {
+                        alert(`Upload lỗi: ${data.error?.message || 'Unknown'}`);
+                    }
+                } catch(err) {
+                    alert('Lỗi upload ảnh: ' + err.message);
+                }
+            }
+        };
+        input.click();
+    }
+
+    async function setAsMainImage(url) {
+        const img = galleryImages.find(i => i.url === url);
+        if (img) {
+            mainImage = url;
+            mainImageAlt = img.alt || '';
+            document.getElementById('main_image_alt').value = mainImageAlt;
+            document.getElementById('mainImageAltContainer').style.display = 'block';
+            renderGallery();
+            markDirty();
+            showToast('✅ Đã chọn ảnh đại diện');
+        }
+    }
+
+    async function removeGalleryImage(url) {
+        if (!confirm('Xóa ảnh này?')) return;
+        galleryImages = galleryImages.filter(i => i.url !== url);
+        if (mainImage === url) {
+            mainImage = galleryImages.length > 0 ? galleryImages[0].url : '';
+            mainImageAlt = mainImage ? (galleryImages[0].alt || '') : '';
+            document.getElementById('main_image_alt').value = mainImageAlt;
+            if (!mainImage) document.getElementById('mainImageAltContainer').style.display = 'none';
+        }
+        renderGallery();
+        markDirty();
+        showToast('🗑️ Đã xóa ảnh');
+    }
+
+    document.getElementById('main_image_alt').addEventListener('input', function() {
+        mainImageAlt = this.value;
+        const mainImgIndex = galleryImages.findIndex(i => i.url === mainImage);
+        if (mainImgIndex !== -1) {
+            galleryImages[mainImgIndex].alt = mainImageAlt;
+        }
+        renderGallery();
+        markDirty();
+    });
+
+    // ========== SUMMERNOTE EDITOR ==========
+    function initEditor() {
+        $('#content').summernote({
+            height: 300,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['align', ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ],
+            callbacks: {
+                onImageUpload: function(files) {
+                    for (let file of files) uploadEditorImage(file);
+                    markDirty();
+                },
+                onFullscreen: function(isFullscreen) {
+                    if (isFullscreen) $('body').addClass('fullscreen-active');
+                    else $('body').removeClass('fullscreen-active');
+                },
+                onChange: function() { markDirty(); }
+            }
+        });
+        editor = $('#content');
+    }
+
+    async function uploadEditorImage(file) {
+        const formData = new FormData();
+        formData.append('upload', file);
+        formData.append('type', 'policy_desc');
+
+        let altText = prompt(`Nhập ALT text cho ảnh editor "${file.name}":`, file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '));
+        if (altText !== null) {
+            formData.append('alt_text', altText);
+        }
+
+        try {
+            const res = await fetch(API_BASE + 'upload_image.php', {
+                method: 'POST',
+                headers: { 'X-Admin-Secret': ADMIN_SECRET },
+                body: formData
+            });
+            const data = await res.json();
+            if (data.uploaded) {
+                const imgHtml = `<img src="${data.url}" alt="${escapeHtml(data.alt || altText || '')}" style="max-width:100%">`;
+                editor.summernote('pasteHTML', imgHtml);
+                markDirty();
+                showToast('✅ Đã chèn ảnh vào nội dung');
+            } else {
+                alert('Upload ảnh thất bại: ' + data.error?.message);
+            }
+        } catch(err) {
+            alert('Lỗi upload ảnh: ' + err.message);
+        }
+    }
+
+    // ========== SEO PREVIEW ==========
+    function updateSeoPreview() {
+        let title = document.getElementById('seo_title').value.trim() || document.getElementById('title').value.trim() || 'Tiêu đề';
+        if (title.length > 70) title = title.substring(0, 70);
+        document.getElementById('google_preview_title').innerText = title;
+
+        updateDemoUrl();
+
+        let desc = document.getElementById('seo_description').value.trim() || 'Mô tả chính sách...';
+        if (desc.length > 175) desc = desc.substring(0, 175);
+        document.getElementById('google_preview_desc').innerText = desc;
+
+        const titleLen = document.getElementById('seo_title').value.length;
+        const descLen = document.getElementById('seo_description').value.length;
+        document.getElementById('seo_title_count').innerHTML = `${titleLen}/70 ký tự ${titleLen > 70 ? '<span class="text-danger">(Vượt quá giới hạn)</span>' : ''}`;
+        document.getElementById('seo_desc_count').innerHTML = `${descLen}/175 ký tự ${descLen > 175 ? '<span class="text-danger">(Vượt quá giới hạn)</span>' : ''}`;
+
+        if (titleLen > 70) document.getElementById('seo_title_count').classList.add('warning');
+        else document.getElementById('seo_title_count').classList.remove('warning');
+        if (descLen > 175) document.getElementById('seo_desc_count').classList.add('warning');
+        else document.getElementById('seo_desc_count').classList.remove('warning');
+
+        markDirty();
+    }
+
+    // ========== COLLECT POLICY DATA ==========
+    function collectPolicyData(isDraft = false) {
+        const title = document.getElementById('title').value.trim();
+        if (!title && !hasFormData()) return null;
+
+        let slug = document.getElementById('slug').value.trim();
+        if (title && !slug) slug = createSlug(title);
+
+        const policyId = document.getElementById('policyId').value;
+        const content = editor ? editor.summernote('code') : document.getElementById('content').value;
+        const status = isDraft ? 0 : (document.getElementById('status').checked ? 1 : 0);
+        const seo_title = document.getElementById('seo_title').value.trim();
+        const seo_description = document.getElementById('seo_description').value.trim();
+
+        return {
+            id: policyId ? parseInt(policyId) : 0,
+            slug: slug || '',
+            title: title || 'Chính sách mới (nháp)',
+            content: content || '',
+            status: status,
+            seo_title: seo_title,
+            seo_description: seo_description,
+            gallery: JSON.stringify(galleryImages)
+        };
+    }
+
+    // ========== LOAD POLICY DATA ==========
+    async function loadPolicyData(id, preview = false) {
+        currentPolicyId = id;
+        isPreviewMode = preview;
+        document.getElementById('isPreviewMode').value = preview ? '1' : '0';
+
+        try {
+            showLoading(true);
+            const p = await apiRequest(`admin_policies.php?id=${id}`);
+            if (!p.id) throw new Error('Không tìm thấy chính sách');
+
+            document.getElementById('policyId').value = p.id;
+            document.getElementById('slug').value = p.slug || '';
+            document.getElementById('title').value = p.title || '';
+            if (editor && editor.summernote) editor.summernote('code', p.content || '');
+            document.getElementById('status').checked = p.status == 1;
+            document.getElementById('seo_title').value = p.seo_title || '';
+            document.getElementById('seo_description').value = p.seo_description || '';
+
+            // Update status label
+            updateStatusLabel();
+
+            // Gallery
+            if (p.main_image) {
+                mainImage = p.main_image;
+                mainImageAlt = p.main_image_alt || '';
+                document.getElementById('main_image_alt').value = mainImageAlt;
+                document.getElementById('mainImageAltContainer').style.display = 'block';
+            }
+
+            galleryImages = [];
+            if (p.gallery && Array.isArray(p.gallery)) {
+                galleryImages = p.gallery.map(img => ({
+                    url: img.url || img,
+                    alt: img.alt || ''
+                }));
+            }
+            if (!galleryImages.length && p.main_image) {
+                galleryImages.push({ url: p.main_image, alt: mainImageAlt });
+            }
+            renderGallery();
+
+            updateSeoPreview();
+            updateDemoUrl();
+
+            if (preview) {
+                document.getElementById('formTitle').innerHTML = `Xem trước chính sách #${p.id} <span class="preview-mode-banner"><i class="fas fa-eye"></i> ĐANG XEM TRƯỚC</span>`;
+                document.getElementById('previewModeBanner').style.display = 'inline-flex';
+                document.getElementById('previewNotice').classList.remove('d-none');
+
+                document.querySelectorAll('#policyForm input, #policyForm select, #policyForm textarea, #policyForm button:not(.btn-preview)').forEach(el => {
+                    if (el.id !== 'previewModeBanner' && el.id !== 'previewNotice') {
+                        el.disabled = true;
+                    }
+                });
+                document.querySelectorAll('.btn-save, .btn-draft, .btn-clone, #backToListBtn').forEach(el => {
+                    el.disabled = true;
+                    el.style.opacity = '0.5';
+                    el.style.cursor = 'not-allowed';
+                });
+
+                if (p.status == 0) {
+                    document.getElementById('statusBadge').style.display = 'inline-block';
+                    document.getElementById('statusBadge').innerHTML = '<i class="fas fa-eye-slash"></i> ĐANG TẮT';
+                }
+            } else {
+                document.getElementById('formTitle').innerText = `Chỉnh sửa chính sách #${p.id}`;
+                document.getElementById('previewModeBanner').style.display = 'none';
+                document.getElementById('previewNotice').classList.add('d-none');
+                document.getElementById('statusBadge').style.display = 'none';
+
+                document.querySelectorAll('#policyForm input, #policyForm select, #policyForm textarea, #policyForm button').forEach(el => {
+                    el.disabled = false;
+                });
+                document.querySelectorAll('.btn-save, .btn-draft, .btn-clone, #backToListBtn').forEach(el => {
+                    el.disabled = false;
+                    el.style.opacity = '1';
+                    el.style.cursor = 'pointer';
+                });
+            }
+
+            resetDirty();
+        } catch(err) {
+            alert('Lỗi tải chính sách: ' + err.message);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    function updateStatusLabel() {
+        const label = document.getElementById('statusLabel');
+        const icon = document.getElementById('statusIcon');
+        const checked = document.getElementById('status').checked;
+        if (checked) {
+            icon.innerHTML = '<i class="fas fa-check-circle text-success"></i>';
+            label.textContent = 'Kích hoạt';
+        } else {
+            icon.innerHTML = '<i class="fas fa-times-circle text-danger"></i>';
+            label.textContent = 'Tắt';
+        }
+    }
+
+    // ========== SAVE POLICY ==========
+    async function savePolicy(isDraft = false) {
+        if (isPreviewMode) {
+            alert('Không thể lưu khi đang ở chế độ xem trước.');
+            return;
+        }
+
+        const title = document.getElementById('title').value.trim();
+        const slug = document.getElementById('slug').value.trim();
+
+        if (!isDraft && (!title || !slug)) {
+            alert('Vui lòng nhập tiêu đề và slug hợp lệ');
+            document.getElementById('title').focus();
+            return;
+        }
+
+        if (!isDraft && !title) {
+            alert('Vui lòng nhập tiêu đề');
+            document.getElementById('title').focus();
+            return;
+        }
+
+        if (!isDraft && !slug) {
+            alert('Vui lòng nhập slug');
+            document.getElementById('slug').focus();
+            return;
+        }
+
+        const policyData = collectPolicyData(isDraft);
+        if (!policyData && !isDraft) return;
+        if (!policyData && isDraft) return;
+
+        const method = (policyData.id && policyData.id !== 0) ? 'PUT' : 'POST';
+        try {
+            showLoading(true);
+            const data = await apiRequest('admin_policies.php', { method, body: JSON.stringify(policyData) });
+            if (data.success) {
+                resetDirty();
+                if ((!policyData.id || policyData.id === 0) && data.id) {
+                    document.getElementById('policyId').value = data.id;
+                    currentPolicyId = data.id;
+                    showToast('✅ Đã thêm chính sách thành công!');
+                    setTimeout(() => { window.location.href = 'policies.html'; }, 1000);
+                } else {
+                    showToast(isDraft ? '✅ Đã lưu nháp thành công!' : '✅ Cập nhật thành công!');
+                    setTimeout(() => { window.location.href = 'policies.html'; }, 1000);
+                }
+            } else {
+                alert('Lỗi: ' + (data.message || 'Không xác định'));
+            }
+        } catch(err) {
+            alert('Lỗi kết nối: ' + err.message);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    // ========== PREVIEW POLICY ==========
+    function previewPolicy() {
+        const policyId = document.getElementById('policyId').value;
+        if (!policyId || policyId === '0') {
+            if (hasFormData()) {
+                if (confirm('Chính sách chưa được lưu. Bạn có muốn lưu nháp trước khi xem trước không?')) {
+                    savePolicy(true);
+                    setTimeout(() => {
+                        const newId = document.getElementById('policyId').value;
+                        if (newId && newId !== '0') {
+                            previewPolicy();
+                        }
+                    }, 1500);
+                    return;
+                } else {
+                    return;
+                }
+            }
+            alert('Vui lòng lưu chính sách trước khi xem trước.');
+            return;
+        }
+
+        const slug = document.getElementById('slug').value.trim() || 'chinh-sach';
+        const previewUrl = `../chinh-sach.php?slug=${encodeURIComponent(slug)}&preview=1`;
+        window.open(previewUrl, '_blank');
+    }
+
+    // ========== CLONE POLICY ==========
+    async function clonePolicy() {
+        if (isPreviewMode) {
+            alert('Không thể nhân bản khi đang ở chế độ xem trước.');
+            return;
+        }
+
+        const policyId = document.getElementById('policyId').value;
+        if (!policyId || policyId === '0') {
+            alert('Không thể nhân bản chính sách chưa được lưu.');
+            return;
+        }
+        if (!confirm('Bạn có chắc chắn muốn nhân bản chính sách này?')) return;
+        try {
+            showLoading(true);
+            const data = await apiRequest(`admin_policies.php?action=clone&id=${policyId}`, { method: 'POST' });
+            if (data.success && data.new_id) {
+                showToast('✅ Nhân bản thành công!');
+                setTimeout(() => { window.location.href = `policy_form.html?id=${data.new_id}`; }, 500);
+            } else {
+                alert('Lỗi khi nhân bản: ' + (data.message || 'Unknown error'));
+            }
+        } catch(err) {
+            alert('Lỗi: ' + err.message);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    // ========== BIND DIRTY EVENTS ==========
+    function bindDirtyEvents() {
+        const inputs = document.querySelectorAll('#policyForm input, #policyForm select, #policyForm textarea');
+        inputs.forEach(input => {
+            if (input.type !== 'button' && input.type !== 'submit' && !input.disabled) {
+                input.addEventListener('input', markDirty);
+                input.addEventListener('change', markDirty);
+            }
+        });
+        if (editor) {
+            $('#content').on('summernote.change', function() { markDirty(); });
+        }
+
+        document.getElementById('seo_title').addEventListener('input', function() {
+            if (this.value.length > 70) this.value = this.value.substring(0, 70);
+            updateSeoPreview();
+        });
+        document.getElementById('seo_description').addEventListener('input', function() {
+            if (this.value.length > 175) this.value = this.value.substring(0, 175);
+            updateSeoPreview();
+        });
+
+        document.getElementById('status').addEventListener('change', function() {
+            updateStatusLabel();
+            markDirty();
+        });
+
+        document.getElementById('title').addEventListener('blur', function() {
+            let slugField = document.getElementById('slug');
+            if (!slugField.value.trim()) slugField.value = createSlug(this.value);
+            updateSeoPreview();
+            updateDemoUrl();
+        });
+        document.getElementById('title').addEventListener('input', function() {
+            updateSeoPreview();
+            updateDemoUrl();
+        });
+        document.getElementById('slug').addEventListener('input', function() {
+            updateSeoPreview();
+            updateDemoUrl();
+            markDirty();
+        });
+    }
+
+    // ========== KHỞI TẠO TRANG ==========
+    window.onload = async () => {
+        initEditor();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('id');
+        const previewId = urlParams.get('preview');
+
+        renderGallery();
+        updateSeoPreview();
+        updateDemoUrl();
+        document.getElementById('mainImageAltContainer').style.display = 'none';
+        updateStatusLabel();
+
+        if (previewId && previewId !== '0') {
+            await loadPolicyData(previewId, true);
+        } else if (editId && editId !== '0') {
+            await loadPolicyData(editId, false);
+        } else {
+            currentPolicyId = null;
+            galleryImages = [];
+            mainImage = '';
+            mainImageAlt = '';
+            renderGallery();
+            document.getElementById('formTitle').innerText = 'Thêm chính sách mới';
+            document.getElementById('previewModeBanner').style.display = 'none';
+            document.getElementById('previewNotice').classList.add('d-none');
+            document.getElementById('statusBadge').style.display = 'none';
+            resetDirty();
+        }
+
+        bindDirtyEvents();
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('admin');
+            window.location.href = 'login.html';
+        });
+
+        document.getElementById('backToListBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!isPreviewMode && isDirty && hasFormData()) {
+                if (confirm('Bạn có thay đổi chưa lưu. Hệ thống sẽ tự động lưu nháp trước khi rời đi. Tiếp tục?')) {
+                    autoSaveDraftOnLeave();
+                    setTimeout(() => { window.location.href = 'policies.html'; }, 500);
+                }
+            } else {
+                window.location.href = 'policies.html';
+            }
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (!isPreviewMode && isDirty && hasFormData()) {
+                autoSaveDraftOnLeave();
+                e.preventDefault();
+                e.returnValue = 'Các thay đổi bạn đã thực hiện có thể không được lưu. Hệ thống sẽ tự động lưu nháp trước khi rời khỏi.';
+                return e.returnValue;
+            }
+        });
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+[02-Jun-2026 19:57:20 Asia/Ho_Chi_Minh] PHP Fatal error:  Cannot redeclare isAdminLoggedIn() (previously declared in /home/dcdtpglk/public_html/admin/index.php:6) in /home/dcdtpglk/public_html/api/config.php on line 43
+[02-Jun-2026 19:57:23 Asia/Ho_Chi_Minh] PHP Fatal error:  Cannot redeclare isAdminLoggedIn() (previously declared in /home/dcdtpglk/public_html/admin/index.php:6) in /home/dcdtpglk/public_html/api/config.php on line 43
+[02-Jun-2026 19:57:24 Asia/Ho_Chi_Minh] PHP Fatal error:  Cannot redeclare isAdminLoggedIn() (previously declared in /home/dcdtpglk/public_html/admin/index.php:6) in /home/dcdtpglk/public_html/api/config.php on line 43
+[02-Jun-2026 20:53:24 Asia/Ho_Chi_Minh] PHP Fatal error:  Cannot redeclare isAdminLoggedIn() (previously declared in /home/dcdtpglk/public_html/admin/index.php:6) in /home/dcdtpglk/public_html/api/config.php on line 43
+[02-Jun-2026 20:53:28 Asia/Ho_Chi_Minh] PHP Fatal error:  Cannot redeclare isAdminLoggedIn() (previously declared in /home/dcdtpglk/public_html/admin/index.php:6) in /home/dcdtpglk/public_html/api/config.php on line 43
+[02-Jun-2026 20:53:36 Asia/Ho_Chi_Minh] PHP Fatal error:  Cannot redeclare isAdminLoggedIn() (previously declared in /home/dcdtpglk/public_html/admin/index.php:6) in /home/dcdtpglk/public_html/api/config.php on line 43
+[02-Jun-2026 20:55:31 Asia/Ho_Chi_Minh] PHP Fatal error:  Cannot redeclare isAdminLoggedIn() (previously declared in /home/dcdtpglk/public_html/admin/index.php:6) in /home/dcdtpglk/public_html/api/config.php on line 43

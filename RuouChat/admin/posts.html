@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Ruouchat Admin | Quản lý bài viết</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <style>
+        /* ===== RESET & LAYOUT ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #0f172a; overflow-x: hidden; height: 100vh; }
+
+        .app-wrapper {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== SIDEBAR (giống product_form) ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            box-shadow: 12px 0 28px -12px rgba(0,0,0,0.25);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            padding: 0 4px;
+        }
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .sidebar::-webkit-scrollbar-thumb { background: #eab308; border-radius: 10px; }
+
+        .sidebar .brand {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #e2e8f0 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 0.9rem 0.5rem !important;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 8px 14px;
+            margin: 3px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            transition: all 0.2s;
+            background: transparent;
+            white-space: nowrap;
+        }
+        .sidebar a i {
+            width: 24px;
+            font-size: 1rem;
+            text-align: center;
+            color: #94a3b8;
+            transition: all 0.2s;
+        }
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.08);
+            color: white;
+            transform: translateX(4px);
+        }
+        .sidebar a:hover i {
+            color: #facc15;
+            transform: scale(1.05);
+        }
+        .sidebar a.active {
+            background: linear-gradient(95deg, rgba(234,179,8,0.18), rgba(234,179,8,0.05));
+            color: white;
+            border-left: 3px solid #eab308;
+        }
+        .sidebar a.active i { color: #facc15; }
+        #logoutBtn {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            color: #facc15;
+            font-weight: 600;
+        }
+        #logoutBtn i { color: #facc15; }
+        #logoutBtn:hover {
+            background: rgba(250,204,21,0.15);
+            color: #fde047;
+            transform: translateX(4px);
+        }
+
+        /* ===== NỘI DUNG CHÍNH ===== */
+        .main-content {
+            margin-left: 200px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 100vh;
+            background: #f8fafc;
+            padding: 24px 28px;
+        }
+
+        /* ===== MOBILE TOGGLE & OVERLAY ===== */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1060;
+            background: #eab308;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: #0f172a;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 260px;
+                z-index: 1050;
+            }
+            .sidebar.open { transform: translateX(0); }
+            .main-content {
+                margin-left: 0;
+                padding-top: 70px;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .mobile-menu-toggle { display: block; }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-toggle { display: none; }
+            .sidebar-overlay { display: none !important; }
+        }
+
+        @media (max-width: 576px) {
+            .main-content { padding: 70px 12px 12px 12px; }
+        }
+
+        /* ===== POSTS STYLES (co nhỏ) ===== */
+        .content { padding: 0; }
+        .content h2 {
+            font-weight: 500;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #eab308, #f59e0b, #d97706);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            border-left: 5px solid #eab308;
+            padding-left: 18px;
+            margin: 0;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(234, 179, 8, 0.2);
+        }
+        .post-table-wrapper {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+        .table thead th {
+            background: #f8fafc;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 10px;
+            font-size: 0.7rem;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        .table td {
+            vertical-align: middle;
+            padding: 10px 10px;
+            font-size: 0.78rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .post-img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        /* ===== CÁC NÚT BORDER-RADIUS 10px ===== */
+        .btn, .btn-primary, .btn-secondary, .btn-outline-primary,
+        .btn-outline-secondary, .btn-warning, .btn-danger, .btn-info,
+        .btn-success, .btn-sm, .btn-action, .btn-save, .btn-draft,
+        .btn-preview, .btn-clone, .btn-secondary-custom,
+        .btn-edit, .btn-delete, .btn-cover, .btn-insert, .btn-remove,
+        .btn-cover.active, .btn-cover:hover, .btn-insert:hover,
+        .btn-remove:hover {
+            border-radius: 10px !important;
+        }
+
+        .btn-save { background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 10px 22px; font-weight: 700; color: white; box-shadow: 0 4px 10px rgba(5,150,105,0.3); transition: all 0.2s; font-size: 0.9rem; }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(5,150,105,0.4); }
+        .btn-draft { background: linear-gradient(135deg, #f59e0b, #d97706); border: none; padding: 10px 22px; font-weight: 700; color: white; box-shadow: 0 4px 10px rgba(245,158,11,0.3); transition: all 0.2s; margin-right: 8px; font-size: 0.9rem; }
+        .btn-draft:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,158,11,0.4); }
+        .btn-preview { background: linear-gradient(135deg, #3b82f6, #2563eb); border: none; padding: 10px 22px; font-weight: 700; color: white; margin-right: 8px; font-size: 0.9rem; }
+        .btn-clone { background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none; padding: 10px 22px; font-weight: 700; color: white; font-size: 0.9rem; }
+        .btn-secondary-custom { background: #64748b; border: none; padding: 6px 16px; border-radius: 10px !important; color: white; transition: background 0.2s; font-size: 0.85rem; }
+        .btn-secondary-custom:hover { background: #475569; color: white; }
+
+        /* Editor card co nhỏ */
+        .editor-card { background: white; border-radius: 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.04); padding: 16px 20px; margin-bottom: 16px; transition: box-shadow 0.2s; }
+        .editor-card:hover { box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+        .editor-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; border-left: 3px solid #eab308; padding-left: 12px; }
+        .editor-card .form-control, .editor-card .form-select {
+            border-radius: 10px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+        .editor-card .form-label { font-size: 0.8rem; font-weight: 600; margin-bottom: 2px; }
+
+        .action-buttons-group { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+
+        /* Gallery */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .gallery-item {
+            position: relative;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            cursor: grab;
+            border: 2px solid transparent;
+        }
+        .gallery-thumb { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; background: #f1f5f9; }
+        .cover-badge {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: #eab308;
+            color: #2d1f00;
+            padding: 1px 6px;
+            border-radius: 20px;
+            font-size: 8px;
+            font-weight: bold;
+            z-index: 2;
+        }
+        .gallery-actions {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            display: flex;
+            gap: 3px;
+            background: rgba(0,0,0,0.6);
+            padding: 3px 4px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .gallery-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 10px;
+            padding: 1px 4px;
+            border-radius: 20px;
+            transition: 0.2s;
+        }
+        .gallery-actions button:hover { background: rgba(255,255,255,0.2); }
+        .btn-cover.active { background: #eab308; color: #2d1f00; }
+
+        /* SEO Preview co nhỏ */
+        .seo-preview { background: #f8f9fa; border-radius: 10px; padding: 12px; border: 1px solid #e9ecef; margin-top: 8px; }
+        .preview-title { color: #1a0dab; font-size: 16px; line-height: 1.3; cursor: default; }
+        .preview-url { color: #006621; font-size: 12px; word-break: break-all; }
+        .preview-desc { color: #545454; font-size: 12px; margin-top: 2px; }
+
+        .url-demo-box {
+            background: linear-gradient(135deg, #fefce8 0%, #f8fafc 100%);
+            border-radius: 12px;
+            padding: 12px 16px;
+            border: 2px solid #eab308;
+            position: relative;
+            margin-top: 6px;
+        }
+        .url-demo-box .url-label { font-weight: 600; color: #0f172a; font-size: 0.8rem; margin-bottom: 4px; }
+        .url-demo-box .url-value { color: #006621; font-size: 0.9rem; word-break: break-all; font-weight: 500; }
+        .url-demo-box .url-badge { position: absolute; top: -10px; right: 12px; background: #eab308; color: #0f172a; font-size: 0.6rem; font-weight: 700; padding: 2px 12px; border-radius: 20px; text-transform: uppercase; }
+
+        .char-count { font-size: 0.7rem; color: #6c757d; margin-top: 0.15rem; }
+        .char-count.warning { color: #dc3545; }
+
+        .note-editor { border-radius: 12px; border: 1px solid #e2e8f0; }
+        .note-toolbar { background: #f8fafc; border-radius: 12px 12px 0 0; }
+
+        .modal-fullscreen { padding: 0 !important; }
+        .modal-fullscreen .modal-dialog { max-width: none; width: 100%; height: 100%; margin: 0; padding: 0; }
+        .modal-fullscreen .modal-content { height: 100%; border-radius: 0; border: none; }
+        .modal-fullscreen .modal-body { overflow-y: auto; max-height: calc(100vh - 120px); padding: 16px 24px; }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+        }
+        .spinner-border { width: 2.5rem; height: 2.5rem; }
+
+        .auto-save-toast { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 8px 16px; border-radius: 10px; font-size: 0.85rem; z-index: 10000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+
+        .modal .btn { border-radius: 10px !important; }
+
+        @media (max-width: 768px) {
+            .table td, .table th { font-size: 0.7rem; padding: 6px 6px; }
+            .content h2 { font-size: 1.2rem; }
+            .editor-card { padding: 12px 14px; }
+            .action-buttons-group .btn { font-size: 0.75rem; padding: 6px 14px; }
+            .gallery-container { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+<div id="loading-overlay">
+    <div class="text-center">
+        <div class="spinner-border text-warning mb-3" role="status"></div>
+        <div>Kiểm tra quyền truy cập...</div>
+    </div>
+</div>
+
+<div class="app-wrapper">
+    <!-- SIDEBAR (giống product_form) -->
+    <div class="sidebar" id="sidebar">
+        <div class="brand">Ruouchat Admin</div>
+        <div class="d-flex flex-column">
+            <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="products.html"><i class="fas fa-wine-bottle"></i> Sản phẩm</a>
+            <a href="flash_sales.html"><i class="fas fa-bolt"></i> Flash sale</a>
+            <a href="categories.html"><i class="fas fa-folder"></i> Danh mục</a>
+            <a href="orders.html"><i class="fas fa-shopping-cart"></i> Đơn hàng</a>
+            <a href="customers.html"><i class="fas fa-users"></i> Khách hàng</a>
+            <a href="contacts.html"><i class="fas fa-envelope"></i> Liên hệ</a>
+            <a href="posts.html" class="active"><i class="fas fa-newspaper"></i> Bài viết</a>
+            <a href="gift_products.html"><i class="fas fa-gift"></i> Quà tặng</a>
+            <a href="glasses.html"><i class="fas fa-glass-martini"></i> Ly pha lê</a>
+            <a href="other_products.html"><i class="fas fa-box"></i> Sản phẩm khác</a>
+            <a href="promotions.html"><i class="fas fa-bullhorn"></i> Khuyến mãi</a>
+            <a href="producers.php"><i class="fas fa-building"></i> Nhà sản xuất</a>
+            <a href="policies.html"><i class="fas fa-file-contract"></i> Chính sách</a>
+            <a href="index.php"><i class="fas fa-list"></i> Menu</a>
+            <a href="pages.php"><i class="fas fa-file-alt"></i> Trang mới</a>
+            <a href="banners.html"><i class="fas fa-image"></i> Banner</a>
+            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+        </div>
+    </div>
+
+    <!-- OVERLAY mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- NÚT TOGGLE mobile -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i> Menu</button>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <div class="main-content">
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h2>Quản lý bài viết</h2>
+                <button class="btn btn-primary" id="createPostBtn" style="font-size:0.85rem; padding:6px 16px;"><i class="fas fa-plus-circle me-2"></i>Viết bài mới</button>
+            </div>
+            <div class="post-table-wrapper">
+                <div id="postsList">Đang tải...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Full màn hình - FORM TẠO/SỬA BÀI VIẾT -->
+<div class="modal fade modal-fullscreen" id="postModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"><i class="fas fa-edit me-2"></i>Bài viết</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="postForm" onsubmit="return false;">
+                    <input type="hidden" id="postId">
+                    <div class="row g-3">
+                        <div class="col-lg-8">
+                            <!-- THÔNG TIN CƠ BẢN -->
+                            <div class="editor-card">
+                                <h3>Thông tin cơ bản</h3>
+                                <div class="mb-2">
+                                    <label class="form-label">Tiêu đề *</label>
+                                    <input type="text" id="title" class="form-control" required placeholder="Nhập tiêu đề bài viết">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Slug (URL)</label>
+                                    <input type="text" id="slug" class="form-control" placeholder="Để trống tự tạo từ tiêu đề">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Mô tả ngắn</label>
+                                    <textarea id="short_description" class="form-control" rows="2" placeholder="Mô tả ngắn cho bài viết..."></textarea>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Nội dung</label>
+                                    <textarea id="content" class="form-control"></textarea>
+                                    <small class="text-muted">📹 Có thể chèn video (YouTube, Vimeo) bằng nút <i class="fas fa-video"></i>. Kéo thả ảnh từ máy tính hoặc dùng thư viện ảnh bên phải.</small>
+                                </div>
+                            </div>
+
+                            <!-- SEO -->
+                            <div class="editor-card">
+                                <h3>SEO</h3>
+                                <div class="url-demo-box">
+                                    <span class="url-badge">🔗 URL</span>
+                                    <div class="url-label"><i class="fas fa-globe me-1"></i> Đường dẫn bài viết:</div>
+                                    <div class="url-value" id="demoUrlDisplay">https://ruouchat.vn/bai-viet/</div>
+                                </div>
+                                <div class="mb-1">
+                                    <div class="char-count" id="seo_title_count">0/70 ký tự</div>
+                                    <input type="text" id="seo_title" class="form-control" maxlength="70" placeholder="Meta Title">
+                                </div>
+                                <div class="mb-1">
+                                    <div class="char-count" id="seo_desc_count">0/175 ký tự</div>
+                                    <textarea id="seo_description" class="form-control" rows="2" maxlength="175" placeholder="Meta Description"></textarea>
+                                </div>
+                                <div class="seo-preview">
+                                    <div class="preview-title" id="google_preview_title">Tiêu đề</div>
+                                    <div class="preview-url" id="google_preview_url">https://ruouchat.vn/</div>
+                                    <div class="preview-desc" id="google_preview_desc">Mô tả</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <!-- TRẠNG THÁI -->
+                            <div class="editor-card">
+                                <h3>Trạng thái</h3>
+                                <div class="mb-2">
+                                    <label class="form-label">Trạng thái</label>
+                                    <select id="status" class="form-select">
+                                        <option value="1">Hiển thị</option>
+                                        <option value="0">Ẩn</option>
+                                        <option value="2">Nháp</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Lịch hẹn giờ</label>
+                                    <input type="datetime-local" id="schedule_time" class="form-control">
+                                    <small class="text-muted">Để trống nếu đăng ngay</small>
+                                </div>
+                            </div>
+
+                            <!-- DANH MỤC -->
+                            <div class="editor-card">
+                                <h3>Danh mục <span style="background:#eab30820; color:#b45309; font-size:0.65rem; border-radius:50px; padding:1px 8px; margin-left:6px;">Chọn nhiều</span></h3>
+                                <div id="categoriesList" class="border rounded p-2" style="max-height:150px; overflow-y:auto; font-size:0.85rem;">
+                                    <div class="text-muted">Đang tải...</div>
+                                </div>
+                                <small class="text-muted d-block mt-2"><i class="fas fa-info-circle"></i> Giữ Ctrl/Cmd để chọn nhiều</small>
+                            </div>
+
+                            <!-- THƯ VIỆN ẢNH -->
+                            <div class="editor-card">
+                                <h3>Thư viện ảnh</h3>
+                                <button type="button" class="btn btn-outline-primary w-100 mb-2" onclick="uploadMultipleImages()" style="font-size:0.8rem; padding:4px 12px;">
+                                    <i class="fas fa-images me-1"></i>Tải ảnh (nhiều)
+                                </button>
+                                <div id="galleryContainer" class="gallery-container"></div>
+                                <small class="text-muted mt-2 d-block">⭐ Click <i class="fas fa-star"></i> để chọn ảnh bìa. Click <i class="fas fa-plus-circle"></i> để chèn vào bài viết.</small>
+                            </div>
+
+                            <!-- NÚT HÀNH ĐỘNG -->
+                            <div class="action-buttons-group">
+                                <button type="button" class="btn btn-save" onclick="savePost(false)"><i class="fas fa-save me-2"></i>Lưu & Xuất bản</button>
+                                <button type="button" class="btn btn-draft" onclick="savePost(true)"><i class="fas fa-pen-fancy me-2"></i>Lưu nháp</button>
+                                <button type="button" class="btn btn-preview" onclick="previewPost()"><i class="fas fa-eye me-2"></i>Xem trước</button>
+                                <button type="button" class="btn btn-clone" onclick="clonePost()"><i class="fas fa-copy me-2"></i>Nhân bản</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="savePostBtn">Lưu bài viết</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận clone -->
+<div class="modal fade" id="cloneConfirmModal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận nhân bản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn nhân bản bài viết này?</p>
+                <p class="text-muted small">Bài viết mới sẽ có tiêu đề kèm "(Copy)"</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button class="btn btn-primary" id="confirmCloneBtn">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="autoSaveToast" class="auto-save-toast">📝 Đã tự động lưu nháp</div>
+
+<script>
+    // ========== CẤU HÌNH ==========
+    const API_BASE = (() => {
+        const path = window.location.pathname;
+        if (path.includes('/admin/')) return '../api/';
+        if (path.includes('/pages/')) return '../api/';
+        return '/api/';
+    })();
+
+    let editor = null;
+    let modalInstance = null;
+    let currentEditId = null;
+    let categoriesList = [];
+    let galleryImages = [];
+    let sortable = null;
+    let isDirty = false;
+    let autoSaveTriggered = false;
+
+    // ========== HÀM TIỆN ÍCH ==========
+    function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m])); }
+    
+    function createSlug(str) {
+        if (!str) return '';
+        return String(str).toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[đĐ]/g, 'd')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('autoSaveToast');
+        toast.textContent = msg;
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 2500);
+    }
+
+    function markDirty() { if (!isDirty) isDirty = true; }
+    function resetDirty() { isDirty = false; autoSaveTriggered = false; }
+
+    function showLoading(show) {
+        document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+    }
+
+    function hasFormData() {
+        const title = document.getElementById('title').value.trim();
+        const content = editor ? editor.summernote('code') : document.getElementById('content').value;
+        return title !== '' || (content && content !== '<p><br></p>' && content !== '');
+    }
+
+    // ========== MOBILE MENU ==========
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggleBtn = document.getElementById('mobileMenuToggle');
+
+    function closeMobileMenu() {
+        if (window.innerWidth <= 768) { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
+    }
+    function openMobileMenu() {
+        if (window.innerWidth <= 768) { sidebar.classList.add('open'); overlay.classList.add('active'); }
+    }
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.contains('open') ? closeMobileMenu() : openMobileMenu(); });
+    }
+    overlay.addEventListener('click', closeMobileMenu);
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
+    });
+
+    // ========== API REQUEST ==========
+    async function apiRequest(url, options = {}) {
+        const fullUrl = url.startsWith('http') ? url : API_BASE + url;
+        try {
+            showLoading(true);
+            const response = await fetch(fullUrl, {
+                ...options,
+                headers: { 'Content-Type': 'application/json', ...options.headers }
+            });
+            const text = await response.text();
+            if (!text.trim()) throw new Error('Server trả về rỗng');
+            let data;
+            try { data = JSON.parse(text); } catch(e) { throw new Error('Phản hồi không phải JSON'); }
+            if (!response.ok) throw new Error(data.error || data.message || `Lỗi ${response.status}`);
+            return data;
+        } catch(err) {
+            console.error(err);
+            throw err;
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    // ========== KIỂM TRA ĐĂNG NHẬP ==========
+    async function checkAdminAndLoad() {
+        try {
+            const response = await fetch(API_BASE + 'auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'check' }),
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (!data.logged_in || data.user?.role !== 'admin') {
+                window.location.href = 'login.html';
+                return false;
+            }
+            document.getElementById('loading-overlay').style.display = 'none';
+            initEditor();
+            await loadCategories();
+            loadPosts();
+            return true;
+        } catch (error) {
+            console.error('Lỗi kiểm tra đăng nhập:', error);
+            window.location.href = 'login.html';
+            return false;
+        }
+    }
+
+    document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        fetch(API_BASE + 'auth.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'logout' }),
+            credentials: 'include'
+        }).catch(() => {});
+        window.location.href = 'login.html';
+    });
+
+    // ========== KHỞI TẠO SUMMERNOTE ==========
+    function initEditor() {
+        $('#content').summernote({
+            height: 400,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['align', ['alignLeft', 'alignCenter', 'alignRight', 'alignJustify']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ],
+            callbacks: {
+                onImageUpload: function(files) {
+                    for (let file of files) uploadEditorImage(file);
+                    markDirty();
+                },
+                onFullscreen: function(isFullscreen) {
+                    if (isFullscreen) $('body').addClass('fullscreen-active');
+                    else $('body').removeClass('fullscreen-active');
+                },
+                onChange: function() { markDirty(); }
+            }
+        });
+        editor = $('#content');
+    }
+
+    // Upload ảnh từ editor
+    async function uploadEditorImage(file) {
+        const formData = new FormData();
+        formData.append('upload', file);
+        formData.append('type', 'post');
+        try {
+            const res = await fetch(API_BASE + 'upload_image.php', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.uploaded) {
+                addImageToGallery(data.url);
+                editor.summernote('insertImage', data.url);
+            } else alert('Upload ảnh thất bại: ' + data.error?.message);
+        } catch(err) { alert('Lỗi upload ảnh'); }
+    }
+
+    // ========== QUẢN LÝ DANH MỤC ==========
+    async function loadCategories() {
+        try {
+            const res = await fetch(API_BASE + 'post_categories.php');
+            categoriesList = await res.json();
+        } catch(e) {
+            categoriesList = [];
+        }
+        renderCategories();
+    }
+
+    function renderCategories() {
+        const container = document.getElementById('categoriesList');
+        if (!categoriesList.length) {
+            container.innerHTML = '<div class="text-muted text-center p-2">Chưa có danh mục</div>';
+            return;
+        }
+        let html = '';
+        categoriesList.forEach(cat => {
+            html += `<div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="${cat.id}" id="cat_${cat.id}">
+                        <label class="form-check-label" for="cat_${cat.id}">${escapeHtml(cat.name)}</label>
+                    </div>`;
+        });
+        container.innerHTML = html;
+        container.querySelectorAll('.form-check-input').forEach(cb => {
+            cb.addEventListener('change', markDirty);
+        });
+    }
+
+    function getSelectedCategoryIds() {
+        const checkboxes = document.querySelectorAll('#categoriesList .form-check-input:checked');
+        return Array.from(checkboxes).map(cb => parseInt(cb.value));
+    }
+
+    // ========== QUẢN LÝ GALLERY ==========
+    function addImageToGallery(url) {
+        galleryImages.push({ url, sort_order: galleryImages.length, is_cover: galleryImages.length === 0 ? 1 : 0 });
+        renderGallery();
+        markDirty();
+    }
+
+    function insertImageIntoEditor(imageUrl) {
+        if (!editor || !editor.summernote) { alert('Editor chưa sẵn sàng'); return; }
+        editor.summernote('focus');
+        editor.summernote('insertImage', imageUrl);
+    }
+
+    async function uploadMultipleImages() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.multiple = true;
+        input.onchange = async (e) => {
+            for (const file of e.target.files) {
+                const formData = new FormData();
+                formData.append('upload', file);
+                formData.append('type', 'post_gallery');
+                formData.append('post_id', currentEditId || 0);
+                try {
+                    const res = await fetch(API_BASE + 'upload_image.php', { method: 'POST', body: formData });
+                    const data = await res.json();
+                    if (data.uploaded) {
+                        galleryImages.push({ url: data.url, sort_order: galleryImages.length, is_cover: galleryImages.length === 0 ? 1 : 0 });
+                        renderGallery();
+                        markDirty();
+                    } else alert(`Upload lỗi: ${data.error?.message}`);
+                } catch(err) { alert('Lỗi upload'); }
+            }
+        };
+        input.click();
+    }
+
+    function renderGallery() {
+        const container = document.getElementById('galleryContainer');
+        if (!galleryImages.length) {
+            container.innerHTML = '<div class="text-muted text-center p-3">Chưa có ảnh. Nhấn "Tải ảnh" để thêm.</div>';
+            return;
+        }
+        let html = '';
+        galleryImages.forEach((img, idx) => {
+            const isCover = img.is_cover ? '<div class="cover-badge">Ảnh bìa</div>' : '';
+            html += `<div class="gallery-item" data-idx="${idx}" data-url="${escapeHtml(img.url)}">
+                        <img src="${img.url}" class="gallery-thumb">
+                        ${isCover}
+                        <div class="gallery-actions">
+                            <button type="button" class="btn-cover ${img.is_cover ? 'active' : ''}" onclick="setAsCover(${idx})" title="Đặt làm ảnh bìa"><i class="fas fa-star"></i></button>
+                            <button type="button" class="btn-insert" onclick="insertImageIntoEditor('${escapeHtml(img.url)}')" title="Chèn vào bài viết"><i class="fas fa-plus-circle"></i></button>
+                            <button type="button" class="btn-remove" onclick="removeGalleryImage(${idx})" title="Xóa"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
+        });
+        container.innerHTML = html;
+
+        if (sortable) sortable.destroy();
+        const galleryContainer = document.getElementById('galleryContainer');
+        sortable = new Sortable(galleryContainer, {
+            animation: 150,
+            handle: '.gallery-item',
+            onEnd: function() {
+                const items = document.querySelectorAll('.gallery-item');
+                const newOrder = [];
+                items.forEach((item) => {
+                    const idx = parseInt(item.getAttribute('data-idx'));
+                    newOrder.push(galleryImages[idx]);
+                });
+                galleryImages = newOrder;
+                galleryImages.forEach((img, i) => img.sort_order = i);
+                renderGallery();
+                markDirty();
+            }
+        });
+    }
+
+    function setAsCover(idx) {
+        galleryImages.forEach((img, i) => img.is_cover = (i === idx) ? 1 : 0);
+        renderGallery();
+        markDirty();
+    }
+
+    function removeGalleryImage(idx) {
+        galleryImages.splice(idx, 1);
+        renderGallery();
+        markDirty();
+    }
+
+    // ========== LƯU BÀI VIẾT ==========
+    function collectPostData(isDraft = false) {
+        const title = document.getElementById('title').value.trim();
+        if (!title && !hasFormData()) return null;
+
+        const postId = document.getElementById('postId').value;
+        let slug = document.getElementById('slug').value.trim();
+        if (!slug && title) slug = createSlug(title);
+
+        const content = editor ? editor.summernote('code') : document.getElementById('content').value;
+        const status = isDraft ? 2 : parseInt(document.getElementById('status').value);
+        const image_cover = galleryImages.find(img => img.is_cover)?.url || (galleryImages[0]?.url || '');
+
+        return {
+            id: postId ? parseInt(postId) : 0,
+            title: title || 'Bài viết mới (nháp)',
+            slug: slug || '',
+            content: content || '',
+            short_description: document.getElementById('short_description').value || '',
+            status: status,
+            category_ids: getSelectedCategoryIds(),
+            gallery: galleryImages.map((img, idx) => ({
+                url: img.url,
+                sort_order: idx,
+                is_cover: img.is_cover || 0
+            })),
+            image_cover: image_cover,
+            seo_title: document.getElementById('seo_title').value || '',
+            seo_description: document.getElementById('seo_description').value || '',
+            schedule_time: document.getElementById('schedule_time').value || null
+        };
+    }
+
+    async function savePost(isDraft = false) {
+        const title = document.getElementById('title').value.trim();
+        if (!isDraft && !title) {
+            alert('Vui lòng nhập tiêu đề bài viết');
+            document.getElementById('title').focus();
+            return;
+        }
+
+        const postData = collectPostData(isDraft);
+        if (!postData) { alert('Vui lòng nhập thông tin bài viết'); return; }
+
+        const method = (postData.id && postData.id !== 0) ? 'PUT' : 'POST';
+        try {
+            showLoading(true);
+            const data = await apiRequest('admin_posts.php', { method, body: JSON.stringify(postData) });
+            if (data.success) {
+                resetDirty();
+                if (data.id) document.getElementById('postId').value = data.id;
+                currentEditId = data.id || postData.id;
+                showToast(isDraft ? '📝 Đã lưu nháp thành công!' : '✅ Đã lưu bài viết thành công!');
+                modalInstance.hide();
+                loadPosts();
+            } else {
+                alert('Lỗi: ' + (data.error || 'Không xác định'));
+            }
+        } catch(err) {
+            alert('Lỗi kết nối: ' + err.message);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    // ========== XEM TRƯỚC ==========
+    function previewPost() {
+        const postId = document.getElementById('postId').value;
+        if (!postId || postId === '0' || postId === '') {
+            if (!hasFormData()) {
+                alert('Vui lòng nhập nội dung trước khi xem trước.');
+                return;
+            }
+            if (confirm('Bài viết chưa được lưu. Bạn có muốn lưu nháp trước khi xem trước không?')) {
+                savePost(true);
+                const checkInterval = setInterval(() => {
+                    const newId = document.getElementById('postId').value;
+                    if (newId && newId !== '0' && newId !== '') {
+                        clearInterval(checkInterval);
+                        openPreview(newId);
+                    }
+                }, 500);
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    const newId = document.getElementById('postId').value;
+                    if (!newId || newId === '0' || newId === '') {
+                        alert('Lưu nháp thất bại. Vui lòng thử lại.');
+                    }
+                }, 5000);
+            }
+            return;
+        }
+        openPreview(postId);
+    }
+
+    function openPreview(postId) {
+        window.open(`post.php?id=${postId}&preview=1`, '_blank');
+    }
+
+    function previewPostById(id) {
+        window.open(`post.php?id=${id}&preview=1`, '_blank');
+    }
+
+    // ========== NHÂN BẢN ==========
+    async function clonePost() {
+        const postId = document.getElementById('postId').value;
+        if (!postId || postId === '0' || postId === '') {
+            alert('Không thể nhân bản bài viết chưa được lưu.');
+            return;
+        }
+
+        const confirmModal = new bootstrap.Modal(document.getElementById('cloneConfirmModal'));
+        confirmModal.show();
+
+        document.getElementById('confirmCloneBtn').onclick = async function() {
+            confirmModal.hide();
+            try {
+                showLoading(true);
+                const data = await apiRequest(`admin_posts.php?action=clone&id=${postId}`, { method: 'POST' });
+                if (data.success && data.new_id) {
+                    showToast('✅ Nhân bản thành công!');
+                    modalInstance.hide();
+                    loadPosts();
+                } else {
+                    alert('Lỗi khi nhân bản: ' + (data.error || 'Unknown error'));
+                }
+            } catch(err) {
+                alert('Lỗi: ' + err.message);
+            } finally {
+                showLoading(false);
+            }
+        };
+    }
+
+    // ========== LOAD DANH SÁCH BÀI VIẾT ==========
+    async function loadPosts() {
+        const container = $('#postsList');
+        container.html('<div class="text-center p-4"><i class="fas fa-spinner fa-pulse"></i> Đang tải...</div>');
+        try {
+            const res = await fetch(API_BASE + 'admin_posts.php');
+            const posts = await res.json();
+            if (!posts.length) { container.html('<div class="text-center p-4 text-muted">Chưa có bài viết.</div>'); return; }
+            let html = '<div class="table-responsive"><table class="table align-middle"><thead><tr><th>ID</th><th>Hình</th><th>Tiêu đề</th><th>Danh mục</th><th>Trạng thái</th><th>Ngày</th><th>Thao tác</th></tr></thead><tbody>';
+            for (let p of posts) {
+                const imgSrc = p.image && p.image.trim() ? p.image : 'https://placehold.co/45x45?text=No+Img';
+                let statusBadge = '';
+                if (p.status == 1) statusBadge = '<span class="badge bg-success" style="font-size:0.7rem; padding:3px 8px; border-radius:10px;">Hiển thị</span>';
+                else if (p.status == 2) statusBadge = '<span class="badge bg-warning text-dark" style="font-size:0.7rem; padding:3px 8px; border-radius:10px;">Nháp</span>';
+                else statusBadge = '<span class="badge bg-secondary" style="font-size:0.7rem; padding:3px 8px; border-radius:10px;">Ẩn</span>';
+                html += `<tr><td>${p.id}</td><td><img src="${escapeHtml(imgSrc)}" class="post-img" onerror="this.src='https://placehold.co/45x45?text=Error'"></td><td class="fw-semibold">${escapeHtml(p.title)}</td><td>${escapeHtml(p.category_names || 'Chưa phân loại')}</td><td>${statusBadge}</td><td>${p.created_at}</td><td>
+                            <button class="btn btn-sm btn-warning" onclick="editPost(${p.id})" style="font-size:0.7rem; padding:3px 10px;"><i class="fas fa-edit"></i> Sửa</button>
+                            <button class="btn btn-sm btn-danger" onclick="deletePost(${p.id})" style="font-size:0.7rem; padding:3px 10px;"><i class="fas fa-trash-alt"></i> Xóa</button>
+                            <button class="btn btn-sm btn-info" onclick="previewPostById(${p.id})" style="font-size:0.7rem; padding:3px 10px;"><i class="fas fa-eye"></i></button>
+                        </td></tr>`;
+            }
+            html += '</tbody></table></div>';
+            container.html(html);
+        } catch(err) { container.html('<div class="alert alert-danger">Lỗi tải dữ liệu</div>'); }
+    }
+
+    // ========== DELETE ==========
+    async function deletePost(id) {
+        if (!confirm('Xóa bài viết này?')) return;
+        try {
+            await fetch(`${API_BASE}admin_posts.php?id=${id}`, { method: 'DELETE' });
+            loadPosts();
+            showToast('🗑️ Đã xóa bài viết');
+        } catch(e) { alert('Lỗi xóa bài viết'); }
+    }
+
+    // ========== EDIT ==========
+    async function editPost(id) {
+        currentEditId = id;
+        try {
+            showLoading(true);
+            const res = await fetch(`${API_BASE}admin_posts.php?id=${id}`);
+            const post = await res.json();
+            if (!post.id) { alert('Không tìm thấy bài viết'); return; }
+
+            $('#modalTitle').html('<i class="fas fa-edit me-2"></i>Sửa bài viết');
+            $('#postId').val(post.id);
+            $('#title').val(post.title);
+            $('#slug').val(post.slug || '');
+            $('#short_description').val(post.short_description || '');
+            $('#status').val(post.status);
+            $('#seo_title').val(post.seo_title || '');
+            $('#seo_description').val(post.seo_description || '');
+            $('#schedule_time').val(post.schedule_time || '');
+
+            if (editor && editor.summernote) editor.summernote('code', post.content || '');
+
+            const categoryIds = post.category_ids || [];
+            document.querySelectorAll('#categoriesList .form-check-input').forEach(cb => {
+                cb.checked = categoryIds.includes(parseInt(cb.value));
+            });
+
+            galleryImages = (post.gallery || []).map(img => ({
+                url: img.image_url,
+                sort_order: img.sort_order || 0,
+                is_cover: img.is_cover || 0
+            }));
+            renderGallery();
+
+            updateSeoPreview();
+            updateDemoUrl();
+
+            modalInstance.show();
+            resetDirty();
+        } catch(e) {
+            alert('Lỗi tải bài viết: ' + e.message);
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    // ========== TẠO BÀI VIẾT MỚI ==========
+    function showPostForm() {
+        currentEditId = null;
+        $('#modalTitle').html('<i class="fas fa-plus-circle me-2"></i>Thêm bài viết mới');
+        $('#postForm')[0].reset();
+        $('#postId').val('');
+        $('#status').val('1');
+        $('#schedule_time').val('');
+        $('#seo_title').val('');
+        $('#seo_description').val('');
+        if (editor && editor.summernote) editor.summernote('code', '');
+        document.querySelectorAll('#categoriesList .form-check-input').forEach(cb => cb.checked = false);
+        galleryImages = [];
+        renderGallery();
+        updateSeoPreview();
+        updateDemoUrl();
+        resetDirty();
+        modalInstance.show();
+    }
+
+    // ========== SEO PREVIEW ==========
+    function updateSeoPreview() {
+        const title = document.getElementById('seo_title').value.trim() || document.getElementById('title').value.trim() || 'Tiêu đề';
+        const truncatedTitle = title.length > 70 ? title.substring(0, 70) : title;
+        document.getElementById('google_preview_title').innerText = truncatedTitle || 'Tiêu đề';
+        
+        const desc = document.getElementById('seo_description').value.trim() || document.getElementById('short_description').value.trim() || 'Mô tả bài viết...';
+        const truncatedDesc = desc.length > 175 ? desc.substring(0, 175) : desc;
+        document.getElementById('google_preview_desc').innerText = truncatedDesc;
+
+        const titleLen = document.getElementById('seo_title').value.length;
+        const descLen = document.getElementById('seo_description').value.length;
+        document.getElementById('seo_title_count').innerHTML = `${titleLen}/70 ký tự ${titleLen > 70 ? '<span class="text-danger">(Vượt quá giới hạn)</span>' : ''}`;
+        document.getElementById('seo_desc_count').innerHTML = `${descLen}/175 ký tự ${descLen > 175 ? '<span class="text-danger">(Vượt quá giới hạn)</span>' : ''}`;
+        
+        document.getElementById('seo_title_count').classList.toggle('warning', titleLen > 70);
+        document.getElementById('seo_desc_count').classList.toggle('warning', descLen > 175);
+        
+        updateDemoUrl();
+    }
+
+    // ========== DEMO URL ==========
+    function updateDemoUrl() {
+        const title = document.getElementById('title').value || 'bai-viet';
+        const slugInput = document.getElementById('slug');
+        let slug = slugInput.value.trim() || createSlug(title);
+        if (!slug) slug = 'bai-viet';
+        
+        const demoUrl = `https://ruouchat.vn/bai-viet/${slug}`;
+        document.getElementById('demoUrlDisplay').textContent = demoUrl;
+        document.getElementById('google_preview_url').textContent = demoUrl;
+    }
+
+    // ========== AUTO SAVE ==========
+    async function autoSaveDraftOnLeave() {
+        if (autoSaveTriggered) return;
+        if (!hasFormData()) return;
+        const postData = collectPostData(true);
+        if (!postData) return;
+        autoSaveTriggered = true;
+        const url = API_BASE + 'admin_posts.php';
+        const method = (postData.id && postData.id !== 0) ? 'PUT' : 'POST';
+        const body = JSON.stringify(postData);
+        try {
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: body,
+                keepalive: true
+            });
+            showToast('📝 Đã tự động lưu nháp');
+        } catch(e) {
+            const blob = new Blob([body], { type: 'application/json' });
+            navigator.sendBeacon(url, blob);
+        }
+    }
+
+    // ========== KHỞI TẠO ==========
+    $(document).ready(() => {
+        modalInstance = new bootstrap.Modal(document.getElementById('postModal'), { backdrop: 'static', keyboard: true });
+        $('#createPostBtn').click(showPostForm);
+        $('#savePostBtn').click(() => savePost(false));
+
+        $('#title').on('blur', function() {
+            if (!$('#slug').val().trim()) {
+                $('#slug').val(createSlug($(this).val()));
+            }
+            updateSeoPreview();
+            updateDemoUrl();
+        });
+        $('#title').on('input', function() { updateSeoPreview(); updateDemoUrl(); markDirty(); });
+        $('#slug').on('input', function() { updateSeoPreview(); updateDemoUrl(); markDirty(); });
+        $('#seo_title').on('input', function() { if (this.value.length > 70) this.value = this.value.substring(0, 70); updateSeoPreview(); markDirty(); });
+        $('#seo_description').on('input', function() { if (this.value.length > 175) this.value = this.value.substring(0, 175); updateSeoPreview(); markDirty(); });
+        $('#short_description').on('input', function() { updateSeoPreview(); markDirty(); });
+        $('#status').on('change', markDirty);
+        $('#schedule_time').on('change', markDirty);
+        $('#content').on('input', markDirty);
+
+        document.querySelectorAll('#postForm input, #postForm textarea, #postForm select').forEach(el => {
+            if (el.type !== 'button' && el.type !== 'submit') {
+                el.addEventListener('input', markDirty);
+                el.addEventListener('change', markDirty);
+            }
+        });
+
+        window.addEventListener('beforeunload', function(e) {
+            if (isDirty && hasFormData()) {
+                autoSaveDraftOnLeave();
+                e.preventDefault();
+                e.returnValue = 'Các thay đổi có thể chưa được lưu. Hệ thống sẽ tự động lưu nháp.';
+                return e.returnValue;
+            }
+        });
+
+        document.getElementById('postModal').addEventListener('hide.bs.modal', function(e) {
+            if (isDirty && hasFormData()) {
+                if (!confirm('Bạn có thay đổi chưa lưu. Hệ thống sẽ tự động lưu nháp. Tiếp tục?')) {
+                    e.preventDefault();
+                    return;
+                }
+                autoSaveDraftOnLeave();
+            }
+            resetDirty();
+        });
+    });
+
+    // Bắt đầu kiểm tra admin
+    checkAdminAndLoad();
+</script>
+</body>
+</html>
